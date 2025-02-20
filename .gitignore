@@ -1,0 +1,47 @@
+# Maven specific files
+target/
+
+# Eclipse specific files
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+
+# NetBeans specific files
+nbproject/
+
+# VS Code specific files
+.vscode/
+
+# Mac specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+
+# Log files
+*.log
+
+# Java specific files
+*.class
+*.jar
+*.war
+*.ear
+
+# Package-specific files
+*.apk
+*.aab
+
+# Gradle wrapper specific files
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# JRebel specific files
+.jrebel/
+
+# Dependency and build-specific files
+/.mvn/
