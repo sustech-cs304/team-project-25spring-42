@@ -37,7 +37,7 @@ When you are able to develop the new feature, it is strongly recommended to exec
 Before making any changes, create a new branch from develop for your feature or bug fix:
 
 ```bash
-git checkout develop
+git checkout --track origin/develop
 git checkout -b feature/my-feature
 ```
 
