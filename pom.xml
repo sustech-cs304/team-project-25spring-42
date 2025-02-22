@@ -36,6 +36,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/Monacofx.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>18</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
