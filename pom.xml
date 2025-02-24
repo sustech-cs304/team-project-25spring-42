@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>17</version>
+            <version>23</version>
         </dependency>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
@@ -74,6 +74,11 @@
             <artifactId>fontbox</artifactId>
             <version>3.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.18.2</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -82,7 +87,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.5</version>
                 <configuration>
-                    <mainClass>sustech.cs304.pdfReader.PDFViewerFXDemo</mainClass> <!-- 替换为你的主类 -->
+                    <mainClass>sustech.cs304.login.Main</mainClass> <!-- 替换为你的主类 -->
                 </configuration>
             </plugin>
 
