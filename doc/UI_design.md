@@ -6,7 +6,7 @@
 
 ### New Login UI
 
-![UI_design_picture2](.\picture\UI_design_picture2.png)
+![UI_design_picture2](./picture/UI_design_picture2.png)
 
 
 
