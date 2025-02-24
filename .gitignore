@@ -49,3 +49,5 @@ gradle-wrapper.properties
 # 忽略除 lib 目录下的 .jar 文件外的其他文件
 /lib/*
 !/lib/*.jar
+
+.env
