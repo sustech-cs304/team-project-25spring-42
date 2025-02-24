@@ -11,7 +11,7 @@ public class ChatController {
     private final DeepseekClient deepseekClient = new DeepseekClient();
     
     private final List<String> openaiModels = Arrays.asList("gpt-3.5-turbo", "gpt-4.0", "o1", "o1-mini", "o3-mini", "o1-preview");
-    private final List<String> deepseekModels = Arrays.asList("deepseek-chat");
+    private final List<String> deepseekModels = Arrays.asList("deepseek-chat", "deepseek-reasoner");
 
     public String getResponse(String model, String prompt) {
         if (openaiModels.contains(model)) {
