@@ -12,6 +12,7 @@ import sustech.cs304.ai.RequestBodyy;
 import sustech.cs304.ai.RequestBodyy.Message;
 import java.util.List;
 import java.util.Collections;
+import sustech.cs304.utils.JsonUtils;
 
 public class GeminiClient {
 
@@ -33,9 +34,12 @@ public class GeminiClient {
             .messages(Collections.singletonList(message))
             .build();
 
+        String jsonRequestBody = gson.toJson(requestBody);
+        String updatedJsonRequestBody = JsonUtils.replaceJsonKey(jsonRequestBody, "content", "part");
+
         Request request = new Request.Builder()
             .url(API_URL + "/model/" + model + ":generateContent?key=" + API_KEY)
-            .post(RequestBody.create(gson.toJson(requestBody), MediaType.get("application/json")))
+            .post(RequestBody.create(updatedJsonRequestBody, MediaType.get("application/json")))
             .build();
 
         try (Response response = client.newCall(request).execute()) {
