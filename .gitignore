@@ -9,6 +9,7 @@ target/
 # IntelliJ IDEA specific files
 .idea/
 *.iml
+.factorypath
 
 # NetBeans specific files
 nbproject/
