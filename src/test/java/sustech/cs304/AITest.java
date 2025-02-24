@@ -22,37 +22,37 @@ public class AITest extends TestCase {
         chatController = new ChatController();
     }
 
-    // public void testGetResponse_withOpenaiModel() {
-    //     String model = "gpt-3.5-turbo";
-    //     String prompt = "Hello, OpenAI! Who are you?";
-    //     String response = chatController.getResponse(model, prompt);
-    //     
-    //     System.out.println(response);
-    //     assertNotNull(response);
-    //    // assertTrue("Response should contain 'ChatGPT'", response.contains("ChatGPT"));
-    // }
-    //
-    // public void testGetResponse_withDeepseekModel() {
-    //     String model = "deepseek-chat";
-    //     String prompt = "Hello, Deepseek!";
-    //     String response = chatController.getResponse(model, prompt);
-    //
-    //     System.out.println(response);
-    //     assertNotNull(response);
-    //     
-    //     // assertTrue("Response should contain 'Deepseek'", response.contains("Deepseek"));
-    // }
+    public void testGetResponse_withOpenaiModel() {
+        String model = "gpt-3.5-turbo";
+        String prompt = "Hello, OpenAI! Who are you?";
+        String response = chatController.getResponse(model, prompt);
+        
+        System.out.println(response);
+        assertNotNull(response);
+       // assertTrue("Response should contain 'ChatGPT'", response.contains("ChatGPT"));
+    }
 
-    // public void testGetResponse_withGeminiModel() {
-    //     String model = "gemini-2.0-flash";
-    //     String prompt = "Hello, Gemini! Who are You?";
-    //     String response = chatController.getResponse(model, prompt);
-    //     
-    //     System.out.println(response);
-    //     assertNotNull(response);
-    //     
-    //     // assertTrue("Response should contain 'Gemini'", response.contains("Gemini"));
-    // }
+    public void testGetResponse_withDeepseekModel() {
+        String model = "deepseek-chat";
+        String prompt = "Hello, Deepseek! Who are you?";
+        String response = chatController.getResponse(model, prompt);
+
+        System.out.println(response);
+        assertNotNull(response);
+        
+        // assertTrue("Response should contain 'Deepseek'", response.contains("Deepseek"));
+    }
+
+    public void testGetResponse_withGeminiModel() {
+        String model = "gemini-2.0-flash";
+        String prompt = "Hello, Gemini! Who are You?";
+        String response = chatController.getResponse(model, prompt);
+        
+        System.out.println(response);
+        assertNotNull(response);
+        
+        // assertTrue("Response should contain 'Gemini'", response.contains("Gemini"));
+    }
 
 
     public void testGetResponse_withInvalidModel() {
