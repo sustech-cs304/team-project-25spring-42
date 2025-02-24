@@ -1,4 +1,4 @@
-# How to run program with javafx package
+# How to run program with javafx package (not recommend)
 
 
 
@@ -57,3 +57,35 @@ And next you need to type this string.
 
 
 Finally you can successfully execute the program.
+
+
+
+
+
+
+
+# Using maven to run (recommend)
+
+
+
+change the file that you want to run in
+
+![run_javafx_picture1](.\picture\run_javafx_picture7.png)
+
+
+
+
+
+
+
+in the main directiory.
+
+```bash
+mvn clean install
+mvn javafx:run
+```
+
+
+
+
+
