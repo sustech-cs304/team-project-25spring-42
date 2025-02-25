@@ -12,12 +12,15 @@ public class ChatController {
     
     private final List<String> openaiModels = Arrays.asList("gpt-3.5-turbo", "gpt-4.0", "o1", "o1-mini", "o3-mini", "o1-preview");
     private final List<String> deepseekModels = Arrays.asList("deepseek-chat", "deepseek-reasoner");
+    private final List<String> geminiModels = Arrays.asList("gemini-2.0-flash");
 
     public String getResponse(String model, String prompt) {
         if (openaiModels.contains(model)) {
             return getOpenaiResponse(model, prompt);
         } else if (deepseekModels.contains(model)) {
             return getDeepseekResponse(model, prompt);
+        } else if (geminiModels.contains(model)) {
+            return getOpenaiResponse(model, prompt);
         } else {
             return "Invalid model";
         }

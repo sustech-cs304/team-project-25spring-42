@@ -34,13 +34,24 @@
 //
 //     public void testGetResponse_withDeepseekModel() {
 //         String model = "deepseek-chat";
-//         String prompt = "Hello, Deepseek!";
+//         String prompt = "Hello, Deepseek! Who are you?";
 //         String response = chatController.getResponse(model, prompt);
 //
 //         System.out.println(response);
 //         assertNotNull(response);
 //         
 //         // assertTrue("Response should contain 'Deepseek'", response.contains("Deepseek"));
+//     }
+//
+//     public void testGetResponse_withGeminiModel() {
+//         String model = "gemini-2.0-flash";
+//         String prompt = "Hello, Gemini! Who are You?";
+//         String response = chatController.getResponse(model, prompt);
+//         
+//         System.out.println(response);
+//         assertNotNull(response);
+//         
+//         // assertTrue("Response should contain 'Gemini'", response.contains("Gemini"));
 //     }
 //
 //
