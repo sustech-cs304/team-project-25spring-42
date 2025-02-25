@@ -27,7 +27,6 @@ public class EditorController {
                 "}");
         monacoFX.getEditor().setCurrentLanguage("c");
         monacoFX.getEditor().setCurrentTheme("vs-light");
-
     }
 
     public MonacoFX getMonacoFX() {
