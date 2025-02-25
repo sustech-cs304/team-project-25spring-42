@@ -52,6 +52,10 @@
             <ListView fx:id="listView" prefHeight="28.0" prefWidth="1730.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="editorPane" layoutX="190.0" layoutY="60.0" prefHeight="1020.0" prefWidth="1730.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
+      <AnchorPane fx:id="editorPane" layoutX="190.0" layoutY="60.0" prefHeight="1020.0" prefWidth="1730.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+        <children>
+            <fx:include fx:id="editor" source="editor.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />           
+        </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
