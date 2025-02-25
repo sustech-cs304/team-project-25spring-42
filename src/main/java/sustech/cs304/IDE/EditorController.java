@@ -1,5 +1,7 @@
 package sustech.cs304.IDE;
 
+import java.util.List;
+
 import eu.mihosoft.monacofx.MonacoFX;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -18,14 +20,7 @@ public class EditorController {
         monacoFX.prefWidthProperty().bind(editorPane.widthProperty());
         monacoFX.prefHeightProperty().bind(editorPane.heightProperty());
         this.editorPane.getChildren().add(monacoFX);
-        monacoFX.getEditor().getDocument().setText(
-                "#include <stdio.h>\n" +
-                "int main() {\n" +
-                "   // printf() displays the string inside quotation\n" +
-                "   printf(\"Hello, World!\");\n" +
-                "   return 0;\n" +
-                "}");
-        monacoFX.getEditor().setCurrentLanguage("c");
+        monacoFX.getEditor().setCurrentLanguage("java");
         monacoFX.getEditor().setCurrentTheme("vs-light");
     }
 
@@ -43,5 +38,13 @@ public class EditorController {
 
     public void setLanguage(String language) {
         monacoFX.getEditor().setCurrentLanguage(language);
+    }
+
+    public void setText(List<String> lines) {
+        StringBuilder sb = new StringBuilder();
+        for (String line : lines) {
+            sb.append(line).append("\n");
+        }
+        monacoFX.getEditor().getDocument().setText(sb.toString());
     }
 }
