@@ -9,18 +9,17 @@ public class IDEController {
     private AnchorPane backgroundPane;
 
     @FXML
+    private FileTreeController fileTreeController;
+
+    @FXML
+    private MenuBarController menuBarController;
+
+    @FXML
     private void initialize() {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
+        menuBarController.setFileTreeController(fileTreeController);
     }
-    
-    // @FXML
-    // private AnchorPane editorPane;
-    //
-    // @FXML
-    // private void initialize() {
-    // }
-
 }
