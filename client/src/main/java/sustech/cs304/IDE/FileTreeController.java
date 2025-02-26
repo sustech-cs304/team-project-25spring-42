@@ -5,9 +5,10 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import sustech.cs304.IDE.components.treeItems.ProviderTreeItem;
+import sustech.cs304.IDE.components.treeItems.FileTreeItem;
 import sustech.cs304.IDE.components.treeItems.FileTreeNode;
 import sustech.cs304.IDE.components.treeItems.TreeCellImpl;
+import sustech.cs304.IDE.components.treeItems.DirTreeItem;
 import javafx.util.Callback;
 import javafx.scene.control.TreeCell;
 import sustech.cs304.pdfReader.pdfReaderController;
@@ -23,7 +24,7 @@ public class FileTreeController {
     @FXML
     private TreeView<FileTreeNode> treeView;
 
-    private ProviderTreeItem rootItem;
+    private DirTreeItem rootItem;
 
     private EditorController editorController;
 
@@ -40,7 +41,7 @@ public class FileTreeController {
     @FXML
     private void initialize() {
         FileTreeNode rootNode = new FileTreeNode("Folder", null);
-        rootItem = new ProviderTreeItem(rootNode);
+        rootItem = new DirTreeItem(rootNode);
         rootItem.setExpanded(true);
 
         treeView.setRoot(rootItem);
@@ -87,11 +88,14 @@ public class FileTreeController {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
-                ProviderTreeItem fileItem = new ProviderTreeItem(new FileTreeNode(file.getName(), file.getAbsolutePath()));
                 if (file.isDirectory()) {
-                    buildFileTree(fileItem, file);
+                    DirTreeItem dirItem = new DirTreeItem(new FileTreeNode(file.getName(), file.getAbsolutePath()));
+                    parentItem.getChildren().add(dirItem);
+                    buildFileTree(dirItem, file);
+                } else {
+                    FileTreeItem fileItem = new FileTreeItem(new FileTreeNode(file.getName(), file.getAbsolutePath()));
+                    parentItem.getChildren().add(fileItem);
                 }
-                parentItem.getChildren().add(fileItem);
             }
         }
     }
@@ -103,17 +107,13 @@ public class FileTreeController {
             String extension = getExtension(file);
             if(extension.equals("pdf") ){
                 MYpdfReaderController.getFile(file);
-
-
             }else{
-
                 try {
                     List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
                     editorController.setText(lines);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
