@@ -1,6 +1,8 @@
 package sustech.cs304.IDE;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import eu.mihosoft.monacofx.MonacoFX;
@@ -9,17 +11,18 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 
-
 public class EditorController {
 
     @FXML
     private TabPane editorTabPane;
 
-    private ArrayList<MonacoFX> monacoFXs;
+    private HashSet<MonacoFX> monacoFXs;
+    private HashSet<File> files;
 
     @FXML
     private void initialize() {
-        monacoFXs = new ArrayList<>();
+        monacoFXs = new HashSet<>();
+        files = new HashSet<>();
     }
 
     public void setTheme(String theme) {
@@ -36,21 +39,43 @@ public class EditorController {
         monacoFX.getEditor().getDocument().setText(sb.toString());
     }
 
-    public void addPage(List<String> lines) {
+    public void addPage(List<String> lines, File file) {
+        if (files.contains(file)) {
+            Tab tab = findTabByFile(file);
+            editorTabPane.getSelectionModel().select(tab);
+            return;
+        }
+
+        Tab newTab = new Tab();
+        newTab.setId(file.getAbsolutePath());
+        newTab.setText(file.getName());
+        
         MonacoFX monacoFX = new MonacoFX();
+        monacoFXs.add(monacoFX);
+
+        files.add(file);
+
         AnchorPane editorPane = new AnchorPane();
         AnchorPane.setTopAnchor(monacoFX, 0.0);
         AnchorPane.setBottomAnchor(monacoFX, 0.0);
         AnchorPane.setLeftAnchor(monacoFX, 0.0);
         AnchorPane.setRightAnchor(monacoFX, 0.0);
-        
-        
         editorPane.getChildren().add(monacoFX);
-        monacoFXs.add(monacoFX);
 
-        Tab tab = new Tab("New Tab");
-        tab.setContent(editorPane);
-        editorTabPane.getTabs().add(tab);
+        newTab.setContent(editorPane);
+        editorTabPane.getTabs().add(newTab);
+        editorTabPane.getSelectionModel().select(newTab);
         setText(monacoFX, lines);
     }
+
+    private Tab findTabByFile(File file) {
+        for (Tab tab : editorTabPane.getTabs()) {
+            if (tab.getId().equals(file.getAbsolutePath())) {
+                return tab;
+            }
+        }
+        return null;
+    }
 }
+
+

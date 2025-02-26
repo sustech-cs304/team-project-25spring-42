@@ -70,7 +70,7 @@ public class FileTreeController {
             if (selectedItem != null) {
                 FileTreeNode node = selectedItem.getValue();
                 File selectedFile = new File(node.getPath());
-                if (selectedFile.exists() && selectedFile.isFile()) {
+                if (selectedFile.exists()) {
                     openFile(selectedFile);
                 }
             }
@@ -129,7 +129,7 @@ public class FileTreeController {
             }else{
                 try {
                     List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
-                    editorController.addPage(lines);
+                    editorController.addPage(lines, file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
