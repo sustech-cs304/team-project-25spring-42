@@ -12,12 +12,12 @@ import sustech.cs304.IDE.components.treeItems.DirTreeItem;
 import javafx.util.Callback;
 import javafx.scene.control.TreeCell;
 import sustech.cs304.pdfReader.pdfReaderController;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
 import java.nio.charset.Charset;
+import sustech.cs304.utils.FileUtils;
 
 public class FileTreeController {
 
@@ -104,7 +104,7 @@ public class FileTreeController {
         if (file.isDirectory()) {
             return;
         } else {
-            String extension = getExtension(file);
+            String extension = FileUtils.getExtension(file);
             if(extension.equals("pdf") ){
                 MYpdfReaderController.getFile(file);
             }else{
@@ -116,16 +116,5 @@ public class FileTreeController {
                 }
             }
         }
-    }
-
-    private String getExtension(File file){
-        String fileName = file.getName();
-        String extension = "";
-        int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex > 0) { // 确保文件名中包含 "."
-            extension = fileName.substring(lastDotIndex + 1);
-        }
-        return extension;
-
     }
 }
