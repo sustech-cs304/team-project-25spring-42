@@ -10,6 +10,8 @@ import sustech.cs304.IDE.components.treeItems.FileTreeNode;
 import sustech.cs304.IDE.components.treeItems.TreeCellImpl;
 import javafx.util.Callback;
 import javafx.scene.control.TreeCell;
+import sustech.cs304.pdfReader.pdfReaderController;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -24,6 +26,16 @@ public class FileTreeController {
     private ProviderTreeItem rootItem;
 
     private EditorController editorController;
+
+    public pdfReaderController getMYpdfReaderController() {
+        return MYpdfReaderController;
+    }
+
+    public void setMYpdfReaderController(pdfReaderController MYpdfReaderController) {
+        this.MYpdfReaderController = MYpdfReaderController;
+    }
+
+    private pdfReaderController MYpdfReaderController;
 
     @FXML
     private void initialize() {
@@ -88,13 +100,32 @@ public class FileTreeController {
         if (file.isDirectory()) {
             return;
         } else {
-            try {
-                List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
-                editorController.setText(lines);
-            } catch (IOException e) {
-                e.printStackTrace();
+            String extension = getExtension(file);
+            if(extension.equals("pdf") ){
+                MYpdfReaderController.getFile(file);
+
+
+            }else{
+
+                try {
+                    List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
+                    editorController.setText(lines);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
-}
 
+    private String getExtension(File file){
+        String fileName = file.getName();
+        String extension = "";
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex > 0) { // 确保文件名中包含 "."
+            extension = fileName.substring(lastDotIndex + 1);
+        }
+        return extension;
+
+    }
+}

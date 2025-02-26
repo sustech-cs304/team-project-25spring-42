@@ -2,6 +2,7 @@ package sustech.cs304.IDE;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import sustech.cs304.pdfReader.pdfReaderController;
 
 public class IDEController {
 
@@ -18,6 +19,10 @@ public class IDEController {
     private EditorController editorController;
 
     @FXML
+    private pdfReaderController MYpdfReaderController;
+
+
+    @FXML
     private void initialize() {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
@@ -25,5 +30,6 @@ public class IDEController {
         }
         menuBarController.setFileTreeController(fileTreeController);
         fileTreeController.setEditorController(editorController);
+        fileTreeController.setMYpdfReaderController(MYpdfReaderController);
     }
 }

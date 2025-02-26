@@ -87,7 +87,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.5</version>
                 <configuration>
-                    <mainClass>sustech.cs304.login.Main</mainClass> <!-- 替换为你的主类 -->
+                    <mainClass>sustech.cs304.ai.ui.Main</mainClass> <!-- 替换为你的主类 -->
                 </configuration>
             </plugin>
 
@@ -102,6 +102,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
 
         </plugins>
