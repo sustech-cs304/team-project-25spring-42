@@ -1,7 +1,6 @@
 package sustech.cs304.IDE;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import eu.mihosoft.monacofx.MonacoFX;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
+import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.layout.AnchorPane;
 
 public class EditorController {
@@ -49,6 +49,9 @@ public class EditorController {
         Tab newTab = new Tab();
         newTab.setId(file.getAbsolutePath());
         newTab.setText(file.getName());
+        newTab.setOnClosed(event -> {
+            files.remove(file);
+        });
         
         MonacoFX monacoFX = new MonacoFX();
         monacoFXs.add(monacoFX);
