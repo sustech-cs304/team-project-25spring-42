@@ -70,7 +70,7 @@ public class FileTreeController {
             if (selectedItem != null) {
                 FileTreeNode node = selectedItem.getValue();
                 File selectedFile = new File(node.getPath());
-                if (selectedFile.exists()) {
+                if (selectedFile.exists() && selectedFile.isFile()) {
                     openFile(selectedFile);
                 }
             }
