@@ -10,6 +10,9 @@ public class IDEController {
     private AnchorPane backgroundPane;
 
     @FXML
+    private AnchorPane editorPane;
+
+    @FXML
     private FileTreeController fileTreeController;
 
     @FXML
@@ -21,13 +24,13 @@ public class IDEController {
     @FXML
     private pdfReaderController MYpdfReaderController;
 
-
     @FXML
     private void initialize() {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
+
         menuBarController.setFileTreeController(fileTreeController);
         fileTreeController.setEditorController(editorController);
         fileTreeController.setMYpdfReaderController(MYpdfReaderController);
