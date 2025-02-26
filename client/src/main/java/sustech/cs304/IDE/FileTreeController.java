@@ -12,12 +12,14 @@ import sustech.cs304.IDE.components.treeItems.DirTreeItem;
 import javafx.util.Callback;
 import javafx.scene.control.TreeCell;
 import sustech.cs304.pdfReader.pdfReaderController;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
 import java.util.List;
 import java.nio.charset.Charset;
+import sustech.cs304.utils.FileUtils;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class FileTreeController {
 
@@ -27,6 +29,8 @@ public class FileTreeController {
     private DirTreeItem rootItem;
 
     private EditorController editorController;
+
+    private boolean showHiddenFiles = false;
 
     public pdfReaderController getMYpdfReaderController() {
         return MYpdfReaderController;
@@ -87,7 +91,22 @@ public class FileTreeController {
     private void buildFileTree(TreeItem<FileTreeNode> parentItem, File directory) {
         File[] files = directory.listFiles();
         if (files != null) {
+            Arrays.sort(files, new Comparator<File>() {
+                @Override
+                public int compare(File file1, File file2) {
+                    if (file1.isDirectory() && !file2.isDirectory()) {
+                        return -1;
+                    } else if (!file1.isDirectory() && file2.isDirectory()) {
+                        return 1;
+                    }
+                    return file1.getName().compareToIgnoreCase(file2.getName());
+                }
+            });
+
             for (File file : files) {
+                if (!showHiddenFiles && FileUtils.ifDotFile(file)) {
+                    continue;
+                }
                 if (file.isDirectory()) {
                     DirTreeItem dirItem = new DirTreeItem(new FileTreeNode(file.getName(), file.getAbsolutePath()));
                     parentItem.getChildren().add(dirItem);
@@ -104,7 +123,7 @@ public class FileTreeController {
         if (file.isDirectory()) {
             return;
         } else {
-            String extension = getExtension(file);
+            String extension = FileUtils.getExtension(file);
             if(extension.equals("pdf") ){
                 MYpdfReaderController.getFile(file);
             }else{
@@ -116,16 +135,5 @@ public class FileTreeController {
                 }
             }
         }
-    }
-
-    private String getExtension(File file){
-        String fileName = file.getName();
-        String extension = "";
-        int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex > 0) { // 确保文件名中包含 "."
-            extension = fileName.substring(lastDotIndex + 1);
-        }
-        return extension;
-
     }
 }
