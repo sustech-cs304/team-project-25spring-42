@@ -4,26 +4,19 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeView;
-import javafx.scene.control.Label;
-import javafx.event.EventHandler;
-import javafx.event.Event;
-
 
 public class ProviderTreeItem extends AbstractTreeItem {
-    
-    public ProviderTreeItem(String name, String path) {
-        this.setValue(new FileTreeNode(name, path));
-    }
 
+    public ProviderTreeItem(FileTreeNode fileTreeNode) {
+        this.setValue(fileTreeNode);
+    }
+    
     @Override
-    public ContextMenu getMenu(){
+    public ContextMenu getMenu() {
         MenuItem addInbox = new MenuItem("add inbox");
-        addInbox.setOnAction(new EventHandler() {
-            public void handle(Event t) {
-                BoxTreeItem newBox = new BoxTreeItem("inbox");
-                    getChildren().add(newBox);
-            }
+        addInbox.setOnAction(event -> {
+            BoxTreeItem newBox = new BoxTreeItem(new FileTreeNode("inbox", "inbox"));
+            getChildren().add(newBox);
         });
         return new ContextMenu(addInbox);
     }
@@ -50,25 +43,13 @@ abstract class AbstractTreeItem extends TreeItem<FileTreeNode> {
     public abstract ContextMenu getMenu();
 }
 
-class FileTreeNode {
-    private String name;
-    private String path;
-
-    public FileTreeNode(String name, String path) {
-        this.name = name;
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPath() {
-        return path;
+class BoxTreeItem extends AbstractTreeItem{
+    public BoxTreeItem(FileTreeNode fileTreeNode) {
+        this.setValue(fileTreeNode);
     }
 
     @Override
-    public String toString() {
-        return name;
+    public ContextMenu getMenu() {
+        return new ContextMenu(new MenuItem("test"));
     }
 }

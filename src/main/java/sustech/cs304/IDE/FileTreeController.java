@@ -5,6 +5,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import sustech.cs304.IDE.components.ProviderTreeItem;
+import sustech.cs304.IDE.components.FileTreeNode;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -26,7 +28,7 @@ public class FileTreeController {
     @FXML
     private void initialize() {
         FileTreeNode rootNode = new FileTreeNode("Folder", null);
-        rootItem = new TreeItem<>(rootNode);
+        rootItem = new TreeItem<FileTreeNode>(rootNode);
         rootItem.setExpanded(true);
 
         treeView.setRoot(rootItem);
@@ -67,7 +69,7 @@ public class FileTreeController {
         if (files != null) {
             for (File file : files) {
                 FileTreeNode node = new FileTreeNode(file.getName(), file.getAbsolutePath());
-                TreeItem<FileTreeNode> fileItem = new TreeItem<>(node);
+                ProviderTreeItem fileItem = new ProviderTreeItem(node);
                 addContentMenu(fileItem);
 
                 if (file.isDirectory()) {
@@ -109,25 +111,3 @@ public class FileTreeController {
     
 }
 
-class FileTreeNode {
-    private String name;
-    private String path;
-
-    public FileTreeNode(String name, String path) {
-        this.name = name;
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
