@@ -24,10 +24,10 @@ public class pdfReaderController {
     private AnchorPane rootAnchorPane;
 
     @FXML
-    private ScrollPane pdfScrollPane; // ScrollPane，用于提供滚动功能
+    private ScrollPane pdfScrollPane;
 
     @FXML
-    private AnchorPane pdfReaderPane; // 用于显示 PDF 内容的 AnchorPane
+    private AnchorPane pdfReaderPane;
 
     private PDDocument document;
     private PDFRenderer renderer;
@@ -36,20 +36,20 @@ public class pdfReaderController {
     private ImageView pdfImageView;
 
     public void initialize() {
-        // 初始化 ImageView
+
         pdfImageView = new ImageView();
         pdfReaderPane.getChildren().add(pdfImageView);
 
-        // 设置 ScrollPane 的属性
-        pdfScrollPane.setFitToWidth(true); // 允许水平滚动
-        pdfScrollPane.setFitToHeight(true); // 允许垂直滚动
-        pdfScrollPane.setPannable(true); // 允许拖动滚动
 
-        // 绑定右键菜单事件
+        pdfScrollPane.setFitToWidth(true);
+        pdfScrollPane.setFitToHeight(true);
+        pdfScrollPane.setPannable(true);
+
+
         pdfReaderPane.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showContextMenu);
 
         try {
-            // 加载 PDF 文件
+
             File pdfFile = new File("/Users/ylers/Desktop/paper/textF-ch7.3.2.pdf"); // 修改为你的 PDF 文件路径
             document = Loader.loadPDF(pdfFile);
             renderer = new PDFRenderer(document);
@@ -76,16 +76,16 @@ public class pdfReaderController {
     }
 
     private void renderPage(int pageIndex) throws IOException {
-        // 渲染 PDF 页面到 BufferedImage
+
         BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, (float) (zoomFactor * 72));
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
 
-        // 设置 ImageView 的图像和尺寸
+
         pdfImageView.setImage(image);
         pdfImageView.setFitWidth(bufferedImage.getWidth());
         pdfImageView.setFitHeight(bufferedImage.getHeight());
 
-        // 调整 pdfReaderPane 的尺寸以匹配 ImageView
+
         pdfReaderPane.setPrefWidth(bufferedImage.getWidth());
         pdfReaderPane.setPrefHeight(bufferedImage.getHeight());
     }
@@ -96,7 +96,7 @@ public class pdfReaderController {
 
             MenuItem zoomIn = new MenuItem("Zoom In");
             zoomIn.setOnAction(e -> {
-                zoomFactor = Math.min(zoomFactor * 1.25, 4.0); // 限制最大缩放为 4 倍
+                zoomFactor = Math.min(zoomFactor * 1.25, 4.0);
                 try {
                     renderPage(currentPage);
                 } catch (IOException ex) {
@@ -106,7 +106,7 @@ public class pdfReaderController {
 
             MenuItem zoomOut = new MenuItem("Zoom Out");
             zoomOut.setOnAction(e -> {
-                zoomFactor = Math.max(zoomFactor / 1.25, 0.25); // 限制最小缩放为 0.25 倍
+                zoomFactor = Math.max(zoomFactor / 1.25, 0.25);
                 try {
                     renderPage(currentPage);
                 } catch (IOException ex) {
