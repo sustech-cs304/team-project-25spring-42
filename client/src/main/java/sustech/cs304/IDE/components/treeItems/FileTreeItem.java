@@ -4,20 +4,21 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 
-public class ProviderTreeItem extends AbstractTreeItem {
+public class FileTreeItem extends AbstractTreeItem {
 
-    public ProviderTreeItem(FileTreeNode fileTreeNode) {
+    public FileTreeItem(FileTreeNode fileTreeNode) {
         this.setValue(fileTreeNode);
     }
     
     @Override
     public ContextMenu getMenu() {
-        MenuItem addInbox = new MenuItem("add inbox");
-        addInbox.setOnAction(event -> {
-            BoxTreeItem newBox = new BoxTreeItem(new FileTreeNode("inbox", "inbox"));
-            getChildren().add(newBox);
+        MenuItem copy = new MenuItem("Copy");
+        MenuItem rename = new MenuItem("Rename");
+        copy.setOnAction(event -> {
         });
-        return new ContextMenu(addInbox);
+        rename.setOnAction(event -> {
+        });
+        return new ContextMenu(copy, rename);
     }
 }
 
