@@ -1,4 +1,4 @@
-package sustech.cs304.IDE.components;
+package sustech.cs304.IDE.components.treeItems;
 
 public class FileTreeNode {
     private String name;
