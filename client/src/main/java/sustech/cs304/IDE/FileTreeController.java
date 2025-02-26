@@ -5,11 +5,11 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import sustech.cs304.IDE.components.ProviderTreeItem;
-import sustech.cs304.IDE.components.FileTreeNode;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
+import sustech.cs304.IDE.components.treeItems.ProviderTreeItem;
+import sustech.cs304.IDE.components.treeItems.FileTreeNode;
+import sustech.cs304.IDE.components.treeItems.TreeCellImpl;
+import javafx.util.Callback;
+import javafx.scene.control.TreeCell;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -21,14 +21,14 @@ public class FileTreeController {
     @FXML
     private TreeView<FileTreeNode> treeView;
 
-    private TreeItem<FileTreeNode> rootItem;
+    private ProviderTreeItem rootItem;
 
     private EditorController editorController;
 
     @FXML
     private void initialize() {
         FileTreeNode rootNode = new FileTreeNode("Folder", null);
-        rootItem = new TreeItem<FileTreeNode>(rootNode);
+        rootItem = new ProviderTreeItem(rootNode);
         rootItem.setExpanded(true);
 
         treeView.setRoot(rootItem);
@@ -58,6 +58,13 @@ public class FileTreeController {
                 }
             }
         });
+
+        treeView.setCellFactory(new Callback<TreeView<FileTreeNode>,TreeCell<FileTreeNode>>(){
+            @Override
+            public TreeCell<FileTreeNode> call(TreeView<FileTreeNode> p) {
+                return new TreeCellImpl();
+            }
+        });
     }
 
     public void setEditorController(EditorController editorController) {
@@ -68,10 +75,7 @@ public class FileTreeController {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
-                FileTreeNode node = new FileTreeNode(file.getName(), file.getAbsolutePath());
-                ProviderTreeItem fileItem = new ProviderTreeItem(node);
-                addContentMenu(fileItem);
-
+                ProviderTreeItem fileItem = new ProviderTreeItem(new FileTreeNode(file.getName(), file.getAbsolutePath()));
                 if (file.isDirectory()) {
                     buildFileTree(fileItem, file);
                 }
@@ -92,22 +96,5 @@ public class FileTreeController {
             }
         }
     }
-
-    private void addContentMenu(TreeItem<FileTreeNode> item) {
-
-        ContextMenu contextMenu = new ContextMenu();
-
-        MenuItem openItem = new MenuItem("Open " + item.getValue());
-        openItem.setOnAction(e -> System.out.println("Open item: " + item.getValue()));
-
-        MenuItem deleteItem = new MenuItem("Delete " + item.getValue());
-        deleteItem.setOnAction(e -> System.out.println("Delete item: " + item.getValue()));
-
-        contextMenu.getItems().addAll(openItem, deleteItem);
-
-        item.setGraphic(new Label(item.getValue().getName()));
-
-    }
-    
 }
 

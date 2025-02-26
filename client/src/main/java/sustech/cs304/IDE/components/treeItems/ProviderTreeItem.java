@@ -1,9 +1,8 @@
-package sustech.cs304.IDE.components;
+package sustech.cs304.IDE.components.treeItems;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeCell;
 
 public class ProviderTreeItem extends AbstractTreeItem {
 
@@ -19,23 +18,6 @@ public class ProviderTreeItem extends AbstractTreeItem {
             getChildren().add(newBox);
         });
         return new ContextMenu(addInbox);
-    }
-}
-
-final class TreeCellImpl extends TreeCell<FileTreeNode> {
-
-    @Override
-    public void updateItem(FileTreeNode fileTreeNode, boolean empty) {
-        super.updateItem(fileTreeNode, empty);
-
-        if (empty) {
-            setText(null);
-            setGraphic(null);
-        } else {
-            setText(getItem() == null ? "" : getItem().toString());
-            setGraphic(getTreeItem().getGraphic());
-            setContextMenu(((AbstractTreeItem) getTreeItem()).getMenu());
-        }
     }
 }
 
