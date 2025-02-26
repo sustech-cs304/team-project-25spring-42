@@ -60,6 +60,21 @@ public class pdfReaderController {
         }
     }
 
+    public void getFile(File file){
+        try {
+
+            File pdfFile = file;
+            document = Loader.loadPDF(pdfFile);
+            renderer = new PDFRenderer(document);
+            currentPage = 0;
+            renderPage(currentPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to load PDF file: " + e.getMessage());
+        }
+
+    }
+
     private void renderPage(int pageIndex) throws IOException {
         // 渲染 PDF 页面到 BufferedImage
         BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, (float) (zoomFactor * 72));

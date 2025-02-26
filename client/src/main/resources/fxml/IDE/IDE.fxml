@@ -55,7 +55,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <fx:include source="../pdfReader.fxml" />
+                        <fx:include fx:id="MYpdfReader" source="../pdfReader.fxml" />
                      </children></AnchorPane>
             </content>
           </Tab>
