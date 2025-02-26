@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.IDE.FileTreeController">
    <children>
-      <TreeView fx:id="treeView" prefHeight="1048.0" prefWidth="150.0" />
+      <TreeView fx:id="treeView" prefHeight="1048.0" prefWidth="150.0">
+         <contextMenu>
+            <ContextMenu>
+               <items>
+                  <MenuItem mnemonicParsing="false" text="delete" />
+                  <MenuItem mnemonicParsing="false" text="rename" />
+                  <MenuItem mnemonicParsing="false" text="copy" />
+               </items>
+            </ContextMenu>
+         </contextMenu></TreeView>
    </children>
 </AnchorPane>
