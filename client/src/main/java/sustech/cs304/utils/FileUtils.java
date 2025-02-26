@@ -17,4 +17,8 @@ public class FileUtils {
         }
         return extension;
     }
+
+    public static boolean ifDotFile(File file){
+        return file.getName().startsWith(".");
+    }
 }
