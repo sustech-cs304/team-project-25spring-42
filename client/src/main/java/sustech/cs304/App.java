@@ -18,7 +18,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL fxmlUrl = getClass().getResource("/fxml/IDE/IDE.fxml");
+        URL fxmlUrl = getClass().getResource("/fxml/login.fxml");
         if (fxmlUrl == null) {
             System.err.println("FXML file not found! Check the path and ensure the file is in the resources folder.");
             return;
