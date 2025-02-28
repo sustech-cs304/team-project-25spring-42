@@ -11,6 +11,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import sustech.cs304.ai.ChatController;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Main extends Application {
 
     private TextArea chatArea;
@@ -66,11 +70,18 @@ public class Main extends Application {
 
             // only simulation
             String aiResponse = chatController.getResponse(model,userMessage);
+            JsonObject jsonObject = JsonParser.parseString(aiResponse).getAsJsonObject();
+            JsonArray choicesArray = jsonObject.getAsJsonArray("choices");
 
-            
 
-            chatArea.appendText(aiResponse);
+            JsonObject firstChoice = choicesArray.get(0).getAsJsonObject();
+            JsonObject messageObject = firstChoice.getAsJsonObject("message");
+            String content = messageObject.get("content").getAsString();
 
+
+
+            chatArea.appendText("AI助手: " + content + "\n");
+            chatArea.appendText("-----------------------\n");
             inputField.clear();
         }
     }
