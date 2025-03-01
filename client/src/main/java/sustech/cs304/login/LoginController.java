@@ -9,7 +9,7 @@ import java.net.URI;
 import javafx.fxml.FXML;
 
 public class LoginController {
-    private static final String SERVER_URL = "http://10.32.137.85:8080/auth/github";
+    private static final String SERVER_URL = "http://107.173.91.140:8080/auth/github";
 
     @FXML
     public void loginWithGitHub() throws IOException {
