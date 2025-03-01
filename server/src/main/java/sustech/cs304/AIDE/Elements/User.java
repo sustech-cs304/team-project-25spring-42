@@ -10,21 +10,21 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String githubId;
+    private String platformId;
 
     private String username;
     private String avatarUrl;
 
     public User() {}
 
-    public User(String githubId, String username, String avatarUrl) {
-        this.githubId = githubId;
+    public User(String platformId, String username, String avatarUrl) {
+        this.platformId = platformId;
         this.username = username;
         this.avatarUrl = avatarUrl;
     }
 
     public Long getId() { return id; }
-    public String getGithubId() { return githubId; }
+    public String getPlatformId() { return platformId; }
     public String getUsername() { return username; }
     public String getAvatarUrl() { return avatarUrl; }
 }
