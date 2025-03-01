@@ -5,11 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sustech.cs304.IDE.FileTreeController;
-import sustech.cs304.IDE.IDEController;
 
 import java.net.URL;
-import java.util.Objects;
 
 public class App extends Application {
     public static void main(String[] args) {
@@ -31,118 +28,65 @@ public class App extends Application {
         stage.show();
     }
 }
-/**
- * Hello world!
- *
- */
-// public class App 
-// {
-//     public static void main( String[] args )
-//     {
-//         System.out.println( "Hello World!" );
-//     }
-// }
-//
-// import com.techsenger.jeditermfx.core.TtyConnector;
-// import com.techsenger.jeditermfx.ui.JediTermFxWidget;
-// import com.techsenger.jeditermfx.ui.settings.DefaultSettingsProvider;
-// import org.jetbrains.annotations.NotNull;
-// import java.io.IOException;
-// import java.io.PipedReader;
-// import java.io.PipedWriter;
+
 // import javafx.application.Application;
-// import javafx.application.Platform;
+// import javafx.geometry.Pos;
 // import javafx.scene.Scene;
+// import javafx.scene.control.Button;
+// import javafx.scene.image.Image;
+// import javafx.scene.image.ImageView;
+// import javafx.scene.layout.VBox;
+// import javafx.scene.paint.Color;
+// import javafx.scene.text.Font;
 // import javafx.stage.Stage;
+// import javafx.scene.web.WebView;
+// import javafx.scene.web.WebEngine;
 //
 // public class App extends Application {
+//     private static final String CLIENT_ID = "your_client_id";
+//     private static final String REDIRECT_URI = "http://localhost:8080/callback";
+//     private static final String AUTH_URL = "https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URI + "&scope=read:user";
 //
-//     private static final char ESC = 27;
+//     @Override
+//     public void start(Stage stage) {
+//         // 创建 GitHub 按钮
+//         Button githubButton = new Button("Sign in with GitHub");
+//         githubButton.setFont(new Font("Arial", 16));
+//         githubButton.setTextFill(Color.WHITE);
+//         githubButton.setStyle("-fx-background-color: #24292e; -fx-padding: 10px 20px; -fx-background-radius: 5px;");
+//         
+//         // GitHub Logo
+//         ImageView githubIcon = new ImageView(new Image("https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"));
+//         githubIcon.setFitWidth(20);
+//         githubIcon.setFitHeight(20);
+//         
+//         githubButton.setGraphic(githubIcon);
+//         githubButton.setOnAction(e -> openGitHubLogin());
 //
-//     private static void writeTerminalCommands(@NotNull PipedWriter writer) throws IOException {
-//         writer.write(ESC + "%G");
-//         writer.write(ESC + "[31m");
-//         writer.write("Hello\r\n");
-//         writer.write(ESC + "[32;43m");
-//         writer.write("World\r\n");
+//         // 布局
+//         VBox root = new VBox(20, githubButton);
+//         root.setAlignment(Pos.CENTER);
+//         root.setStyle("-fx-background-color: #ffffff;");
+//
+//         Scene scene = new Scene(root, 400, 300);
+//         stage.setTitle("GitHub Sign-In");
+//         stage.setScene(scene);
+//         stage.show();
 //     }
 //
-//     private static @NotNull JediTermFxWidget createTerminalWidget() {
-//         JediTermFxWidget widget = new JediTermFxWidget(80, 24, new DefaultSettingsProvider());
-//         try (PipedWriter terminalWriter = new PipedWriter()) {
-//             widget.setTtyConnector(new ExampleTtyConnector(terminalWriter));
-//             widget.start();
-//             writeTerminalCommands(terminalWriter);
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//         return widget;
-//     }
+//     private void openGitHubLogin() {
+//         Stage webStage = new Stage();
+//         WebView webView = new WebView();
+//         WebEngine webEngine = webView.getEngine();
+//         webEngine.load(AUTH_URL);
 //
-//     private static class ExampleTtyConnector implements TtyConnector {
-//
-//         private final PipedReader myReader;
-//
-//         public ExampleTtyConnector(@NotNull PipedWriter writer) {
-//             try {
-//                 myReader = new PipedReader(writer);
-//             } catch (IOException e) {
-//                 throw new RuntimeException(e);
-//             }
-//         }
-//
-//         @Override
-//         public void close() {
-//         }
-//
-//         @Override
-//         public String getName() {
-//             return null;
-//         }
-//
-//         @Override
-//         public int read(char[] buf, int offset, int length) throws IOException {
-//             return myReader.read(buf, offset, length);
-//         }
-//
-//         @Override
-//         public void write(byte[] bytes) {
-//         }
-//
-//         @Override
-//         public boolean isConnected() {
-//             return true;
-//         }
-//
-//         @Override
-//         public void write(String string) {
-//         }
-//
-//         @Override
-//         public int waitFor() {
-//             return 0;
-//         }
-//
-//         @Override
-//         public boolean ready() throws IOException {
-//             return myReader.ready();
-//         }
+//         Scene webScene = new Scene(webView, 600, 400);
+//         webStage.setScene(webScene);
+//         webStage.setTitle("GitHub Authentication");
+//         webStage.show();
 //     }
 //
 //     public static void main(String[] args) {
-//         launch(args);
-//     }
-//
-//     @Override
-//     public void start(Stage stage) throws Exception {
-//         JediTermFxWidget widget = createTerminalWidget();
-//         stage.setTitle("Basic Terminal Example");
-//         stage.setOnCloseRequest(event -> {
-//             widget.close();
-//             widget.getTtyConnector().close();
-//         });
-//         Scene scene = new Scene(widget.getPane(), 600, 400);
-//         stage.setScene(scene);
-//         stage.show();
+//         launch();
 //     }
 // }
