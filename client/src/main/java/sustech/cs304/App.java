@@ -5,11 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sustech.cs304.IDE.FileTreeController;
-import sustech.cs304.IDE.IDEController;
 
 import java.net.URL;
-import java.util.Objects;
 
 public class App extends Application {
     public static void main(String[] args) {
