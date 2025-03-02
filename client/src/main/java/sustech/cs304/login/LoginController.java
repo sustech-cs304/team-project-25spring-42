@@ -1,5 +1,6 @@
 package sustech.cs304.login;
 
+
 import okhttp3.*;
 
 import java.awt.*;
@@ -14,6 +15,7 @@ import javafx.scene.web.WebView;
 public class LoginController {
     private static final String SERVER_URL_Github = "http://107.173.91.140:8080/auth/github";
     private static final String SERVER_URL_X = "http://107.173.91.140:8080/auth/x";
+    private static final String SERVER_URL_Google = "http://107.173.91.140:8080/auth/google";
 
     @FXML
     private StackPane loginPane;
@@ -50,6 +52,21 @@ public class LoginController {
     public void loginWithX() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_URL_X).build();
+        Response response = client.newCall(request).execute();
+        
+        String loginUrl = response.body().string();
+        response.close();
+        System.out.println(loginUrl);
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().browse(URI.create(loginUrl));
+        } else {
+            System.out.println("Open manually: " + loginUrl);
+        }
+    }
+     @FXML
+    public void loginWithGoogle() throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(SERVER_URL_Google).build();
         Response response = client.newCall(request).execute();
         
         String loginUrl = response.body().string();
