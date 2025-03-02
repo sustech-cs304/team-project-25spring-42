@@ -16,6 +16,13 @@
             <MenuItem mnemonicParsing="false" text="Delete" />
          </items>
       </Menu>
+      <Menu mnemonicParsing="false" text="Color">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#setColorVs" text="vs" />
+            <MenuItem mnemonicParsing="false" onAction="#setColorVsDark" text="vs-dark" />
+            <MenuItem mnemonicParsing="false" onAction="#setColorHcBlack" text="hc-black" />
+         </items>
+      </Menu>
       <Menu mnemonicParsing="false" text="Help">
          <items>
             <MenuItem mnemonicParsing="false" text="About" />
