@@ -1,49 +1,25 @@
-/* GitHub 按钮的默认样式 */
-.github-button {
+.login-button {
     -fx-font-family: "Arial";
     -fx-font-size: 16px;
-    -fx-text-fill: white;
-    -fx-background-color: #24292e;
-    -fx-padding: 10px 20px;
-    -fx-background-radius: 5px;
-    -fx-border-color: transparent;
-    -fx-border-width: 2px;
-    -fx-cursor: hand;
-    -fx-alignment: center;
-}
-
-.github-button:hover {
-    -fx-background-color: #2d333b;
-}
-
-.github-button:pressed {
-    -fx-background-color: #1b1f23; 
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
-}
-
-.github-button:focused {
-    -fx-border-color: white;
-    -fx-border-width: 2px;
-}
-
-.github-button:disabled {
-    -fx-background-color: #808080;
-    -fx-text-fill: #cccccc;
-    -fx-cursor: default;
-}
-
-.x-button {
-    -fx-font-family: "Arial";
-    -fx-font-size: 16px;
-    -fx-text-fill: black;
+    -fx-text-fill: #555;
     -fx-background-color: white;
     -fx-padding: 10px 20px;
-    -fx-background-radius: 5px;
-    -fx-border-color: transparent;
-    -fx-border-width: 2px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
     -fx-cursor: hand;
-    -fx-alignment: center;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.login-button:hover {
+    -fx-border-color: #999;
+    -fx-background-color: #f9f9f9;
+}
+
+.login-button:pressed {
+    -fx-background-color: #f8f8f8;
+    -fx-background-color: #f0f0f0;
 }
 
 .fancy-text {

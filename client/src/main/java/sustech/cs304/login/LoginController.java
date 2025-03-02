@@ -9,6 +9,7 @@ import java.net.URI;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
