@@ -12,6 +12,8 @@ public class MenuBarController {
 
     private EditorController editorController;
 
+    private IDEController ideController;
+
     @FXML
     private void initialize() {
         fileTreeController = new FileTreeController();
@@ -33,6 +35,10 @@ public class MenuBarController {
         this.editorController = editorController;
     }
 
+    public void setIdeController(IDEController ideController) {
+        this.ideController = ideController;
+    }
+
     public FileTreeController getFileTreeController() {
         return fileTreeController;
     }
@@ -40,35 +46,21 @@ public class MenuBarController {
     @FXML
     private void setColorVs() {
         if (editorController != null) {
-            this.changeTheme("vs");
+            ideController.changeTheme("vs");
         }
     }
 
     @FXML
     private void setColorVsDark() {
-        this.changeTheme("vs-dark");
+        if (editorController != null) {
+            ideController.changeTheme("vs-dark");
+        }
     }
 
     @FXML
     private void setColorHcBlack() {
         if (editorController != null) {
-            this.changeTheme("hc-black");
-        }
-    }
-
-    public void changeTheme(String theme) {
-        editorController.setTheme(theme);
-        switch (theme) {
-            // 增加代码以切换除编辑界面外整体颜色
-            case "vs":
-
-                break;
-            case "vs-dark":
-
-                break;
-            case "hc-black":
-
-                break;
+            ideController.changeTheme("hc-black");
         }
     }
 }
