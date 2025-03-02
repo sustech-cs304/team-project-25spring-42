@@ -27,7 +27,7 @@
 //         String model = "gpt-3.5-turbo";
 //         String prompt = "Hello, OpenAI! Who are you?";
 //         String response = chatController.getResponse(model, prompt);
-//         
+//
 //         System.out.println(response);
 //         assertNotNull(response);
 //        // assertTrue("Response should contain 'ChatGPT'", response.contains("ChatGPT"));
@@ -40,7 +40,7 @@
 //
 //         System.out.println(response);
 //         assertNotNull(response);
-//         
+//
 //         // assertTrue("Response should contain 'Deepseek'", response.contains("Deepseek"));
 //     }
 //
@@ -48,10 +48,10 @@
 //         String model = "gemini-2.0-flash";
 //         String prompt = "Hello, Gemini! Who are You?";
 //         String response = chatController.getResponse(model, prompt);
-//         
+//
 //         System.out.println(response);
 //         assertNotNull(response);
-//         
+//
 //         // assertTrue("Response should contain 'Gemini'", response.contains("Gemini"));
 //     }
 //
@@ -60,7 +60,7 @@
 //         String model = "invalid-model";
 //         String prompt = "Hello!";
 //         String response = chatController.getResponse(model, prompt);
-//         
+//
 //         assertEquals("Invalid model", response);
 //     }
 //
