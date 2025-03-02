@@ -32,6 +32,7 @@ public class IDEController {
         }
 
         menuBarController.setFileTreeController(fileTreeController);
+        menuBarController.setEditorController(editorController);
         fileTreeController.setEditorController(editorController);
         fileTreeController.setMYpdfReaderController(MYpdfReaderController);
     }
