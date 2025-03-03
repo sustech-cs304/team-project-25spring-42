@@ -66,7 +66,7 @@
       </AnchorPane>
       <AnchorPane fx:id="fileTreePane" layoutX="60.0" layoutY="32.0" prefHeight="1048.0" prefWidth="190.0" styleClass="tree-view" stylesheets="@../../css/ide-dark.css">
          <children>
-            <fx:include fx:id="fileTree" prefHeight="1048.0" prefWidth="190.0" source="fileTree.fxml" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <fx:include fx:id="fileTree" prefHeight="1048.0" prefWidth="190.0" source="fileTree.fxml" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="editorPane" layoutX="250.0" layoutY="32.0" prefHeight="1048.0" prefWidth="1670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
