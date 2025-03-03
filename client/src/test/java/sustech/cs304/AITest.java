@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 // package sustech.cs304;
 //
 // import junit.framework.TestCase;
@@ -69,7 +69,7 @@
 //         super.tearDown();
 //     }
 // }
-=======
+
 package sustech.cs304;
 
 import junit.framework.TestCase;
@@ -140,4 +140,4 @@ public class AITest extends TestCase {
         super.tearDown();
     }
 }
->>>>>>> a6920d1d85eeab6327d4c76cd95c53fa63907ffb
+
