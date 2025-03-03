@@ -19,16 +19,24 @@ public class EditorController {
     private HashSet<MonacoFX> monacoFXs;
     private HashSet<File> files;
 
+    private String background;
+
     @FXML
     private void initialize() {
         monacoFXs = new HashSet<>();
         files = new HashSet<>();
     }
 
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
     /**
      * Set the theme of the editor
      * @param theme the theme to be set, include "vs", "vs-dark", "hc-black"
      */
+
+
     public void setTheme(String theme) {
         for (MonacoFX monacoFX : monacoFXs) {
             monacoFX.getEditor().setCurrentTheme(theme);
@@ -103,7 +111,7 @@ public class EditorController {
         editorTabPane.getTabs().add(newTab);
         editorTabPane.getSelectionModel().select(newTab);
         setText(monacoFX, lines);
-        setTheme("hc-black");
+        setTheme(background);
     }
 
     private Tab findTabByFile(File file) {

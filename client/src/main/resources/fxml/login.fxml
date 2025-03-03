@@ -10,7 +10,7 @@
 
 <StackPane fx:id="loginPane" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.login.LoginController">
    <children>
-      <Button fx:id="githubButton" mnemonicParsing="false" onAction="#loginWithGitHub" prefHeight="45.0" prefWidth="250.0" styleClass="github-button" stylesheets="@../css/login.css" text="Sign in with Github" StackPane.alignment="CENTER">
+      <Button fx:id="githubButton" mnemonicParsing="false" onAction="#loginWithGitHub" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With Github" StackPane.alignment="CENTER">
          <StackPane.margin>
             <Insets top="300.0" />
          </StackPane.margin>
@@ -27,9 +27,9 @@
             <Insets bottom="200.0" />
          </StackPane.margin>
       </Label>
-      <Button mnemonicParsing="false" onAction="#loginWithX" prefHeight="45.0" prefWidth="250.0" styleClass="x-button" stylesheets="@../css/login.css" text="Sign in with X" StackPane.alignment="CENTER" fx:id="xButton">
+      <Button mnemonicParsing="false" onAction="#loginWithX" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With X" textAlignment="CENTER" StackPane.alignment="CENTER" fx:id="xButton">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-30.0">
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-32.0">
                <image>
                   <Image url="@../img/x.png" />
                </image>
@@ -40,6 +40,21 @@
          </graphic>
          <StackPane.margin>
             <Insets top="170.0" />
+         </StackPane.margin>
+      </Button>
+      <Button fx:id="googleButton" mnemonicParsing="false" onAction="#loginWithGoogle" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With Google" StackPane.alignment="CENTER">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-12.0">
+               <image>
+                  <Image url="@../img/google.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+         </graphic>
+         <StackPane.margin>
+            <Insets top="40.0" />
          </StackPane.margin>
       </Button>
    </children>

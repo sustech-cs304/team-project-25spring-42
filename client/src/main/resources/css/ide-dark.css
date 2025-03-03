@@ -1,0 +1,23 @@
+.button {
+    -fx-background-color: white;
+}
+
+.button:hover {
+    -fx-background-color: #f4f4f4;
+}
+
+.model-list-pane {
+    -fx-background-color: white;
+}
+
+.background-pane {
+    -fx-background-color: white;
+}
+
+.file-tree-pane {
+    -fx-background-color: white;
+}
+
+.tree-view {
+    -fx-background-color: white;
+}
