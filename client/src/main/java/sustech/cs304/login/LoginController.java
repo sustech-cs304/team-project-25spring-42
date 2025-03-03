@@ -43,7 +43,11 @@ public class LoginController {
             System.out.println("Open manually: " + loginUrl);
         }
         AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
-        System.out.println(authChecker.checkAuth());
+        if (authChecker.checkAuth()) {
+            switchToIDEPage();
+        } else {
+            return;
+        }
     }
 
     @FXML
@@ -76,7 +80,11 @@ public class LoginController {
             System.out.println("Open manually: " + loginUrl);
         }
         AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
-        System.out.println(authChecker.checkAuth());
+        if (authChecker.checkAuth()) {
+            switchToIDEPage();
+        } else {
+            return;
+        }
     }
     
     public static int getState(String loginUrl){
