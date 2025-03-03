@@ -12,8 +12,8 @@
 * ```bash
   mvn clean install
   ```
-
-​	to install reference jar files.
+  
+  to install reference jar files.
 
 * ```bash
   mvn javafx:run
