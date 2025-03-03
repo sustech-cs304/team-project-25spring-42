@@ -2,6 +2,7 @@ package sustech.cs304.login;
 
 
 import okhttp3.*;
+import sustech.cs304.login.Elements.*;
 
 import java.awt.*;
 import java.io.IOException;
@@ -22,22 +23,24 @@ public class LoginController {
     private StackPane loginPane;
 
     @FXML
-    public void loginWithGitHub() throws IOException {
+    public void loginWithGitHub() throws IOException, InterruptedException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_URL_Github).build();
         Response response = client.newCall(request).execute();
         
         String loginUrl = response.body().string();
+        int state = getState(loginUrl);
         response.close();
-        System.out.println(loginUrl);
 
-        switchToAuthPage(loginUrl);
+        //switchToAuthPage(loginUrl);
 
-        // if (Desktop.isDesktopSupported()) {
-        //     Desktop.getDesktop().browse(URI.create(loginUrl));
-        // } else {
-        //     System.out.println("Open manually: " + loginUrl);
-        // }
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().browse(URI.create(loginUrl));
+        } else {
+            System.out.println("Open manually: " + loginUrl);
+        }
+        AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
+        System.out.println(authChecker.checkAuth());
     }
 
     private void switchToAuthPage(String loginUrl) {
@@ -57,7 +60,6 @@ public class LoginController {
         
         String loginUrl = response.body().string();
         response.close();
-        System.out.println(loginUrl);
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().browse(URI.create(loginUrl));
         } else {
@@ -65,19 +67,27 @@ public class LoginController {
         }
     }
      @FXML
-    public void loginWithGoogle() throws IOException {
+    public void loginWithGoogle() throws IOException, InterruptedException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(SERVER_URL_Google).build();
         Response response = client.newCall(request).execute();
         
         String loginUrl = response.body().string();
+        int state = getState(loginUrl);
         response.close();
-        System.out.println(loginUrl);
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().browse(URI.create(loginUrl));
         } else {
             System.out.println("Open manually: " + loginUrl);
         }
+        AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
+        System.out.println(authChecker.checkAuth());
+    }
+    
+    public static int getState(String loginUrl){
+        String[] parts = loginUrl.split("=");
+        String state = parts[parts.length-1];
+        return Integer.parseInt(state);
     }
     
 }
