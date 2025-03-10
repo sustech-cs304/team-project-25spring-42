@@ -15,8 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL fxmlUrl = getClass().getResource("/fxml/login.fxml");
-        // URL fxmlUrl = getClass().getResource("/fxml/IDE/IDE.fxml");
+        URL fxmlUrl = getClass().getResource("/fxml/IDE/IDE.fxml");
         if (fxmlUrl == null) {
             System.err.println("FXML file not found! Check the path and ensure the file is in the resources folder.");
             return;
@@ -25,6 +24,10 @@ public class App extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setTitle("AIDE");
+        String loginCSS = this.getClass().getResource("/css/login.css").toExternalForm();
+        scene.getStylesheets().add(loginCSS);
+        String initialBgCSS = this.getClass().getResource("/css/style-vs-dark.css").toExternalForm();
+        scene.getStylesheets().add(initialBgCSS);
         stage.setScene(scene);
         stage.show();
     }

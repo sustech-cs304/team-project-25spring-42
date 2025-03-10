@@ -10,6 +10,12 @@
          <items>
             <MenuItem fx:id="open" mnemonicParsing="false" onAction="#openFolder" text=" Open Folder" />
          </items>
+         <items>
+            <MenuItem fx:id="save_this" mnemonicParsing="false" onAction="#savePage" text=" Save this file" />
+         </items>
+         <items>
+            <MenuItem fx:id="save_all" mnemonicParsing="false" onAction="#saveAll" text=" Save all" />
+         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Edit">
          <items>

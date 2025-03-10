@@ -10,8 +10,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import sustech.cs304.utils.FileUtils;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class EditorController {
+
+    private IDEController ideController;
 
     @FXML
     private TabPane editorTabPane;
@@ -25,6 +30,10 @@ public class EditorController {
     private void initialize() {
         monacoFXs = new HashSet<>();
         files = new HashSet<>();
+    }
+
+    public void setIdeController(IDEController ideController) {
+        this.ideController = ideController;
     }
 
     public void setBackground(String background) {
@@ -112,6 +121,7 @@ public class EditorController {
         editorTabPane.getSelectionModel().select(newTab);
         setText(monacoFX, lines);
         setTheme(background);
+        ideController.openEditor();
     }
 
     private Tab findTabByFile(File file) {
@@ -122,6 +132,39 @@ public class EditorController {
         }
         return null;
     }
+
+    public void savePage() {
+        Tab tab = this.editorTabPane.getSelectionModel().getSelectedItem();
+        if (tab == null) {
+            return;
+        }
+        String path = tab.getId();
+        File file = new File(path);
+        MonacoFX monaco = (MonacoFX) ((AnchorPane) tab.getContent()).getChildren().get(0);
+        String content = monaco.getEditor().getDocument().getText();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAll() {
+        for (Tab tab : editorTabPane.getTabs()) {
+            if (tab == null) {
+                return;
+            }
+            String path = tab.getId();
+            File file = new File(path);
+            MonacoFX monaco = (MonacoFX) ((AnchorPane) tab.getContent()).getChildren().get(0);
+            String content = monaco.getEditor().getDocument().getText();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+                bw.write(content);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
-
-

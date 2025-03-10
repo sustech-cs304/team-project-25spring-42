@@ -2,3 +2,48 @@
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
 }
+
+#welcomeLabel {
+    -fx-text-fill: #000000;
+    -fx-font-family: Arial;
+}
+
+#openLink {
+    -fx-text-fill: #007ACC;
+}
+
+#openLink:visited {
+    -fx-text-fill: #007ACC;
+}
+
+#firstModeButton {
+
+}
+
+#firstModeButton:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+}
+
+#secondModeButton {
+
+}
+
+#secondModeButton:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+}
+
+#profileButton {
+
+}
+
+#profileButton:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+}
+
+#settingButton {
+
+}
+
+#settingButton:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+}

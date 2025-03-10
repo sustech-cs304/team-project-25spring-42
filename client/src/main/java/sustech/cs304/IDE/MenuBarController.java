@@ -23,8 +23,18 @@ public class MenuBarController {
     }
 
     @FXML
-    private void openFolder() {
+    public void openFolder() {
         fileTreeController.handleSelectFolder();
+    }
+
+    @FXML
+    public void savePage() {
+        editorController.savePage();
+    }
+
+    @FXML
+    public void saveAll() {
+        editorController.saveAll();
     }
 
     public void setFileTreeController(FileTreeController fileTreeController) {
