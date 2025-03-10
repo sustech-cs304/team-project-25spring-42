@@ -8,6 +8,15 @@
     -fx-font-family: Arial;
 }
 
+.button {
+    -fx-background-color: #ffffff;
+}
+
+.button:hover {
+    -fx-background-color: #1e1e1e;
+}
+
+
 #openLink {
     -fx-text-fill: #007ACC;
 }
@@ -16,34 +25,14 @@
     -fx-text-fill: #007ACC;
 }
 
-#firstModeButton {
-
+.model-list-pane {
+    -fx-background-color: #ffffff;
 }
 
-#firstModeButton:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+.file-tree-pane {
+    -fx-background-color: #ffffff;
 }
 
-#secondModeButton {
-
-}
-
-#secondModeButton:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
-}
-
-#profileButton {
-
-}
-
-#profileButton:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
-}
-
-#settingButton {
-
-}
-
-#settingButton:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,255,0.6), 15, 0.0, 0, 0);
+.tree-view {
+    -fx-background-color: #ffffff;
 }
