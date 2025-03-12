@@ -2,3 +2,37 @@
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
 }
+
+#welcomeLabel {
+    -fx-text-fill: #000000;
+    -fx-font-family: Arial;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+}
+
+.button:hover {
+    -fx-background-color: #1e1e1e;
+}
+
+
+#openLink {
+    -fx-text-fill: #007ACC;
+}
+
+#openLink:visited {
+    -fx-text-fill: #007ACC;
+}
+
+.model-list-pane {
+    -fx-background-color: #ffffff;
+}
+
+.file-tree-pane {
+    -fx-background-color: #ffffff;
+}
+
+.tree-view {
+    -fx-background-color: #ffffff;
+}
