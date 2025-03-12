@@ -71,7 +71,11 @@ public class FileTreeController {
                 FileTreeNode node = selectedItem.getValue();
                 File selectedFile = new File(node.getPath());
                 if (selectedFile.exists()) {
-                    openFile(selectedFile);
+                    try {
+                        openFile(selectedFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -119,13 +123,13 @@ public class FileTreeController {
         }
     }
 
-    private void openFile(File file) {
+    private void openFile(File file) throws IOException {
         if (file.isDirectory()) {
             return;
         } else {
             String extension = FileUtils.getExtension(file);
             if(extension.equals("pdf") ){
-                MYpdfReaderController.getFile(file);
+                editorController.addpdfPage(file);
             }else{
                 try {
                     List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
