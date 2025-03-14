@@ -27,15 +27,13 @@
 
 4. **Course Tools**
 
-   The Course Tools feature is designed to enhance the learning experience by integrating essential academic tools directly into the IDE. From **managing schedules and course information to facilitating real-time communication and organizing multiple courses**, this feature ensures that students have everything they need to succeed in one centralized platform.
+   The Course Tools feature is designed to enhance the learning experience by integrating essential academic tools directly into the IDE. Includes **small IDE**,a powerful **File Reader** and an intuitive **Note Taker**, designed to streamline your study process and keep all your learning materials organized in one place. Whether you’re reviewing lecture slides, annotating PDFs, or jotting down key concepts, these tools ensure that you can focus on learning without the hassle of switching between multiple apps.
 
 5. **Account System & Friend Chatting**
 
    The Account System & Friend Chatting feature is designed to create a **personalized and collaborative** learning environment. By integrating a robust account system with seamless communication tools, this feature ensures that students can manage their profiles, connect with peers, and collaborate effectively—all within the IDE
 
-6. **Learning Tools**
-
-   The Learning Tools feature includes a powerful **File Reader** and an intuitive **Note Taker**, designed to streamline your study process and keep all your learning materials organized in one place. Whether you’re reviewing lecture slides, annotating PDFs, or jotting down key concepts, these tools ensure that you can focus on learning without the hassle of switching between multiple apps.
+   
 
    
 
