@@ -2,3 +2,36 @@
     -fx-background-color: #1e1e1e;
     -fx-text-fill: #ffffff;
 }
+
+#welcomeLabel {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: Arial;
+}
+
+.button {
+    -fx-background-color: #1e1e1e;
+}
+
+.button:hover {
+    -fx-background-color: #f4f4f4;
+}
+
+#openLink {
+    -fx-text-fill: rgba(55, 148, 255, 1);
+}
+
+#openLink:visited {
+    -fx-text-fill: rgba(55, 148, 255, 1);
+}
+
+.model-list-pane {
+    -fx-background-color: #1e1e1e;
+}
+
+.file-tree-pane {
+    -fx-background-color: #1e1e1e;
+}
+
+.tree-view {
+    -fx-background-color: #1e1e1e;
+}
