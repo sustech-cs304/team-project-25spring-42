@@ -16,6 +16,9 @@ public class IDEController {
     private AnchorPane editorPane;
 
     @FXML
+    private AnchorPane profilePane;
+
+    @FXML
     private FileTreeController fileTreeController;
 
     @FXML
@@ -73,5 +76,10 @@ public class IDEController {
         openLink.setVisible(false);
         welcomeLabel.setManaged(false);
         openLink.setManaged(false);
+    }
+
+    @FXML
+    public void openProfile() {
+
     }
 }
