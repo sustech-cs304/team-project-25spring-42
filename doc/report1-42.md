@@ -14,7 +14,8 @@
 
 ### 1.1 Functional requirements:
 
-1. **act as a useful IDE **
+1. **act as a useful IDE**
+
    Our Intelligent Course-Aware IDE is designed with education and simplicity in mind, allowing students and educators to start coding instantly. When you're writing code, our IDE provides a **straightforward and clean interface**, free from distractions. Its intuitive design ensures that you can focus on learning and teaching, no matter where you are. Experience the perfect blend of functionality and ease-of-use with our IDE, making classroom coding more efficient and enjoyable. 
 
 2. **AI assistant**
