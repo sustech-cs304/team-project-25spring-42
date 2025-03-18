@@ -14,7 +14,7 @@
 
 ### 1.1 Functional requirements:
 
-1. **act as a useful IDE**
+1. **Act as a Useful IDE**
 
    Our Intelligent Course-Aware IDE is designed with education and simplicity in mind, allowing students and educators to start coding instantly. When you're writing code, our IDE provides a **straightforward and clean interface**, free from distractions. Its intuitive design ensures that you can focus on learning and teaching, no matter where you are. Experience the perfect blend of functionality and ease-of-use with our IDE, making classroom coding more efficient and enjoyable. 
 
@@ -22,7 +22,7 @@
 
    The Intelligent Course-Aware IDE is integrated with advanced AI tools, such as **OpenAI**, **DeepSeek**, or custom APIs, to provide **real-time, context-aware assistance** for both coding and course-related queries. This AI-powered assistant acts as a 24/7 learning companion, helping students navigate complex concepts, debug code, and deepen their understanding of course materials. 
 
-3. **course resource management.**
+3. **Course Resource Management.**
 
    The Course Resource Management feature is designed to provide students with a **secure, intuitive, and well-organized** way to manage all their course materials. Whether it’s lecture slides, assignments, reading materials, or personal notes, this feature ensures that everything is easily accessible, logically structured, and protected against unauthorized access.
 
@@ -40,7 +40,7 @@
 
 ### 1.2 Non-functional requirements:
 
-1. **performance:**
+1. **Performance:**
 
    - *Response Time:*
      The IDE should load course materials, execute code snippets, and provide AI-generated responses within **2 seconds** for 95% of requests under normal load conditions.
@@ -48,18 +48,17 @@
    - *Concurrency:*
      The system should support **up to 1,000 concurrent users** without degradation in performance.
 
-2. **security:**
+2. **Security:**
 
    - *Encryption:*
-
-     manually encrypting data using **SHA256**
+     Manually encrypting data using **SHA256**
 
    - *Authentication:*
      The system must support **OAuth 2.0** for secure login.
 
-3. **usability:**
+3. **Usability:**
 
-   The interface is logical, users with vscode, idea and other experience can get started directly. And reduce the learning cost of new users
+   - The interface is logical, users with vscode, idea and other experience can get started directly. And reduce the learning cost of new users
 
 4. **Maintainability:**
 
