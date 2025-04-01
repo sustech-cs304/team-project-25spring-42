@@ -26,6 +26,8 @@ public class JeditermController {
     public void initialize() {
         System.out.println("Initializing JeditermController...");
         JediTermFxWidget widget =  createTerminalWidget();
+        widget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
+        widget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
         widget.addListener(terminalWidget -> {
             widget.close();
         });

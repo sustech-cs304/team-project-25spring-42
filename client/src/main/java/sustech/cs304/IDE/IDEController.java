@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import sustech.cs304.pdfReader.pdfReaderController;
+import sustech.cs304.terminal.JeditermController;
 
 public class IDEController {
 
@@ -24,6 +25,9 @@ public class IDEController {
 
     @FXML
     private pdfReaderController MYpdfReaderController;
+
+    @FXML
+    private JeditermController jeditermController;
 
     private String css;
 
