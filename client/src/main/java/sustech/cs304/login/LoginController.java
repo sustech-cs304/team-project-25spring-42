@@ -18,9 +18,9 @@ import javafx.fxml.FXMLLoader;
 import java.net.URL;
 
 public class LoginController {
-    private static final String SERVER_URL_Github = "http://107.173.91.140:8080/auth/github";
-    private static final String SERVER_URL_X = "http://107.173.91.140:8080/auth/x";
-    private static final String SERVER_URL_Google = "http://107.173.91.140:8080/auth/google";
+    private static final String SERVER_URL_Github = "http://139.180.143.70:8080/auth/github";
+    private static final String SERVER_URL_X = "http://139.180.143.70:8080/auth/x";
+    private static final String SERVER_URL_Google = "http://139.180.143.70:8080/auth/google";
 
     @FXML
     private StackPane loginPane;
