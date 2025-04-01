@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
 import sustech.cs304.pdfReader.pdfReaderController;
+import sustech.cs304.terminal.JeditermController;
 
 public class IDEController {
 
@@ -31,6 +32,8 @@ public class IDEController {
     private pdfReaderController MYpdfReaderController;
 
     @FXML
+    private JeditermController jeditermController;
+
     private Label welcomeLabel;
 
     @FXML
