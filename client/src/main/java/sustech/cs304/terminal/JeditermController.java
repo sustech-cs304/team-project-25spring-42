@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
-import com.techsenger.jeditermfx.app.pty.PtyProcessTtyConnector;
+import sustech.cs304.terminal.pty.PtyProcessTtyConnector;
 import com.techsenger.jeditermfx.core.TtyConnector;
 import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
