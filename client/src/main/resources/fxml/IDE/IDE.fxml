@@ -75,6 +75,7 @@
       <AnchorPane fx:id="editorPane" layoutX="250.0" layoutY="32.0" prefHeight="1048.0" prefWidth="1670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
          <children>
             <fx:include fx:id="editor" source="editor.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <fx:include source="../terminal.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
             <Label fx:id="welcomeLabel" layoutX="176.0" layoutY="141.0" prefHeight="37.0" prefWidth="433.0" text="Welcome to AIDE">
                <font>
                   <Font size="30.0" />
@@ -82,7 +83,8 @@
             <Hyperlink fx:id="openLink" layoutX="219.0" layoutY="211.0" onAction="#openFolder" text="Open Folder">
                <font>
                   <Font size="18.0" />
-               </font></Hyperlink>
+                </font>
+            </Hyperlink>
          </children>
       </AnchorPane>
    </children>
