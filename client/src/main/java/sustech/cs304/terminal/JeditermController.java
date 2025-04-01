@@ -15,9 +15,7 @@ import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import kotlin.text.Charsets;
 
 public class JeditermController {
@@ -29,10 +27,9 @@ public class JeditermController {
         System.out.println("Initializing JeditermController...");
         JediTermFxWidget widget =  createTerminalWidget();
         widget.addListener(terminalWidget -> {
-            widget.close(); // terminate the current process and dispose all allocated resources
+            widget.close();
         });
         terminalPane.getChildren().add(widget.getPane());
-        // terminalPane = (AnchorPane) widget.getPane();
     }
 
     private JediTermFxWidget createTerminalWidget() {
@@ -47,7 +44,6 @@ public class JeditermController {
         try {
             String[] command;
             Map<String, String> envs = new HashMap<String, String>(System.getenv());
-            // Map<String, String> envs = new HashMap<String, String>();
             if (Platform.isWindows()) {
                 command = new String[]{"powershell.exe"};
             } else {
@@ -57,7 +53,6 @@ public class JeditermController {
                 }
                 if (Platform.isMacOS()) {
                     command = new String[]{shell, "--login"};
-                    // command = new String[]{"/bin/mkdir", "hhhhh"};
                 } else {
                     command = new String[]{shell};
                 }
@@ -77,6 +72,4 @@ public class JeditermController {
             throw new IllegalStateException(e);
         }
     }
-
-
 }
