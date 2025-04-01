@@ -51,7 +51,8 @@ public class AuthController {
 
     @GetMapping("/github")
     public String githubLogin() {
-        String url = "https://github.com/login/oauth/authorize?client_id=" + clientIdGithub + "&redirect_uri=http://107.173.91.140:8080/auth/callback/github"+"&state="+ currentSequence;
+        System.out.println("tag");
+        String url = "https://github.com/login/oauth/authorize?client_id=" + clientIdGithub + "&redirect_uri=http://139.180.143.70:8080/auth/callback/github"+"&state="+ currentSequence;
         currentSequence+=1;
         if (currentSequence == 100000) {
             currentSequence = 0;
@@ -61,7 +62,7 @@ public class AuthController {
 
     @GetMapping("/x")
     public String xLohin() {
-        return "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=" + clientIdX + "&redirect_uri=http://107.173.91.140:8080/auth/callback/x&scope=tweet.readuser.read";
+        return "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=" + clientIdX + "&redirect_uri=http://139.180.143.70:8080/auth/callback/x&scope=tweet.readuser.read";
     }
 
     @GetMapping("/google")
@@ -131,7 +132,7 @@ public class AuthController {
                 "https://api.twitter.com/oauth2/token?client_id=" + clientIdX +
                         "&client_secret=" + clientSecretX +
                         "&code=" + code + 
-                        "&redirect_uri=http://107.173.91.140:8080/auth/callback/x&grant_type=authorization_code",
+                        "&redirect_uri=http://139.180.143.70:8080/auth/callback/x&grant_type=authorization_code",
                 null,
                 Map.class
         );
