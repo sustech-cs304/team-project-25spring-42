@@ -1,17 +1,26 @@
 package sustech.cs304.IDE;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
 import eu.mihosoft.monacofx.MonacoFX;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
+import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.utils.FileUtils;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class EditorController {
+
+    private IDEController ideController;
 
     @FXML
     private TabPane editorTabPane;
@@ -25,6 +34,10 @@ public class EditorController {
     private void initialize() {
         monacoFXs = new HashSet<>();
         files = new HashSet<>();
+    }
+
+    public void setIdeController(IDEController ideController) {
+        this.ideController = ideController;
     }
 
     public void setBackground(String background) {
@@ -112,6 +125,37 @@ public class EditorController {
         editorTabPane.getSelectionModel().select(newTab);
         setText(monacoFX, lines);
         setTheme(background);
+        ideController.openEditor();
+    }
+
+
+
+
+    public void addpdfPage(File file) throws IOException {
+        if (files.contains(file)) {
+            Tab tab = findTabByFile(file);
+            editorTabPane.getSelectionModel().select(tab);
+            return;
+        }
+
+        Tab newTab = new Tab();
+        newTab.setId(file.getAbsolutePath());
+        newTab.setText(file.getName());
+        newTab.setOnClosed(event -> {
+            files.remove(file);
+        });
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/pdfReader.fxml")); // 确保路径正确
+        AnchorPane pdfPane = loader.load();
+        pdfReaderController pdfReaderController = loader.getController();
+        pdfReaderController.getFile(file);
+
+        newTab.setContent(pdfPane);
+        editorTabPane.getTabs().add(newTab);
+        editorTabPane.getSelectionModel().select(newTab);
+
+        files.add(file);
     }
 
     private Tab findTabByFile(File file) {
@@ -122,6 +166,39 @@ public class EditorController {
         }
         return null;
     }
+
+    public void savePage() {
+        Tab tab = this.editorTabPane.getSelectionModel().getSelectedItem();
+        if (tab == null) {
+            return;
+        }
+        String path = tab.getId();
+        File file = new File(path);
+        MonacoFX monaco = (MonacoFX) ((AnchorPane) tab.getContent()).getChildren().get(0);
+        String content = monaco.getEditor().getDocument().getText();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            bw.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveAll() {
+        for (Tab tab : editorTabPane.getTabs()) {
+            if (tab == null) {
+                return;
+            }
+            String path = tab.getId();
+            File file = new File(path);
+            MonacoFX monaco = (MonacoFX) ((AnchorPane) tab.getContent()).getChildren().get(0);
+            String content = monaco.getEditor().getDocument().getText();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+                bw.write(content);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
-
-

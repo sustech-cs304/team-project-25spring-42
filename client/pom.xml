@@ -110,7 +110,6 @@
                 <version>0.0.5</version>
                 <configuration>
                     <mainClass>sustech.cs304.App</mainClass>
-                    <!-- <mainClass>sustech.cs304.terminal.Jediterm</mainClass> -->
                 </configuration>
             </plugin>
 

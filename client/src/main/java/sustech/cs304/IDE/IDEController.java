@@ -3,6 +3,8 @@ package sustech.cs304.IDE;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.Hyperlink;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
 
@@ -13,6 +15,9 @@ public class IDEController {
 
     @FXML
     private AnchorPane editorPane;
+
+    @FXML
+    private AnchorPane profilePane;
 
     @FXML
     private FileTreeController fileTreeController;
@@ -29,6 +34,11 @@ public class IDEController {
     @FXML
     private JeditermController jeditermController;
 
+    private Label welcomeLabel;
+
+    @FXML
+    private Hyperlink openLink;
+
     private String css;
 
     @FXML
@@ -42,7 +52,8 @@ public class IDEController {
         menuBarController.setIdeController(this);
         fileTreeController.setEditorController(editorController);
         fileTreeController.setMYpdfReaderController(MYpdfReaderController);
-        editorController.setBackground("hc-black");
+        editorController.setIdeController(this);
+        editorController.setBackground("vs-dark");
     }
 
     public void changeTheme(String theme) {
@@ -54,5 +65,24 @@ public class IDEController {
         }
         css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
         scene.getStylesheets().add(css);
+    }
+
+    @FXML
+    private void openFolder() {
+        if (menuBarController != null) {
+            menuBarController.openFolder();
+        }
+    }
+
+    public void openEditor() {
+        welcomeLabel.setVisible(false);
+        openLink.setVisible(false);
+        welcomeLabel.setManaged(false);
+        openLink.setManaged(false);
+    }
+
+    @FXML
+    public void openProfile() {
+
     }
 }
