@@ -1,17 +1,23 @@
 package sustech.cs304.classroom;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.Parent;
 import sustech.cs304.classroom.MenuBarController;
+
+import java.io.IOException;
 
 public class classController {
 
@@ -24,6 +30,7 @@ public class classController {
     public AnchorPane backgroundPane;
     public Button firstModeButton;
     public ScrollPane ClassChoiceScroll;
+    public AnchorPane editorPane;
     @FXML
     private MenuBarController menuBarController;
 
@@ -84,6 +91,7 @@ public class classController {
         btn.setOnAction(e -> {
             System.out.println("已选择课程: " + course);
             btn.setStatus(!btn.isActive());
+            showCourseHomePage("课程主页", "请从左侧选择课程");
         });
 
         container.getChildren().add(btn);
@@ -98,6 +106,34 @@ public class classController {
         }
         css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
         scene.getStylesheets().add(css);
+    }
+
+
+
+    private void showCourseHomePage(String courseName, String teacherName) {
+        try {
+            // 加载FXML文件
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CourseHomePage.fxml"));
+            Parent courseHomePage = loader.load();
+
+            // 获取控制器实例
+            CourseHomeController controller = loader.getController();
+
+            // 设置课程名称和教师姓名
+            //controller.setCourseInfo(courseName, teacherName);
+
+            // 清空原有内容
+            editorPane.getChildren().clear();
+
+            // 将加载的FXML内容添加到编辑器面板
+            editorPane.getChildren().add(courseHomePage);
+            AnchorPane.setTopAnchor(courseHomePage, 0.0);
+            AnchorPane.setLeftAnchor(courseHomePage, 0.0);
+            AnchorPane.setRightAnchor(courseHomePage, 0.0);
+            AnchorPane.setBottomAnchor(courseHomePage, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
