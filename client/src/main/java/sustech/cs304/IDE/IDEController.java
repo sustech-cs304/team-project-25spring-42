@@ -1,14 +1,26 @@
 package sustech.cs304.IDE;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
+import javafx.stage.Stage;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
 
+import java.io.IOException;
+import java.util.Objects;
+
 public class IDEController {
+    @FXML
+    public Button ThirdModeButton;
+
 
     @FXML
     private AnchorPane backgroundPane;
@@ -54,6 +66,8 @@ public class IDEController {
         fileTreeController.setMYpdfReaderController(MYpdfReaderController);
         editorController.setIdeController(this);
         editorController.setBackground("vs-dark");
+
+        ThirdModeButton.setOnAction(event -> switchToClass());
     }
 
     public void changeTheme(String theme) {
@@ -85,4 +99,25 @@ public class IDEController {
     public void openProfile() {
 
     }
+
+
+
+    private void switchToClass() {
+        try {
+            // 加载新的FXML内容
+            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
+
+            // 替换当前场景的内容
+            Scene currentScene = ThirdModeButton.getScene();
+            currentScene.setRoot(newContent);
+
+            // 或者如果你只想替换部分内容
+            // backgroundPane.getChildren().setAll(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 错误处理...
+        }
+    }
+
 }
