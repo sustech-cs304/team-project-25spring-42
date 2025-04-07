@@ -17,7 +17,7 @@
          <children>
             <VBox layoutY="-1.0" prefHeight="524.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="525.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
                <children>
-                  <Button fx:id="firstModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
+                  <Button fx:id="firstModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToEditor" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -41,7 +41,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="ThirdModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
+                  <Button fx:id="ThirdModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToClass" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -54,7 +54,7 @@
             </VBox>
             <VBox alignment="BOTTOM_LEFT" prefHeight="524.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="524.0">
                <children>
-                  <Button fx:id="UserHomeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#openProfile" prefHeight="60.0" prefWidth="60.0">
+                  <Button fx:id="UserHomeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToUserhome" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -76,24 +76,29 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="fileTreePane" layoutX="60.0" layoutY="32.0" prefHeight="1048.0" prefWidth="190.0" styleClass="tree-view">
+      <AnchorPane fx:id="modePane" layoutX="60.0" layoutY="32.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
          <children>
-            <fx:include fx:id="fileTree" prefHeight="1048.0" prefWidth="190.0" source="fileTree.fxml" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="editorPane" layoutX="250.0" layoutY="32.0" prefHeight="1048.0" prefWidth="1670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
-         <children>
-            <fx:include fx:id="editor" source="editor.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <fx:include fx:id="jediterm" source="../terminal.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-            <Label fx:id="welcomeLabel" layoutX="176.0" layoutY="141.0" prefHeight="37.0" prefWidth="433.0" text="Welcome to AIDE">
-               <font>
-                  <Font size="30.0" />
-               </font></Label>
-            <Hyperlink fx:id="openLink" layoutX="219.0" layoutY="211.0" onAction="#openFolder" text="Open Folder">
-               <font>
-                  <Font size="18.0" />
-                </font>
-            </Hyperlink>
+            <AnchorPane fx:id="fileTreePane" prefHeight="1048.0" prefWidth="190.0" styleClass="tree-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1668.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <fx:include fx:id="fileTree" prefHeight="1048.0" prefWidth="190.0" source="fileTree.fxml" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="editorPane" layoutX="190.0" prefHeight="1048.0" prefWidth="1670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <fx:include fx:id="editor" source="editor.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <fx:include fx:id="jediterm" source="../terminal.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <Label fx:id="welcomeLabel" layoutX="176.0" layoutY="141.0" prefHeight="37.0" prefWidth="433.0" text="Welcome to AIDE">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Hyperlink fx:id="openLink" layoutX="219.0" layoutY="211.0" onAction="#openFolder" text="Open Folder" underline="true">
+                     <font>
+                        <Font size="18.0" />
+                      </font>
+                  </Hyperlink>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
