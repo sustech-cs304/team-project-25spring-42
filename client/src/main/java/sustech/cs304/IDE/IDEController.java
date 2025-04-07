@@ -13,6 +13,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
+import sustech.cs304.userhome.UserHomeController;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -50,6 +51,8 @@ public class IDEController {
     private JeditermController jeditermController;
 
     private Label welcomeLabel;
+
+    private Parent userhomepane;
 
     @FXML
     private Hyperlink openLink;
@@ -125,7 +128,10 @@ public class IDEController {
     private void switchToClass() {
         try {
             // 加载新的FXML内容
+
             Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
+
+
 
             // 替换当前场景的内容
             Scene currentScene = ThirdModeButton.getScene();
@@ -142,12 +148,24 @@ public class IDEController {
 
     private void switchToUserhome() {
         try {
+
             // 加载新的FXML内容
-            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+            //Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+
+            //if(userhomepane==null){
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+            Parent newContent = loader.load();
+            UserHomeController newContent_controller = loader.getController();
+            userhomepane = newContent;
+            newContent_controller.setIDEpane(backgroundPane);
+
+
+            //}
 
             // 替换当前场景的内容
             Scene currentScene = ThirdModeButton.getScene();
-            currentScene.setRoot(newContent);
+            currentScene.setRoot(userhomepane);
+
 
             // 或者如果你只想替换部分内容
             // backgroundPane.getChildren().setAll(newContent);
