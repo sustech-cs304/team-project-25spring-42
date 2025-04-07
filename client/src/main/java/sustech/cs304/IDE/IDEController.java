@@ -6,16 +6,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
-import javafx.stage.Stage;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
 import sustech.cs304.userhome.UserHomeController;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class IDEController {
@@ -25,9 +25,14 @@ public class IDEController {
     @FXML
     public Button UserHomeButton;
 
-
     @FXML
     private AnchorPane backgroundPane;
+
+    @FXML
+    private AnchorPane modePane;
+
+    List<Node> ideContent;
+    private Parent classContent, userHomeContent;
 
     @FXML
     private AnchorPane editorPane;
@@ -50,6 +55,7 @@ public class IDEController {
     @FXML
     private JeditermController jeditermController;
 
+    @FXML
     private Label welcomeLabel;
 
     private Parent userhomepane;
@@ -65,14 +71,18 @@ public class IDEController {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
+        ideContent = new ArrayList<>(modePane.getChildren());
         menuBarController.setIdeController(this);
         fileTreeController.setIdeController(this);
         editorController.setIdeController(this);
         editorController.setBackground("vs-dark");
 
-        ThirdModeButton.setOnAction(event -> switchToClass());
-        UserHomeButton.setOnAction(event -> switchToUserhome());
-
+        try {
+            classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
+            userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void changeTheme(String theme) {
@@ -125,55 +135,30 @@ public class IDEController {
         return jeditermController;
     }
 
-    private void switchToClass() {
-        try {
-            // 加载新的FXML内容
-
-            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
-
-
-
-            // 替换当前场景的内容
-            Scene currentScene = ThirdModeButton.getScene();
-            currentScene.setRoot(newContent);
-
-            // 或者如果你只想替换部分内容
-            // backgroundPane.getChildren().setAll(newContent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 错误处理...
-        }
+    @FXML
+    private void switchToEditor() {
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(ideContent);
     }
 
+    @FXML
+    private void switchToClass() {
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(classContent);
+        AnchorPane.setTopAnchor(classContent, 0.0);
+        AnchorPane.setBottomAnchor(classContent, 0.0);
+        AnchorPane.setLeftAnchor(classContent, 0.0);
+        AnchorPane.setRightAnchor(classContent, 0.0);
+    }
+
+    @FXML
     private void switchToUserhome() {
-        try {
-
-            // 加载新的FXML内容
-            //Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
-
-            //if(userhomepane==null){
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
-            Parent newContent = loader.load();
-            UserHomeController newContent_controller = loader.getController();
-            userhomepane = newContent;
-            newContent_controller.setIDEpane(backgroundPane);
-
-
-            //}
-
-            // 替换当前场景的内容
-            Scene currentScene = ThirdModeButton.getScene();
-            currentScene.setRoot(userhomepane);
-
-
-            // 或者如果你只想替换部分内容
-            // backgroundPane.getChildren().setAll(newContent);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 错误处理...
-        }
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(userHomeContent);
+        AnchorPane.setTopAnchor(userHomeContent, 0.0);
+        AnchorPane.setBottomAnchor(userHomeContent, 0.0);
+        AnchorPane.setLeftAnchor(userHomeContent, 0.0);
+        AnchorPane.setRightAnchor(userHomeContent, 0.0);
     }
 
 }
