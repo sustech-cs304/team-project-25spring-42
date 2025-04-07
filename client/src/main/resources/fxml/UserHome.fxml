@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.userhome.UserHomeController">
+    <top>
+        <ToolBar>
+            <items>
+                <Button fx:id="returnbutton" text="首页" />
+                <Button text="保存" onAction="#handleSave" />
+                <Button text="退出" onAction="#handleLogout" />
+            </items>
+        </ToolBar>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true">
+            <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
+                <!-- 用户ID和头像区域 -->
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <StackPane>
+                        <ImageView fx:id="avatarImageView" fitHeight="120" fitWidth="120">
+                            <image>
+                                <Image url="/img/user.png" />
+                            </image>
+                        </ImageView>
+                        <Button text="更换" style="-fx-background-radius: 15; -fx-padding: 5 10;"
+                                onAction="#handleChangeAvatar" />
+                    </StackPane>
+
+                    <VBox spacing="5">
+                        <Label text="用户ID:" style="-fx-font-weight: bold;" />
+                        <Label fx:id="userIdLabel" style="-fx-font-size: 14;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- 可编辑的用户信息 -->
+                <GridPane hgap="10" vgap="15" style="-fx-padding: 15; -fx-background-color: #f5f5f5; -fx-background-radius: 5;">
+                    <Label text="基本信息" style="-fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnSpan="2" />
+
+                    <Label text="用户名:" GridPane.rowIndex="1" style="-fx-font-weight: bold;" />
+                    <TextField fx:id="usernameField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                    <Label text="账号:" GridPane.rowIndex="2" style="-fx-font-weight: bold;" />
+                    <Label fx:id="accountLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                    <Label text="密码:" GridPane.rowIndex="3" style="-fx-font-weight: bold;" />
+                    <HBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                        <PasswordField fx:id="passwordField" promptText="********" editable="false" />
+                        <Button text="修改密码" onAction="#handleChangePassword" />
+                    </HBox>
+                </GridPane>
+
+                <!-- 自我介绍 -->
+                <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f5f5f5; -fx-background-radius: 5;">
+                    <Label text="自我介绍" style="-fx-font-size: 16; -fx-font-weight: bold;" />
+                    <TextArea fx:id="bioTextArea" wrapText="true" prefRowCount="5"
+                              promptText="介绍一下你自己..." />
+                </VBox>
+
+                <!-- 其他信息 -->
+                <GridPane hgap="10" vgap="10" style="-fx-padding: 15; -fx-background-color: #f5f5f5; -fx-background-radius: 5;">
+                    <Label text="其他信息" style="-fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnSpan="2" />
+
+                    <Label text="注册日期:" GridPane.rowIndex="1" style="-fx-font-weight: bold;" />
+                    <Label fx:id="registerDateLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                    <Label text="最后登录:" GridPane.rowIndex="2" style="-fx-font-weight: bold;" />
+                    <Label fx:id="lastLoginLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                </GridPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding: 10; -fx-background-color: #e0e0e0;">
+            <Label text="© 2023 用户主页" />
+        </HBox>
+    </bottom>
+</BorderPane>
