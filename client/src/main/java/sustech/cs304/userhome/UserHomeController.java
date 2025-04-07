@@ -28,18 +28,12 @@ public class UserHomeController {
     @FXML private Label registerDateLabel;
     @FXML private Label lastLoginLabel;
 
-    // 用户数据模型 (实际应用中可能是一个单独的User类)
-    private String userId;
-    private String username;
-    private String account;
-    private String password;
-    private String bio;
-    private String avatarPath;
-    private String registerDate;
-    private String lastLogin;
+    private User user;
 
     @FXML
     public void initialize() {
+        user = new User();
+
         // 初始化用户数据 (实际应用中应从数据库或服务获取)
         loadUserData();
 
@@ -51,25 +45,19 @@ public class UserHomeController {
 
     private void loadUserData() {
         // 模拟从数据库加载用户数据
-        userId = "U10000000";
-        username = "User";
-        account = "user@example.com";
-        password = "encryptedPassword123"; // 实际应用中应该是加密后的密码
-        bio = "input self introduction";
-        avatarPath = null; // 默认使用内置头像
-        registerDate = "2000-10-10";
-        lastLogin = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        user.loadUserData();
     }
 
     private void bindUserDataToUI() {
-        userIdLabel.setText(userId);
-        usernameField.setText(username);
-        accountLabel.setText(account);
+        userIdLabel.setText(user.getUserId());
+        usernameField.setText(user.getUsername());
+        accountLabel.setText(user.getAccount());
         passwordField.setText("********"); // 不显示真实密码
-        bioTextArea.setText(bio);
-        registerDateLabel.setText(registerDate);
-        lastLoginLabel.setText(lastLogin);
+        bioTextArea.setText(user.getBio());
+        registerDateLabel.setText(user.getRegisterDate());
+        lastLoginLabel.setText(user.getLastLogin());
 
+        String avatarPath = user.getAvatarPath();
         // 加载头像
         if (avatarPath != null && !avatarPath.isEmpty()) {
             try {
@@ -94,7 +82,7 @@ public class UserHomeController {
             try {
                 Image newAvatar = new Image(selectedFile.toURI().toString());
                 avatarImageView.setImage(newAvatar);
-                avatarPath = selectedFile.getAbsolutePath();
+                user.setAvatarPath(selectedFile.getAbsolutePath());
 
                 // 在实际应用中，这里应该上传头像到服务器
                 showAlert("头像已更新", "头像已成功更改", Alert.AlertType.INFORMATION);
@@ -149,7 +137,7 @@ public class UserHomeController {
         // 处理结果
         dialog.showAndWait().ifPresent(newPassword -> {
             // 在实际应用中，这里应该加密并保存新密码
-            password = newPassword;
+            user.setPassword(newPassword);
             showAlert("成功", "密码已更新", Alert.AlertType.INFORMATION);
         });
     }
@@ -157,11 +145,11 @@ public class UserHomeController {
     @FXML
     private void handleSave() {
         // 获取UI上的修改
-        username = usernameField.getText();
-        bio = bioTextArea.getText();
+        user.setUsername(usernameField.getText());
+        user.setBio(bioTextArea.getText());
 
         // 验证用户名
-        if (username == null || username.trim().isEmpty()) {
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
             showAlert("错误", "用户名不能为空", Alert.AlertType.ERROR);
             return;
         }
@@ -170,8 +158,8 @@ public class UserHomeController {
         showAlert("保存成功", "用户信息已保存", Alert.AlertType.INFORMATION);
 
         // 更新最后登录时间
-        lastLogin = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        lastLoginLabel.setText(lastLogin);
+        user.setLastLogin(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        lastLoginLabel.setText(user.getLastLogin());
     }
 
     @FXML
