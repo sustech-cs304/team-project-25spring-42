@@ -11,7 +11,6 @@ import sustech.cs304.IDE.components.treeItems.TreeCellImpl;
 import sustech.cs304.IDE.components.treeItems.DirTreeItem;
 import javafx.util.Callback;
 import javafx.scene.control.TreeCell;
-import sustech.cs304.pdfReader.pdfReaderController;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -28,19 +27,9 @@ public class FileTreeController {
 
     private DirTreeItem rootItem;
 
-    private EditorController editorController;
+    private IDEController ideController;
 
     private boolean showHiddenFiles = false;
-
-    public pdfReaderController getMYpdfReaderController() {
-        return MYpdfReaderController;
-    }
-
-    public void setMYpdfReaderController(pdfReaderController MYpdfReaderController) {
-        this.MYpdfReaderController = MYpdfReaderController;
-    }
-
-    private pdfReaderController MYpdfReaderController;
 
     @FXML
     private void initialize() {
@@ -71,7 +60,11 @@ public class FileTreeController {
                 FileTreeNode node = selectedItem.getValue();
                 File selectedFile = new File(node.getPath());
                 if (selectedFile.exists()) {
-                    openFile(selectedFile);
+                    try {
+                        openFile(selectedFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -82,10 +75,6 @@ public class FileTreeController {
                 return new TreeCellImpl();
             }
         });
-    }
-
-    public void setEditorController(EditorController editorController) {
-        this.editorController = editorController;
     }
 
     private void buildFileTree(TreeItem<FileTreeNode> parentItem, File directory) {
@@ -119,21 +108,25 @@ public class FileTreeController {
         }
     }
 
-    private void openFile(File file) {
+    private void openFile(File file) throws IOException {
         if (file.isDirectory()) {
             return;
         } else {
             String extension = FileUtils.getExtension(file);
             if(extension.equals("pdf") ){
-                MYpdfReaderController.getFile(file);
+                ideController.getEditorController().addpdfPage(file);
             }else{
                 try {
                     List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
-                    editorController.addPage(lines, file);
+                    ideController.getEditorController().addPage(lines, file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    public void setIdeController(IDEController ideController) {
+        this.ideController = ideController;
     }
 }

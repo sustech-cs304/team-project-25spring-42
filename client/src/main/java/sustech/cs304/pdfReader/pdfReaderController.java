@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 public class pdfReaderController {
 
     @FXML
-    private AnchorPane rootAnchorPane;
+    public AnchorPane rootAnchorPane;
 
     @FXML
     private ScrollPane pdfScrollPane;
@@ -36,33 +36,21 @@ public class pdfReaderController {
     private ImageView pdfImageView;
 
     public void initialize() {
-
         pdfImageView = new ImageView();
         pdfReaderPane.getChildren().add(pdfImageView);
-
 
         pdfScrollPane.setFitToWidth(true);
         pdfScrollPane.setFitToHeight(true);
         pdfScrollPane.setPannable(true);
 
-
         pdfReaderPane.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showContextMenu);
 
-        try {
-
-            File pdfFile = new File("/Users/ylers/Desktop/paper/textF-ch7.3.2.pdf"); // 修改为你的 PDF 文件路径
-            document = Loader.loadPDF(pdfFile);
-            renderer = new PDFRenderer(document);
-            renderPage(currentPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load PDF file: " + e.getMessage());
-        }
+        // 监听视口大小变化以调整图像位置
+        pdfScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> updateImageViewPosition());
     }
 
-    public void getFile(File file){
+    public void getFile(File file) {
         try {
-
             File pdfFile = file;
             document = Loader.loadPDF(pdfFile);
             renderer = new PDFRenderer(document);
@@ -72,22 +60,28 @@ public class pdfReaderController {
             e.printStackTrace();
             System.err.println("Failed to load PDF file: " + e.getMessage());
         }
-
     }
 
     private void renderPage(int pageIndex) throws IOException {
-
         BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, (float) (zoomFactor * 72));
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
-
 
         pdfImageView.setImage(image);
         pdfImageView.setFitWidth(bufferedImage.getWidth());
         pdfImageView.setFitHeight(bufferedImage.getHeight());
 
-
         pdfReaderPane.setPrefWidth(bufferedImage.getWidth());
         pdfReaderPane.setPrefHeight(bufferedImage.getHeight());
+
+        updateImageViewPosition();
+    }
+
+    private void updateImageViewPosition() {
+        double offsetX = (pdfScrollPane.getViewportBounds().getWidth() - pdfImageView.getFitWidth()) / 2;
+        double offsetY = (pdfScrollPane.getViewportBounds().getHeight() - pdfImageView.getFitHeight()) / 2;
+
+        pdfImageView.setLayoutX(Math.max(offsetX, 0));
+        pdfImageView.setLayoutY(Math.max(offsetY, 0));
     }
 
     private void showContextMenu(MouseEvent event) {

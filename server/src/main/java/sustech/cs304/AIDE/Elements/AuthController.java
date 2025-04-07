@@ -38,6 +38,10 @@ public class AuthController {
     @Value("${google.client.secret}")
     private String clientSecretGoogle;
 
+    private int[] loginStatus = new int[100000];
+    
+    private int currentSequence = 0;
+
 
     private final UserRepository userRepository;
 
@@ -47,23 +51,34 @@ public class AuthController {
 
     @GetMapping("/github")
     public String githubLogin() {
-        return "https://github.com/login/oauth/authorize?client_id=" + clientIdGithub + "&redirect_uri=http://107.173.91.140:8080/auth/callback/github";
+        System.out.println("tag");
+        String url = "https://github.com/login/oauth/authorize?client_id=" + clientIdGithub + "&redirect_uri=http://139.180.143.70:8080/auth/callback/github"+"&state="+ currentSequence;
+        currentSequence+=1;
+        if (currentSequence == 100000) {
+            currentSequence = 0;
+        }
+        return url;
     }
 
     @GetMapping("/x")
     public String xLohin() {
-        return "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=" + clientIdX + "&redirect_uri=http://107.173.91.140:8080/auth/callback/x&scope=tweet.readuser.read";
+        return "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=" + clientIdX + "&redirect_uri=http://139.180.143.70:8080/auth/callback/x&scope=tweet.readuser.read";
     }
 
     @GetMapping("/google")
     public String googleLogin(){
-        return "https://accounts.google.com/o/oauth2/v2/auth?scope=openid%20email%20profile&response_type=code&redirect_uri=http://JingqiSUN.christmas:8080/auth/callback/google&client_id="+clientIdGoogle;
+        String url =  "https://accounts.google.com/o/oauth2/v2/auth?scope=openid%20email%20profile&response_type=code&redirect_uri=http://JingqiSUN.christmas:8080/auth/callback/google&client_id="+clientIdGoogle+"&state="+ currentSequence;
+        currentSequence+=1;
+        if (currentSequence == 100000) {
+            currentSequence = 0;
+        }
+        return url;
     }
 
     @GetMapping("/callback/github")
-    public User githubCallback(@RequestParam("code") String code) {
+    public User githubCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
         RestTemplate restTemplate = new RestTemplate();
-
+        int sequenceNumber = Integer.parseInt(state);
         Map<String, String> accessTokenResponse = restTemplate.postForObject(
             "https://github.com/login/oauth/access_token?client_id=" + clientIdGithub +
             "&client_secret=" + clientSecretGithub +
@@ -96,12 +111,20 @@ public class AuthController {
         User user = existingUser.orElseGet(() -> new User(platformId, username, avatarUrl));
 
         userRepository.save(user);
+        loginStatus[sequenceNumber] = 1;
+        System.out.print("The user is successfully logged in " + sequenceNumber);
+        if (sequenceNumber -100 >= 0) {
+            loginStatus[sequenceNumber-100] = 0;
+            System.out.print("The user is successfully logged out " + sequenceNumber);
+        } else {
+            loginStatus[sequenceNumber-100+100000] = 0;
+            System.out.print("The user is successfully logged out " + sequenceNumber);
+        }
         return user;
     }   
     
     @GetMapping("/callback/x")
     public User xCallback(@RequestParam("code") String code) {
-        System.out.println("tag1");
         RestTemplate restTemplate = new RestTemplate();
 
         // Exchange code for access token
@@ -109,7 +132,7 @@ public class AuthController {
                 "https://api.twitter.com/oauth2/token?client_id=" + clientIdX +
                         "&client_secret=" + clientSecretX +
                         "&code=" + code + 
-                        "&redirect_uri=http://107.173.91.140:8080/auth/callback/x&grant_type=authorization_code",
+                        "&redirect_uri=http://139.180.143.70:8080/auth/callback/x&grant_type=authorization_code",
                 null,
                 Map.class
         );
@@ -135,8 +158,9 @@ public class AuthController {
         return user;
     }
     @GetMapping("/callback/google")
-    public User googleCallback(@RequestParam("code") String code) {
+    public User googleCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
         RestTemplate restTemplate = new RestTemplate();
+        int sequenceNumber = Integer.parseInt(state);
 
         System.out.println(clientSecretGoogle);
         System.out.println(clientIdGoogle);
@@ -179,7 +203,22 @@ public class AuthController {
         User user = existingUser.orElseGet(() -> new User(platformId, username, avatarUrl));
 
         userRepository.save(user);
+        loginStatus[sequenceNumber] = 1; 
+        System.out.print("The user is successfully logged in " + sequenceNumber);
+        if (sequenceNumber -100 >= 0) {
+            loginStatus[sequenceNumber-100] = 0;
+            System.out.print("The user is successfully logged out " + sequenceNumber);
+        } else {
+            loginStatus[sequenceNumber-100+100000] = 0;
+            System.out.print("The user is successfully logged out " + sequenceNumber);
+        }
         return user;
+    }
+    @GetMapping("/callback/loginStatus/{x}")
+    public String handleCallback(@PathVariable("x") String x) {
+        int statusInt = loginStatus[Integer.parseInt(x)];
+        String status = String.valueOf(statusInt);
+        return status; 
     }
 }
 

@@ -24,15 +24,8 @@ public class GeminiClient {
     private final Gson gson = new Gson();
 
     public String getResponse(String model, String prompt) throws IOException  {
-        Message message = Message.builder()
-            .role("user")
-            .content(prompt)
-            .build();
-
-        RequestBodyy requestBody = RequestBodyy.builder()
-            .model(model)
-            .messages(Collections.singletonList(message))
-            .build();
+        Message message = new Message("user", prompt);
+        RequestBodyy requestBody = new RequestBodyy(model, Collections.singletonList(message));
 
         String jsonRequestBody = gson.toJson(requestBody);
         String updatedJsonRequestBody = JsonUtils.replaceJsonKey(jsonRequestBody, "content", "part");
