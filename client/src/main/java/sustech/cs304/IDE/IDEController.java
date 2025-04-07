@@ -21,6 +21,9 @@ public class IDEController {
     @FXML
     public Button ThirdModeButton;
 
+    @FXML
+    public Button UserHomeButton;
+
 
     @FXML
     private AnchorPane backgroundPane;
@@ -68,6 +71,8 @@ public class IDEController {
         editorController.setBackground("vs-dark");
 
         ThirdModeButton.setOnAction(event -> switchToClass());
+        UserHomeButton.setOnAction(event -> switchToUserhome());
+
     }
 
     public void changeTheme(String theme) {
@@ -106,6 +111,24 @@ public class IDEController {
         try {
             // 加载新的FXML内容
             Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
+
+            // 替换当前场景的内容
+            Scene currentScene = ThirdModeButton.getScene();
+            currentScene.setRoot(newContent);
+
+            // 或者如果你只想替换部分内容
+            // backgroundPane.getChildren().setAll(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 错误处理...
+        }
+    }
+
+    private void switchToUserhome() {
+        try {
+            // 加载新的FXML内容
+            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
 
             // 替换当前场景的内容
             Scene currentScene = ThirdModeButton.getScene();

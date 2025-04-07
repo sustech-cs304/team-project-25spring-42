@@ -54,7 +54,7 @@
             </VBox>
             <VBox alignment="BOTTOM_LEFT" prefHeight="524.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="524.0">
                <children>
-                  <Button maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#openProfile" prefHeight="60.0" prefWidth="60.0">
+                  <Button fx:id="UserHomeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#openProfile" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
