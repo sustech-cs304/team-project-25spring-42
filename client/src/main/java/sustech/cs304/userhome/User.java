@@ -17,8 +17,17 @@ public class User {
     private String registerDate;
     private String lastLogin;
 
-    public User() {
+    private static User instance;
+
+    private User() {
         loadUserData();
+    }
+
+    public static User getInstance() {
+        if (instance == null) {
+            instance = new User();
+        }
+        return instance;
     }
 
     public void loadUserData() {

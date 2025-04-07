@@ -32,20 +32,12 @@ public class UserHomeController {
 
     @FXML
     public void initialize() {
-        user = new User();
-
-        // 初始化用户数据 (实际应用中应从数据库或服务获取)
-        loadUserData();
+        user = User.getInstance();
 
         // 绑定UI控件
         bindUserDataToUI();
 
         returnbutton.setOnAction(event -> switchToIDE());
-    }
-
-    private void loadUserData() {
-        // 模拟从数据库加载用户数据
-        user.loadUserData();
     }
 
     private void bindUserDataToUI() {
