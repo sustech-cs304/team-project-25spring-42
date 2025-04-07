@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
+import sustech.cs304.userhome.UserHomeController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +57,8 @@ public class IDEController {
 
     @FXML
     private Label welcomeLabel;
+
+    private Parent userhomepane;
 
     @FXML
     private Hyperlink openLink;
