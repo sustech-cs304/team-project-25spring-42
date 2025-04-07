@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import sustech.cs304.classroom.MenuBarController;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class classController {
 
@@ -28,6 +29,7 @@ public class classController {
     public Button secondModeButton;
     @FXML
     public AnchorPane backgroundPane;
+    @FXML
     public Button firstModeButton;
     public ScrollPane ClassChoiceScroll;
     public AnchorPane editorPane;
@@ -57,6 +59,25 @@ public class classController {
         VBox contentBox = new VBox(10);
         contentBox.setPadding(new Insets(10));
         ThirdModeButton.setOnAction(event -> switchToClass(contentBox));
+        firstModeButton.setOnAction(event -> switchToIDE());
+    }
+
+    private void switchToIDE() {
+        try {
+            // 加载新的FXML内容
+            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/IDE/IDE.fxml")));
+
+            // 替换当前场景的内容
+            Scene currentScene = ThirdModeButton.getScene();
+            currentScene.setRoot(newContent);
+
+            // 或者如果你只想替换部分内容
+            // backgroundPane.getChildren().setAll(newContent);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 错误处理...
+        }
     }
 
     @FXML

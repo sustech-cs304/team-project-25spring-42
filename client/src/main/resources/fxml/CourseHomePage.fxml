@@ -4,16 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.collections.FXCollections?>
-
-<?import sustech.cs304.classroom.CourseHomeController.ResourceItem?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="sustech.cs304.classroom.CourseHomeController"
-            prefHeight="600" prefWidth="800" style="-fx-background-color: #f5f5f5;">
+            prefHeight="700" prefWidth="900" style="-fx-background-color: #f5f5f5;">
 
-    <!-- 顶部课程标题 -->
+    <!-- Top Course Title Bar -->
     <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #3f51b5; -fx-padding: 15;"
           AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <Label fx:id="courseTitle" text="课程名称" textFill="WHITE" style="-fx-font-weight: bold;">
@@ -28,73 +26,116 @@
         </Label>
     </HBox>
 
-    <!-- 主内容区域 -->
-    <VBox spacing="20" AnchorPane.topAnchor="70" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
-
-        <!-- 1. 消息发布栏 -->
-        <VBox spacing="10" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;">
-            <Label text="课程公告" style="-fx-font-weight: bold; -fx-padding: 10 10 5 10;">
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Label>
-            <ListView fx:id="announcementList" prefHeight="150">
-                <!-- 示例公告项 -->
-<!--                <items>-->
-<!--                    <FXCollections fx:factory="observableArrayList">-->
-<!--                        <String value="5月10日：下周将进行期中考试" />-->
-<!--                        <String value="5月5日：作业提交截止日期延长至5月15日" />-->
-<!--                        <String value="4月28日：课程资料已更新" />-->
-<!--                    </FXCollections>-->
-<!--                </items>-->
-            </ListView>
-            <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 0 10 10 10;">
-                <TextField fx:id="newAnnouncement" promptText="输入新公告..." prefWidth="300"/>
-                <Button text="发布" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-            </HBox>
-        </VBox>
-
-        <!-- 2. 课程资源区 -->
-        <VBox spacing="10" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;">
-            <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 10 5 10;">
-                <Label text="课程资源" style="-fx-font-weight: bold;">
+    <!-- Main Content Area -->
+    <ScrollPane fitToWidth="true" AnchorPane.topAnchor="70" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
+        <VBox spacing="20" style="-fx-padding: 10;">
+            <!-- 1. Announcements Section -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;">
+                <Label text="课程公告" style="-fx-font-weight: bold; -fx-padding: 10 10 5 10;">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="resourceSearch" promptText="搜索资源..." prefWidth="250"/>
-                <Button text="搜索" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
-                <Button text="上传" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
-            </HBox>
-            <TableView fx:id="resourceTable" prefHeight="200">
-                <columns>
-                    <TableColumn text="资源名称" prefWidth="200"/>
-                    <TableColumn text="类型" prefWidth="100"/>
-                    <TableColumn text="上传日期" prefWidth="150"/>
-                    <TableColumn text="大小" prefWidth="100"/>
-                    <TableColumn text="操作" prefWidth="150"/>
-                </columns>
-<!--                &lt;!&ndash; 示例数据 &ndash;&gt;-->
-<!--                <items>-->
-<!--                    <FXCollections fx:factory="observableArrayList">-->
-<!--                        <ResourceItem fileName="Lecture1.pdf" fileType="PDF" date="2023-05-01" size="2.4MB" />-->
-<!--                        <ResourceItem fileName="Assignment1.docx" fileType="Word" date="2023-05-05" size="1.2MB" />-->
-<!--                    </FXCollections>-->
-<!--                </items>-->
-            </TableView>
-        </VBox>
+                <ListView fx:id="announcementList" prefHeight="150">
+                </ListView>
+                <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 0 10 10 10;">
+                    <TextField fx:id="newAnnouncement" promptText="输入新公告..." prefWidth="300"/>
+                    <Button text="发布" onAction="#publishAnnouncement" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                </HBox>
+            </VBox>
 
-        <!-- 3. 进入课程的按钮 -->
-        <Button fx:id="enterCourseBtn" text="进入课程" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;">
-            <font>
-                <Font size="18.0" />
-            </font>
-            <VBox.margin>
-                <Insets top="20.0" />
-            </VBox.margin>
-            <padding>
-                <Insets top="15.0" bottom="15.0" left="30.0" right="30.0" />
-            </padding>
-        </Button>
-    </VBox>
+            <!-- 2. Homework Section -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;">
+                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 10 5 10;">
+                    <Label text="作业列表" style="-fx-font-weight: bold;">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                    <Button text="查看所有作业" onAction="#viewAllHomework" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                </HBox>
+                <TableView fx:id="homeworkTable" prefHeight="200">
+                    <columns>
+                        <TableColumn text="作业名称" prefWidth="200">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="截止日期" prefWidth="150">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="dueDate" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="状态" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="status" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="操作" prefWidth="150">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="action" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- 3. Course Resources Section -->
+            <VBox spacing="10" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;">
+                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 10 5 10;">
+                    <Label text="课程资源" style="-fx-font-weight: bold;">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                    <TextField fx:id="resourceSearch" promptText="搜索资源..." prefWidth="250"/>
+                    <Button text="搜索" onAction="#searchResources" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    <Button text="上传" onAction="#uploadResource" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                </HBox>
+                <TableView fx:id="resourceTable" prefHeight="200">
+                    <columns>
+                        <TableColumn text="资源名称" prefWidth="200">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fileName" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="类型" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fileType" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="上传日期" prefWidth="150">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="date" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="大小" prefWidth="100">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="size" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="操作" prefWidth="150">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="action" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- 4. Enter Course Button -->
+            <Button fx:id="enterCourseBtn" text="进入课程" onAction="#enterCourse"
+                    style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+                <padding>
+                    <Insets top="15.0" bottom="15.0" left="30.0" right="30.0" />
+                </padding>
+            </Button>
+        </VBox>
+    </ScrollPane>
 </AnchorPane>
