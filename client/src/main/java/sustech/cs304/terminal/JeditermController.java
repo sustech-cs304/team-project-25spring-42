@@ -21,17 +21,32 @@ import kotlin.text.Charsets;
 public class JeditermController {
     @FXML 
     private AnchorPane terminalPane;
+    @FXML
+    private AnchorPane backPane;
+
+    private JediTermFxWidget widget;
 
     @FXML
     public void initialize() {
-        System.out.println("Initializing JeditermController...");
-        JediTermFxWidget widget =  createTerminalWidget();
+        widget =  createTerminalWidget();
         widget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
         widget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
         widget.addListener(terminalWidget -> {
             widget.close();
         });
         terminalPane.getChildren().add(widget.getPane());
+    }
+
+    public void close() {
+        backPane.setVisible(false);
+    }
+
+    public void open() {
+        backPane.setVisible(true);
+    }
+
+    public void executeCommand(String command) throws Exception {
+        widget.getTtyConnector().write(command + "\n");
     }
 
     private JediTermFxWidget createTerminalWidget() {
