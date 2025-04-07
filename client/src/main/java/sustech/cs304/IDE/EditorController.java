@@ -8,7 +8,6 @@ import java.util.List;
 import eu.mihosoft.monacofx.MonacoFX;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
@@ -16,7 +15,6 @@ import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.utils.FileUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 
 public class EditorController {
 

@@ -8,15 +8,10 @@ public class MenuBarController {
     @FXML
     private MenuBar menuBar;
 
-    private FileTreeController fileTreeController;
-
-    private EditorController editorController;
-
     private IDEController ideController;
 
     @FXML
     private void initialize() {
-        fileTreeController = new FileTreeController();
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             menuBar.setUseSystemMenuBar(true);
         }
@@ -24,53 +19,41 @@ public class MenuBarController {
 
     @FXML
     public void openFolder() {
-        fileTreeController.handleSelectFolder();
+        ideController.getFileTreeController().handleSelectFolder();
     }
 
     @FXML
     public void savePage() {
-        editorController.savePage();
+        ideController.getEditorController().savePage();
     }
 
     @FXML
     public void saveAll() {
-        editorController.saveAll();
+        ideController.getEditorController().saveAll();
     }
 
-    public void setFileTreeController(FileTreeController fileTreeController) {
-        this.fileTreeController = fileTreeController;
+    @FXML
+    private void openTerminal() {
+        ideController.getJeditermController().open();
     }
 
-    public void setEditorController(EditorController editorController) {
-        this.editorController = editorController;
+    @FXML
+    private void setColorVs() {
+        ideController.changeTheme("vs");
+    }
+
+    @FXML
+    private void setColorVsDark() {
+        ideController.changeTheme("vs-dark");
+    }
+
+    @FXML
+    private void setColorHcBlack() {
+        ideController.changeTheme("hc-black");
     }
 
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
 
-    public FileTreeController getFileTreeController() {
-        return fileTreeController;
-    }
-
-    @FXML
-    private void setColorVs() {
-        if (editorController != null) {
-            ideController.changeTheme("vs");
-        }
-    }
-
-    @FXML
-    private void setColorVsDark() {
-        if (editorController != null) {
-            ideController.changeTheme("vs-dark");
-        }
-    }
-
-    @FXML
-    private void setColorHcBlack() {
-        if (editorController != null) {
-            ideController.changeTheme("hc-black");
-        }
-    }
 }

@@ -47,11 +47,8 @@ public class IDEController {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
-        menuBarController.setFileTreeController(fileTreeController);
-        menuBarController.setEditorController(editorController);
         menuBarController.setIdeController(this);
-        fileTreeController.setEditorController(editorController);
-        fileTreeController.setMYpdfReaderController(MYpdfReaderController);
+        fileTreeController.setIdeController(this);
         editorController.setIdeController(this);
         editorController.setBackground("vs-dark");
     }
@@ -85,4 +82,25 @@ public class IDEController {
     public void openProfile() {
 
     }
+
+    public MenuBarController getMenuBarController() {
+        return menuBarController;
+    }
+
+    public FileTreeController getFileTreeController() {
+        return fileTreeController;
+    }
+
+    public EditorController getEditorController() {
+        return editorController;
+    }
+
+    public pdfReaderController getMYpdfReaderController() {
+        return MYpdfReaderController;
+    }
+
+    public JeditermController getJeditermController() {
+        return jeditermController;
+    }
 }
+
