@@ -38,6 +38,16 @@ public class UserHomeController {
     private String registerDate;
     private String lastLogin;
 
+    public Parent getIDEpane() {
+        return IDEpane;
+    }
+
+    public void setIDEpane(Parent IDEpane) {
+        this.IDEpane = IDEpane;
+    }
+
+    private Parent IDEpane;
+
     @FXML
     public void initialize() {
         // 初始化用户数据 (实际应用中应从数据库或服务获取)
@@ -200,21 +210,17 @@ public class UserHomeController {
 
 
     private void switchToIDE() {
-        try {
-            // 加载新的FXML内容
-            Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/IDE/IDE.fxml")));
+        // 加载新的FXML内容
+        //Parent newContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/IDE/IDE.fxml")));
 
-            // 替换当前场景的内容
-            Scene currentScene = returnbutton.getScene();
-            currentScene.setRoot(newContent);
 
-            // 或者如果你只想替换部分内容
-            // backgroundPane.getChildren().setAll(newContent);
+        // 替换当前场景的内容
+        Scene currentScene = returnbutton.getScene();
+        currentScene.setRoot(IDEpane);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            // 错误处理...
-        }
+        // 或者如果你只想替换部分内容
+        // backgroundPane.getChildren().setAll(newContent);
+
     }
 
 }
