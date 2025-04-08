@@ -147,7 +147,7 @@ public final class ServerUtils{
 
     public static String getUserEmail(String userId){
         OkHttpClient client = new OkHttpClient();         
-        HttpUrl url = HttpUrl.parse("http://139.180.143.70:8080/self/getUserBio")
+        HttpUrl url = HttpUrl.parse("http://139.180.143.70:8080/self/getUserEmail")
                 .newBuilder()
                 .addQueryParameter("platformId", userId)
                 .build();
