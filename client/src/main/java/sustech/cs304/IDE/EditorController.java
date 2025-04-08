@@ -42,16 +42,9 @@ public class EditorController {
         this.background = background;
     }
 
-    /**
-     * Set the theme of the editor
-     * @param theme the theme to be set, include "vs", "vs-dark", "hc-black"
-     */
-
-
     public void setTheme(String theme) {
         for (MonacoFX monacoFX : monacoFXs) {
             monacoFX.getEditor().setCurrentTheme(theme);
-            monacoFX.getWebEngine().executeScript("editor.updateOptions({ fontSize: 40 });");
         }
     }
 

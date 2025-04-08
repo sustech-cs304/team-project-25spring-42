@@ -13,15 +13,15 @@
 <AnchorPane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.IDE.IDEController">
    <children>
       <fx:include fx:id="menuBar" source="menuBar.fxml" AnchorPane.bottomAnchor="1048.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <AnchorPane fx:id="modeListPane" layoutY="32.0" prefHeight="1048.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1860.0" AnchorPane.topAnchor="32.0">
+      <AnchorPane fx:id="modeListPane" layoutY="32.0" prefHeight="1048.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1860.0" AnchorPane.topAnchor="32.0">
          <children>
-            <VBox layoutY="-1.0" prefHeight="524.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="525.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+            <VBox layoutY="-1.0" prefHeight="524.0" prefWidth="60.0" AnchorPane.bottomAnchor="525.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
                <children>
                   <Button fx:id="firstModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToEditor" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="codeImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../img/code.png" />
+                              <Image url="@../../img/code-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -31,9 +31,9 @@
                   </Button>
                   <Button fx:id="secondModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="chatImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../img/chat.png" />
+                              <Image url="@../../img/chat-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -43,31 +43,31 @@
                   </Button>
                   <Button fx:id="classroomButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToClass" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="classImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../img/class.png" />
+                              <Image url="@../../img/class-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
                </children>
             </VBox>
-            <VBox alignment="BOTTOM_LEFT" prefHeight="524.0" prefWidth="60.0" styleClass="model-list-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="524.0">
+            <VBox alignment="BOTTOM_LEFT" prefHeight="524.0" prefWidth="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="524.0">
                <children>
                   <Button fx:id="UserHomeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToUserhome" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="userImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../img/user.png" />
+                              <Image url="@../../img/user-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Button>
                   <Button maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="settingImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../img/setting.png" />
+                              <Image url="@../../img/setting-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -83,7 +83,7 @@
                   <fx:include fx:id="fileTree" prefHeight="1048.0" prefWidth="190.0" source="fileTree.fxml" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="editorPane" layoutX="190.0" prefHeight="1048.0" prefWidth="1670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="editorPane" layoutX="190.0" prefHeight="1048.0" prefWidth="1670.0" styleClass="anchor-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <fx:include fx:id="editor" source="editor.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <fx:include fx:id="jediterm" source="../terminal.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
