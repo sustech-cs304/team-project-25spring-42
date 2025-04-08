@@ -34,6 +34,11 @@
           <MenuItem mnemonicParsing="false" onAction="#openTerminal" text="Open" />
         </items>
       </Menu>
+      <Menu mnemonicParsing="false" text="Run">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#run" text="run" />
+        </items>
+      </Menu>
       <Menu mnemonicParsing="false" text="Help">
          <items>
             <MenuItem mnemonicParsing="false" text="About" />

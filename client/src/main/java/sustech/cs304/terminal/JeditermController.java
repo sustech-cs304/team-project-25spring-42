@@ -9,7 +9,12 @@ import java.util.Map;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
+
+import sustech.cs304.IDE.IDEController;
 import sustech.cs304.terminal.pty.PtyProcessTtyConnector;
+
+import com.techsenger.jeditermfx.core.TerminalColor;
+import com.techsenger.jeditermfx.core.TextStyle;
 import com.techsenger.jeditermfx.core.TtyConnector;
 import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
@@ -24,7 +29,10 @@ public class JeditermController {
     @FXML
     private AnchorPane backPane;
 
+    private IDEController ideController;
+
     private JediTermFxWidget widget;
+    private CustomSettingsProvider settingsProvider;
 
     @FXML
     public void initialize() {
@@ -35,6 +43,29 @@ public class JeditermController {
             widget.close();
         });
         terminalPane.getChildren().add(widget.getPane());
+    }
+
+    public void setIdeController(IDEController ideController) {
+        this.ideController = ideController;
+    }
+
+    public void changeTheme(String theme) {
+        switch (theme) {
+            case "vs":
+                settingsProvider.setBackgroundColor(new TerminalColor(255, 255, 255));
+                settingsProvider.setForegroundColor(new TerminalColor(0, 0, 0));
+                break;
+            case "vs-dark":
+                settingsProvider.setBackgroundColor(new TerminalColor(0, 0, 0));
+                settingsProvider.setForegroundColor(new TerminalColor(255, 255, 255));
+                break;
+            case "hc-black":
+                settingsProvider.setBackgroundColor(new TerminalColor(0, 0, 0));
+                settingsProvider.setForegroundColor(new TerminalColor(255, 255, 255));
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown theme: " + theme);
+        }
     }
 
     public void close() {
@@ -50,7 +81,8 @@ public class JeditermController {
     }
 
     private JediTermFxWidget createTerminalWidget() {
-        JediTermFxWidget widget = new JediTermFxWidget(80, 24, new DefaultSettingsProvider());
+        settingsProvider = new CustomSettingsProvider();
+        JediTermFxWidget widget = new JediTermFxWidget(80, 24, this.settingsProvider);
         widget.setTtyConnector(createTtyConnector());
         widget.addHyperlinkFilter(new DefaultHyperlinkFilter());
         widget.start();
@@ -88,5 +120,33 @@ public class JeditermController {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+}
+
+final class CustomSettingsProvider extends DefaultSettingsProvider {
+    private TerminalColor foregroundColor = new TerminalColor(255, 255, 255);
+    private TerminalColor backgroundColor = new TerminalColor(0, 0, 0);
+
+    @Override
+    public TextStyle getDefaultStyle() {
+        return new TextStyle(foregroundColor, backgroundColor);
+    }
+
+    @Override
+    public TerminalColor getDefaultBackground() {
+        return backgroundColor;
+    }
+
+    @Override
+    public TerminalColor getDefaultForeground() {
+        return foregroundColor;
+    }
+
+    public void setBackgroundColor(TerminalColor color) {
+        this.backgroundColor = color;
+    }
+
+    public void setForegroundColor(TerminalColor color) {
+        this.foregroundColor = color;
     }
 }

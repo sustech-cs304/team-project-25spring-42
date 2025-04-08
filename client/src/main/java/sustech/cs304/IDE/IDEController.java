@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Hyperlink;
@@ -20,25 +19,10 @@ import java.util.Objects;
 
 public class IDEController {
     @FXML
-    public Button ThirdModeButton;
-
-    @FXML
-    public Button UserHomeButton;
-
-    @FXML
-    private AnchorPane backgroundPane;
-
-    @FXML
-    private AnchorPane modePane;
+    private AnchorPane backgroundPane, modePane, editorPane, profilePane;
 
     List<Node> ideContent;
     private Parent classContent, userHomeContent;
-
-    @FXML
-    private AnchorPane editorPane;
-
-    @FXML
-    private AnchorPane profilePane;
 
     @FXML
     private FileTreeController fileTreeController;
@@ -58,8 +42,6 @@ public class IDEController {
     @FXML
     private Label welcomeLabel;
 
-    private Parent userhomepane;
-
     @FXML
     private Hyperlink openLink;
 
@@ -71,12 +53,14 @@ public class IDEController {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
-        ideContent = new ArrayList<>(modePane.getChildren());
+
         menuBarController.setIdeController(this);
         fileTreeController.setIdeController(this);
         editorController.setIdeController(this);
+        jeditermController.setIdeController(this);
         editorController.setBackground("vs-dark");
 
+        ideContent = new ArrayList<>(modePane.getChildren());
         try {
             classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
@@ -108,11 +92,6 @@ public class IDEController {
         openLink.setVisible(false);
         welcomeLabel.setManaged(false);
         openLink.setManaged(false);
-    }
-
-    @FXML
-    public void openProfile() {
-
     }
 
     public MenuBarController getMenuBarController() {
@@ -162,4 +141,3 @@ public class IDEController {
     }
 
 }
-

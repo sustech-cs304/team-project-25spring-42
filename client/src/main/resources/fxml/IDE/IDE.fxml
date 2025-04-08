@@ -41,7 +41,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="ThirdModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToClass" prefHeight="60.0" prefWidth="60.0">
+                  <Button fx:id="classroomButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToClass" prefHeight="60.0" prefWidth="60.0">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
