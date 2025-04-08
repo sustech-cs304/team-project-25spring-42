@@ -4,6 +4,7 @@ import sustech.cs304.AIDE.Elements.User;
 import sustech.cs304.AIDE.Elements.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
@@ -39,6 +40,7 @@ public class AuthController {
     private String clientSecretGoogle;
 
     private int[] loginStatus = new int[100000];
+    private String[] loginID = new String[100000];
     
     private int currentSequence = 0;
 
@@ -76,6 +78,7 @@ public class AuthController {
     }
 
     @GetMapping("/callback/github")
+    @Transactional
     public User githubCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
         RestTemplate restTemplate = new RestTemplate();
         int sequenceNumber = Integer.parseInt(state);
@@ -112,12 +115,15 @@ public class AuthController {
 
         userRepository.save(user);
         loginStatus[sequenceNumber] = 1;
+        loginID[sequenceNumber] = platformId;
         System.out.print("The user is successfully logged in " + sequenceNumber);
         if (sequenceNumber -100 >= 0) {
             loginStatus[sequenceNumber-100] = 0;
+            loginID[sequenceNumber-100] = null;
             System.out.print("The user is successfully logged out " + sequenceNumber);
         } else {
             loginStatus[sequenceNumber-100+100000] = 0;
+            loginID[sequenceNumber-100+100000] = null;
             System.out.print("The user is successfully logged out " + sequenceNumber);
         }
         return user;
@@ -158,6 +164,7 @@ public class AuthController {
         return user;
     }
     @GetMapping("/callback/google")
+    @Transactional
     public User googleCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
         RestTemplate restTemplate = new RestTemplate();
         int sequenceNumber = Integer.parseInt(state);
@@ -204,12 +211,15 @@ public class AuthController {
 
         userRepository.save(user);
         loginStatus[sequenceNumber] = 1; 
+        loginID[sequenceNumber] = platformId;
         System.out.print("The user is successfully logged in " + sequenceNumber);
         if (sequenceNumber -100 >= 0) {
             loginStatus[sequenceNumber-100] = 0;
+            loginID[sequenceNumber-100] = null;
             System.out.print("The user is successfully logged out " + sequenceNumber);
         } else {
             loginStatus[sequenceNumber-100+100000] = 0;
+            loginID[sequenceNumber-100+100000] = null;
             System.out.print("The user is successfully logged out " + sequenceNumber);
         }
         return user;
@@ -217,8 +227,8 @@ public class AuthController {
     @GetMapping("/callback/loginStatus/{x}")
     public String handleCallback(@PathVariable("x") String x) {
         int statusInt = loginStatus[Integer.parseInt(x)];
-        String status = String.valueOf(statusInt);
-        return status; 
+        String loginIDString = loginID[Integer.parseInt(x)];
+        return statusInt + " " + loginIDString;
     }
 }
 
