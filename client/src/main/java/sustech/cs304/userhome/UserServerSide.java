@@ -9,7 +9,7 @@ public class UserServerSide {
     private String phoneNumber;
     private String email;
 
-    UserServerSide(String platformId, String username, String avatarUrl, String registerTime, String lastLoginTime, String phoneNumber, String email) {
+    public UserServerSide(String platformId, String username, String avatarUrl, String registerTime, String lastLoginTime, String phoneNumber, String email) {
         this.platformId = platformId;
         this.username = username;
         this.avatarUrl = avatarUrl;
