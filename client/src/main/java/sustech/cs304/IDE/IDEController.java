@@ -133,9 +133,9 @@ public class IDEController {
     }
 
     public void changeImageColor(String theme) {
-        if (theme == "vs-dark" || theme == "hc-black") {
+        if ("vs-dark".equals(theme) || "hc-black".equals(theme)) {
             theme = "white";
-        } else if (theme == "vs") {
+        } else if ("vs".equals(theme)) {
             theme = "black";
         } else {
             throw new IllegalArgumentException("Invalid theme: " + theme);
