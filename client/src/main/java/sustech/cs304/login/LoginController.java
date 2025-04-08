@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import java.net.URL;
+import java.io.File;
 
 public class LoginController {
     private static final String SERVER_URL_Github = "http://139.180.143.70:8080/auth/github";
@@ -42,6 +43,7 @@ public class LoginController {
         } else {
             System.out.println("Open manually: " + loginUrl);
         }
+        System.out.println("async auth checker");
         AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
         if (authChecker.checkAuth()) {
             switchToIDEPage();
@@ -52,18 +54,23 @@ public class LoginController {
 
     @FXML
     public void loginWithX() throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(SERVER_URL_X).build();
-        Response response = client.newCall(request).execute();
-        
-        String loginUrl = response.body().string();
-        response.close();
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().browse(URI.create(loginUrl));
-        } else {
-
-            System.out.println("Open manually: " + loginUrl);
+        String projectRoot = System.getProperty("user.dir");
+        String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return;
         }
+        String savedUserId = null;
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
+            savedUserId = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (savedUserId == null) {
+            return;
+        }
+        switchToIDEPage();
     }
      @FXML
     public void loginWithGoogle() throws IOException, InterruptedException {
@@ -79,6 +86,7 @@ public class LoginController {
         } else {
             System.out.println("Open manually: " + loginUrl);
         }
+        System.out.println("async auth checker");
         AsyncAuthChecker authChecker = new AsyncAuthChecker(state);
         if (authChecker.checkAuth()) {
             switchToIDEPage();
