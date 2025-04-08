@@ -8,8 +8,9 @@ public class UserServerSide {
     private String lastLoginTime;
     private String phoneNumber;
     private String email;
+    private String bio;
 
-    public UserServerSide(String platformId, String username, String avatarUrl, String registerTime, String lastLoginTime, String phoneNumber, String email) {
+    public UserServerSide(String platformId, String username, String avatarUrl, String registerTime, String lastLoginTime, String phoneNumber, String email, String bio) {
         this.platformId = platformId;
         this.username = username;
         this.avatarUrl = avatarUrl;
@@ -17,6 +18,7 @@ public class UserServerSide {
         this.lastLoginTime = lastLoginTime;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.bio = bio;
     }
     public String getPlatformId() {
         return platformId;
@@ -38,5 +40,8 @@ public class UserServerSide {
     }
     public String getEmail() {
         return email;
+    }
+    public String getBio() {
+        return bio;
     }
 }
