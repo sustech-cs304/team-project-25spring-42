@@ -2,6 +2,7 @@ package sustech.cs304.AIDE.Elements;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import javax.validation.constraints.Email;
 
 @Entity
@@ -45,7 +46,7 @@ public class User {
     public String getEmail() { return email; }
 
     public void updateLastLoginTime() {
-        this.lastLoginTime = LocalDateTime.now();
+        this.lastLoginTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
     }
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
