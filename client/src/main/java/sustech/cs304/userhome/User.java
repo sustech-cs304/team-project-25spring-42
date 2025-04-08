@@ -40,8 +40,9 @@ public class User {
     }
 
     public static String getSavedUserId() {
-        // it is the only string saved in the ./savedUserId.txt
-        File file = new File("./savedUserId.txt");
+        String projectRoot = System.getProperty("user.dir");
+        String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+        File file = new File(filePath);
         if (!file.exists()) {
             return null;
         }
@@ -54,7 +55,7 @@ public class User {
     }
 
     public void loadUserData() {
-        UserServerSide serverSideUser = ServerUtils.serverLoadUserData("google103481236524820488484");
+        UserServerSide serverSideUser = ServerUtils.serverLoadUserData(getSavedUserId());
         this.userId = serverSideUser.getPlatformId();
         this.username = serverSideUser.getUsername();
         this.avatarPath = serverSideUser.getAvatarUrl();
