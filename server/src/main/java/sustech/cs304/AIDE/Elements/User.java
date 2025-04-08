@@ -24,6 +24,10 @@ public class User {
     @Email(message = "Invalid email format")
     private String email;
 
+    @Lob  
+    @Column(length = 20000)
+    private String bio;
+
     public User() {}
 
     public User(String platformId, String username, String avatarUrl) {
@@ -34,6 +38,7 @@ public class User {
         this.lastLoginTime = LocalDateTime.now();
         this.phoneNumber = null;
         this.email = null;
+        this.bio = "Empty Bio";
     }
 
     public Long getId() { return id; }
@@ -44,14 +49,15 @@ public class User {
     public LocalDateTime getLastLoginTime() { return lastLoginTime; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getEmail() { return email; }
+    public String getBio() { return bio; }
 
     public void updateLastLoginTime() {
         this.lastLoginTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
     }
-    public void updatePhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public void updateEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
     public void setUsername(String username) {
@@ -59,6 +65,9 @@ public class User {
     }
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }
 
