@@ -62,7 +62,7 @@ public class User {
         this.lastLogin = serverSideUser.getLastLoginTime();
         this.phoneNumber = serverSideUser.getPhoneNumber();
         this.email = serverSideUser.getEmail();
-        this.bio = "empty bio";
+        this.bio = serverSideUser.getBio();
         this.account = "user@example.com";
         this.password = "encryptedPassword123";
         this.coursesAsTeacher = new ArrayList<>();
