@@ -105,9 +105,9 @@ public class MenuBarController {
         Scene scene = menuBar.getScene();
         if (scene != null) {
             scene.getStylesheets().remove(this.css);
+            this.css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
+            scene.getStylesheets().add(this.css);
         }
-        this.css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
-        scene.getStylesheets().add(this.css);
     }
 
     public void setIdeController(IDEController ideController) {
