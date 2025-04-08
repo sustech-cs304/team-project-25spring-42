@@ -1,7 +1,10 @@
 package sustech.cs304.IDE;
 
+import java.io.File;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import sustech.cs304.utils.FileUtils;
 
 public class MenuBarController {
 
@@ -50,6 +53,45 @@ public class MenuBarController {
     @FXML
     private void setColorHcBlack() {
         ideController.changeTheme("hc-black");
+    }
+
+    @FXML
+    private void run() {
+        File file = ideController.getEditorController().getCurrentFile();
+        ideController.getJeditermController().open();
+        if (file != null) {
+            String filePath = file.getAbsolutePath();
+            String extension = FileUtils.getExtension(file);
+            ideController.getEditorController().savePage();
+
+            try{
+                if (extension.equals("java")) {
+                    String command = "java" + " " + filePath;
+                    ideController.getJeditermController().executeCommand(command);
+                } else if (extension.equals("py")) {
+                    String command = "python" + " " + filePath;
+                    ideController.getJeditermController().executeCommand(command);
+                } else if (extension.equals("c")) {
+                    String command = "gcc" + " " + filePath + " -o " + file.getName().replace(".c", "");
+                    ideController.getJeditermController().executeCommand(command);
+                    command = "./" + file.getName().replace(".c", "");
+                    ideController.getJeditermController().executeCommand(command);
+                } else if (extension.equals("sh")) {
+                    String command = "bash" + " " + filePath;
+                    ideController.getJeditermController().executeCommand(command);
+                } else if (extension.equals("js")) {
+                    String command = "node" + " " + filePath;
+                    ideController.getJeditermController().executeCommand(command);
+                } else if (extension.equals("cpp")) {
+                    String command = "g++" + " " + filePath + " -o " + file.getName().replace(".cpp", "");
+                    ideController.getJeditermController().executeCommand(command);
+                    command = "./" + file.getName().replace(".cpp", "");
+                    ideController.getJeditermController().executeCommand(command);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setIdeController(IDEController ideController) {
