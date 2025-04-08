@@ -68,8 +68,8 @@ public class JeditermController {
                 this.xmarkImage.setImage(xmarkImage);
                 terminalBackPane.setStyle("-fx-background-color: #1e1e1e;");
                 settingsProvider.setBackgroundColor(new TerminalColor(30, 30, 30));
-                settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
-                settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(30, 30, 30));
+                // settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
+                // settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(30, 30, 30));
                 break;
             case "hc-black":
                 xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
@@ -142,8 +142,9 @@ public class JeditermController {
 }
 
 final class CustomSettingsProvider extends DefaultSettingsProvider {
-    private TerminalColor foregroundColor = new TerminalColor(30, 30, 30);
+    private TerminalColor foregroundColor = new TerminalColor(48, 20, 221);
     private TerminalColor backgroundColor = new TerminalColor(245, 245, 245);
+    // private TextStyle defaultStyle = new TextStyle(new TerminalColor(30, 30, 30), backgroundColor);
     private TextStyle defaultStyle = new TextStyle(foregroundColor, backgroundColor);
 
     @Override
