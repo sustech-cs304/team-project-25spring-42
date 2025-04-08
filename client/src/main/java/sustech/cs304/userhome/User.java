@@ -1,10 +1,12 @@
 package sustech.cs304.userhome;
 
+import sustech.cs304.classroom.Course;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.ArrayList;
 
 public class User {
     // 用户数据模型
@@ -16,6 +18,8 @@ public class User {
     private String avatarPath;
     private String registerDate;
     private String lastLogin;
+    private ArrayList<Course> coursesAsTeacher;
+    private ArrayList<Course> coursesAsStudent;
 
     private static User instance;
 
@@ -40,6 +44,27 @@ public class User {
         avatarPath = null; // 默认使用内置头像
         registerDate = "2000-10-10";
         lastLogin = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public void createCourse() {
+        Course course = new Course();
+        course.setTeacher(this);
+        this.coursesAsTeacher.add(course);
+    }
+
+    public void joinCourse(Course course) {
+        if (!this.coursesAsStudent.contains(course)) {
+            course.addStudent(this);
+            this.coursesAsStudent.add(course);
+        }
+    }
+
+    public ArrayList<Course> getCoursesAsTeacher() {
+        return coursesAsTeacher;
+    }
+
+    public ArrayList<Course> getCoursesAsStudent() {
+        return coursesAsStudent;
     }
 
     public String getUserId() {
