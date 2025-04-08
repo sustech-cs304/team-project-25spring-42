@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class User {
     // 用户数据模型
@@ -56,6 +57,15 @@ public class User {
         if (!this.coursesAsStudent.contains(course)) {
             course.addStudent(this);
             this.coursesAsStudent.add(course);
+        }
+    }
+
+    public void createAssignment(Course course, String name, LocalDate dueDate, String status, String discription) {
+        boolean isSucess = course.addAssignment(this, name, dueDate, status, discription);
+        if (isSucess) {
+            System.out.println("Assignment created");
+        } else {
+            System.out.println("Assignment not created");
         }
     }
 
