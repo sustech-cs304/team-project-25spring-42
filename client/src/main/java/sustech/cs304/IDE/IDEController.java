@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Hyperlink;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
@@ -45,7 +47,8 @@ public class IDEController {
     @FXML
     private Hyperlink openLink;
 
-    private String css;
+    @FXML
+    private ImageView codeImage, chatImage, classImage, userImage, settingImage;
 
     @FXML
     private void initialize() {
@@ -67,17 +70,6 @@ public class IDEController {
         } catch(IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void changeTheme(String theme) {
-        editorController.setBackground(theme);
-        editorController.setTheme(theme);
-        Scene scene = backgroundPane.getScene();
-        if (scene != null) {
-            scene.getStylesheets().remove(css);
-        }
-        css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
-        scene.getStylesheets().add(css);
     }
 
     @FXML
@@ -140,4 +132,23 @@ public class IDEController {
         AnchorPane.setRightAnchor(userHomeContent, 0.0);
     }
 
+    public void changeImageColor(String theme) {
+        if (theme == "vs-dark" || theme == "hc-black") {
+            theme = "white";
+        } else if (theme == "vs") {
+            theme = "black";
+        } else {
+            throw new IllegalArgumentException("Invalid theme: " + theme);
+        }
+        Image codeImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/code-" + theme + ".png")));
+        Image chatImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/chat-" + theme + ".png")));
+        Image classImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/class-" + theme + ".png")));
+        Image userImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/user-" + theme + ".png")));
+        Image settingImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/setting-" + theme + ".png")));
+        this.codeImage.setImage(codeImage);
+        this.chatImage.setImage(chatImage);
+        this.classImage.setImage(classImage);
+        this.userImage.setImage(userImage);
+        this.settingImage.setImage(settingImage);
+    }
 }

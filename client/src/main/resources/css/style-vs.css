@@ -1,21 +1,12 @@
 .root {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #000000;
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #1e1e1e;
 }
 
 #welcomeLabel {
-    -fx-text-fill: #000000;
+    -fx-text-fill: #1e1e1e;
     -fx-font-family: Arial;
 }
-
-.button {
-    -fx-background-color: #ffffff;
-}
-
-.button:hover {
-    -fx-background-color: #1e1e1e;
-}
-
 
 #openLink {
     -fx-text-fill: #007ACC;
@@ -25,14 +16,46 @@
     -fx-text-fill: #007ACC;
 }
 
-.model-list-pane {
-    -fx-background-color: #ffffff;
+.button {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #1e1e1e;
 }
 
-.file-tree-pane {
-    -fx-background-color: #ffffff;
+.button:hover {
+    -fx-background-color: #f0f0f0;
 }
 
 .tree-view {
+    -fx-background-color: #e5e5e5;
+}
+
+.tree-cell {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #1e1e1e;
+}
+
+.tree-cell:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: #f5f5f5;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #f5f5f5;
+    -fx-text-base-color: #1e1e1e;
+}
+
+.tab-pane .tab:selected {
     -fx-background-color: #ffffff;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+#terminalBackPane {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #e5e5e5;
 }

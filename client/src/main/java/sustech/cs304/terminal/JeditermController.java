@@ -20,6 +20,8 @@ import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
 
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import kotlin.text.Charsets;
 
@@ -27,7 +29,9 @@ public class JeditermController {
     @FXML 
     private AnchorPane terminalPane;
     @FXML
-    private AnchorPane backPane;
+    private AnchorPane terminalBackPane;
+    @FXML
+    private ImageView xmarkImage;
 
     private IDEController ideController;
 
@@ -52,28 +56,42 @@ public class JeditermController {
     public void changeTheme(String theme) {
         switch (theme) {
             case "vs":
-                settingsProvider.setBackgroundColor(new TerminalColor(255, 255, 255));
-                settingsProvider.setForegroundColor(new TerminalColor(0, 0, 0));
+                Image xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-black.png"));
+                this.xmarkImage.setImage(xmarkImage);
+                terminalBackPane.setStyle("-fx-background-color: #f5f5f5;");
+                settingsProvider.setBackgroundColor(new TerminalColor(245, 245, 245));
+                settingsProvider.setForegroundColor(new TerminalColor(30, 30, 30));
+                settingsProvider.setDefaultStyle(new TerminalColor(30, 30, 30), new TerminalColor(245, 245, 245));
                 break;
             case "vs-dark":
-                settingsProvider.setBackgroundColor(new TerminalColor(0, 0, 0));
-                settingsProvider.setForegroundColor(new TerminalColor(255, 255, 255));
+                xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
+                this.xmarkImage.setImage(xmarkImage);
+                terminalBackPane.setStyle("-fx-background-color: #1e1e1e;");
+                settingsProvider.setBackgroundColor(new TerminalColor(30, 30, 30));
+                settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
+                settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(30, 30, 30));
                 break;
             case "hc-black":
+                xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
+                this.xmarkImage.setImage(xmarkImage);
+                terminalBackPane.setStyle("-fx-background-color: #000000;");
                 settingsProvider.setBackgroundColor(new TerminalColor(0, 0, 0));
-                settingsProvider.setForegroundColor(new TerminalColor(255, 255, 255));
+                settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
+                settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(0, 0, 0));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown theme: " + theme);
         }
+        this.widget.getTerminalPanel().repaint();
+
     }
 
     public void close() {
-        backPane.setVisible(false);
+        terminalBackPane.setVisible(false);
     }
 
     public void open() {
-        backPane.setVisible(true);
+        terminalBackPane.setVisible(true);
     }
 
     public void executeCommand(String command) throws Exception {
@@ -124,12 +142,13 @@ public class JeditermController {
 }
 
 final class CustomSettingsProvider extends DefaultSettingsProvider {
-    private TerminalColor foregroundColor = new TerminalColor(255, 255, 255);
-    private TerminalColor backgroundColor = new TerminalColor(0, 0, 0);
+    private TerminalColor foregroundColor = new TerminalColor(30, 30, 30);
+    private TerminalColor backgroundColor = new TerminalColor(245, 245, 245);
+    private TextStyle defaultStyle = new TextStyle(foregroundColor, backgroundColor);
 
     @Override
     public TextStyle getDefaultStyle() {
-        return new TextStyle(foregroundColor, backgroundColor);
+        return defaultStyle;
     }
 
     @Override
@@ -148,5 +167,9 @@ final class CustomSettingsProvider extends DefaultSettingsProvider {
 
     public void setForegroundColor(TerminalColor color) {
         this.foregroundColor = color;
+    }
+
+    public void setDefaultStyle(TerminalColor foreground, TerminalColor background) {
+        this.defaultStyle = new TextStyle(foreground, background);
     }
 }

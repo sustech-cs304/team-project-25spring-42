@@ -3,6 +3,7 @@ package sustech.cs304.IDE;
 import java.io.File;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import sustech.cs304.utils.FileUtils;
 
@@ -10,6 +11,8 @@ public class MenuBarController {
 
     @FXML
     private MenuBar menuBar;
+
+    private String css;
 
     private IDEController ideController;
 
@@ -42,17 +45,17 @@ public class MenuBarController {
 
     @FXML
     private void setColorVs() {
-        ideController.changeTheme("vs");
+        changeTheme("vs");
     }
 
     @FXML
     private void setColorVsDark() {
-        ideController.changeTheme("vs-dark");
+        changeTheme("vs-dark");
     }
 
     @FXML
     private void setColorHcBlack() {
-        ideController.changeTheme("hc-black");
+        changeTheme("hc-black");
     }
 
     @FXML
@@ -92,6 +95,19 @@ public class MenuBarController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void changeTheme(String theme) {
+        ideController.getJeditermController().changeTheme(theme);
+        ideController.getEditorController().setBackground(theme);
+        ideController.getEditorController().setTheme(theme);
+        ideController.changeImageColor(theme);
+        Scene scene = menuBar.getScene();
+        if (scene != null) {
+            scene.getStylesheets().remove(this.css);
+        }
+        this.css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
+        scene.getStylesheets().add(this.css);
     }
 
     public void setIdeController(IDEController ideController) {
