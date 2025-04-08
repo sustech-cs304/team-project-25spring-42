@@ -272,7 +272,7 @@ public final class ServerUtils{
 
     public static boolean setUserAvatar(String userId, String newUserAvatarUrl){
         OkHttpClient client = new OkHttpClient();         
-        HttpUrl url = HttpUrl.parse("http://139.180.143.70:8080/self/setUserName")
+        HttpUrl url = HttpUrl.parse("http://139.180.143.70:8080/self/setUserAvatar")
                 .newBuilder()
                 .addQueryParameter("platformId", userId)
                 .addQueryParameter("newAvatarUrl", newUserAvatarUrl)
