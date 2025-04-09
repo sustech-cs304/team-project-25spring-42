@@ -57,4 +57,5 @@
 
 #terminalBackPane {
     -fx-background-color: #1e1e1e;
+    -fx-border-color: #3b3b3b;
 }

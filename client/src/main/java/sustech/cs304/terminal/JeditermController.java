@@ -16,12 +16,14 @@ import sustech.cs304.terminal.pty.PtyProcessTtyConnector;
 import com.techsenger.jeditermfx.core.TerminalColor;
 import com.techsenger.jeditermfx.core.TextStyle;
 import com.techsenger.jeditermfx.core.TtyConnector;
+import com.techsenger.jeditermfx.core.model.JediTerminal;
 import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import kotlin.text.Charsets;
 
@@ -47,6 +49,16 @@ public class JeditermController {
             widget.close();
         });
         terminalPane.getChildren().add(widget.getPane());
+    }
+
+    @FXML
+    private void checkIfDragging(MouseEvent event) {
+        ideController.checkIfDragging(event);
+    } 
+
+    @FXML
+    private void dragTerminal(MouseEvent event) {
+        ideController.dragTerminal(event);
     }
 
     public void setIdeController(IDEController ideController) {
@@ -83,15 +95,14 @@ public class JeditermController {
                 throw new IllegalArgumentException("Unknown theme: " + theme);
         }
         this.widget.getTerminalPanel().repaint();
-
     }
 
     public void close() {
-        terminalBackPane.setVisible(false);
+        ideController.closeTerminal();
     }
 
     public void open() {
-        terminalBackPane.setVisible(true);
+        ideController.openTerminal();
     }
 
     public void executeCommand(String command) throws Exception {
@@ -159,6 +170,11 @@ final class CustomSettingsProvider extends DefaultSettingsProvider {
     @Override
     public TerminalColor getDefaultForeground() {
         return foregroundColor;
+    }
+
+    @Override
+    public float getTerminalFontSize() {
+        return 12;
     }
 
     public void setBackgroundColor(TerminalColor color) {
