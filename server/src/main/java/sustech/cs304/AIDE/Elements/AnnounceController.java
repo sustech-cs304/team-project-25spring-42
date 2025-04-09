@@ -90,7 +90,7 @@ public class AnnounceController {
         if (!adminId.equals(userId)) {
             return ResponseEntity.ok(new SetResponse(false));
         }
-        announceRepository.updateVisibilityById(courseId, false);
+        announceRepository.updateVisibilityById(id.toString(), false);
         return ResponseEntity.ok(new SetResponse(true));
     }
 
