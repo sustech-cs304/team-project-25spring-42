@@ -68,7 +68,7 @@ public class UserHomeController {
                 // 可选：添加加载错误处理
                 avatar.exceptionProperty().addListener((obs, old, newVal) -> {
                     if (newVal != null) {
-                        System.err.println("加载头像失败: " + newVal.getMessage());
+                        System.err.println("加载头像失败: " + newVal.getMessage() + " (URL: " + avatarUrl + ")");
                     }
                 });
             } catch (Exception e) {
