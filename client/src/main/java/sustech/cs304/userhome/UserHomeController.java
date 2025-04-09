@@ -59,12 +59,18 @@ public class UserHomeController {
         registerDateLabel.setText(user.getRegisterDate());
         lastLoginLabel.setText(user.getLastLogin());
 
-        String avatarPath = user.getAvatarPath();
+        String avatarUrl = user.getAvatarPath();
         // 加载头像
-        if (avatarPath != null && !avatarPath.isEmpty()) {
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
             try {
-                Image avatar = new Image(new File(avatarPath).toURI().toString());
+                Image avatar = new Image(avatarUrl, true); // true 表示后台加载
                 avatarImageView.setImage(avatar);
+                // 可选：添加加载错误处理
+                avatar.exceptionProperty().addListener((obs, old, newVal) -> {
+                    if (newVal != null) {
+                        System.err.println("加载头像失败: " + newVal.getMessage() + " (URL: " + avatarUrl + ")");
+                    }
+                });
             } catch (Exception e) {
                 System.err.println("加载头像失败: " + e.getMessage());
             }
