@@ -1,10 +1,15 @@
 package sustech.cs304.userhome;
 
+import sustech.cs304.classroom.Course;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import sustech.cs304.utils.ServerUtils;
+import sustech.cs304.userhome.UserServerSide;
 
 public class User {
     // 用户数据模型
@@ -16,6 +21,10 @@ public class User {
     private String avatarPath;
     private String registerDate;
     private String lastLogin;
+    private ArrayList<Course> coursesAsTeacher;
+    private ArrayList<Course> coursesAsStudent;
+    private String email;
+    private String phoneNumber;
 
     private static User instance;
 
@@ -30,16 +39,65 @@ public class User {
         return instance;
     }
 
+    public static String getSavedUserId() {
+        String projectRoot = System.getProperty("user.dir");
+        String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file))) {
+            return reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void loadUserData() {
-        // 模拟从数据库加载用户数据
-        userId = "U10000000";
-        username = "User";
-        account = "user@example.com";
-        password = "encryptedPassword123"; // 实际应用中应该是加密后的密码
-        bio = "input self introduction";
-        avatarPath = null; // 默认使用内置头像
-        registerDate = "2000-10-10";
-        lastLogin = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        UserServerSide serverSideUser = ServerUtils.serverLoadUserData(getSavedUserId());
+        this.userId = serverSideUser.getPlatformId();
+        this.username = serverSideUser.getUsername();
+        this.avatarPath = serverSideUser.getAvatarUrl();
+        this.registerDate = serverSideUser.getRegisterTime();
+        this.lastLogin = serverSideUser.getLastLoginTime();
+        this.phoneNumber = serverSideUser.getPhoneNumber();
+        this.email = serverSideUser.getEmail();
+        this.bio = serverSideUser.getBio();
+        this.account = "user@example.com";
+        this.password = "encryptedPassword123";
+        this.coursesAsTeacher = new ArrayList<>();
+        this.coursesAsStudent = new ArrayList<>();
+    }
+
+    public void createCourse() {
+        Course course = new Course();
+        course.setTeacher(this);
+        this.coursesAsTeacher.add(course);
+    }
+
+    public void joinCourse(Course course) {
+        if (!this.coursesAsStudent.contains(course)) {
+            course.addStudent(this);
+            this.coursesAsStudent.add(course);
+        }
+    }
+
+    public void createAssignment(Course course, String name, LocalDate dueDate, String status, String discription) {
+        boolean isSucess = course.addAssignment(this, name, dueDate, status, discription);
+        if (isSucess) {
+            System.out.println("Assignment created");
+        } else {
+            System.out.println("Assignment not created");
+        }
+    }
+
+    public ArrayList<Course> getCoursesAsTeacher() {
+        return coursesAsTeacher;
+    }
+
+    public ArrayList<Course> getCoursesAsStudent() {
+        return coursesAsStudent;
     }
 
     public String getUserId() {
@@ -68,6 +126,14 @@ public class User {
 
     public String getAvatarPath() {
         return avatarPath;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setUserId(String userId) {
@@ -100,5 +166,13 @@ public class User {
 
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

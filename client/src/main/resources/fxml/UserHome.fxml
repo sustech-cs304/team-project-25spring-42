@@ -6,7 +6,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.userhome.UserHomeController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.userhome.UserHomeController">
     <top>
         <ToolBar>
             <items>
@@ -25,7 +25,7 @@
                     <StackPane>
                         <ImageView fx:id="avatarImageView" fitHeight="120" fitWidth="120">
                             <image>
-                                <Image url="/img/user.png" />
+                                <Image url="@../../img/user.png" />
                             </image>
                         </ImageView>
                         <Button text="更换" style="-fx-background-radius: 15; -fx-padding: 5 10;"

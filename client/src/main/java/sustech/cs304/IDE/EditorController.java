@@ -42,12 +42,6 @@ public class EditorController {
         this.background = background;
     }
 
-    /**
-     * Set the theme of the editor
-     * @param theme the theme to be set, include "vs", "vs-dark", "hc-black"
-     */
-
-
     public void setTheme(String theme) {
         for (MonacoFX monacoFX : monacoFXs) {
             monacoFX.getEditor().setCurrentTheme(theme);
@@ -126,9 +120,6 @@ public class EditorController {
         ideController.openEditor();
     }
 
-
-
-
     public void addpdfPage(File file) throws IOException {
         if (files.contains(file)) {
             Tab tab = findTabByFile(file);
@@ -170,8 +161,7 @@ public class EditorController {
         if (tab == null) {
             return;
         }
-        String path = tab.getId();
-        File file = new File(path);
+        File file = getCurrentFile();
         MonacoFX monaco = (MonacoFX) ((AnchorPane) tab.getContent()).getChildren().get(0);
         String content = monaco.getEditor().getDocument().getText();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
@@ -197,6 +187,13 @@ public class EditorController {
             }
         }
     }
-
-
+    
+    public File getCurrentFile() {
+        Tab tab = this.editorTabPane.getSelectionModel().getSelectedItem();
+        if (tab == null) {
+            return null;
+        }
+        String path = tab.getId();
+        return new File(path);
+    }
 }

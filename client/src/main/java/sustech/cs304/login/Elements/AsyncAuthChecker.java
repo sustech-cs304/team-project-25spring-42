@@ -4,6 +4,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.io.FileWriter;
 
 public class AsyncAuthChecker {
     private final OkHttpClient client;
@@ -37,10 +38,31 @@ public class AsyncAuthChecker {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        if (response.isSuccessful() && "1".equals(response.body().string().trim())) {
-                            result = true;
-                            latch.countDown();
+                        if (response.isSuccessful()) {
+                            String[] parts = response.body().string().split(" ");
+                            if ("1".equals(parts[0])){
+                                System.out.println("Logged in successfully");
+                                result = true;
+                                String userId = parts[1];
+                                System.out.println("User ID: " + userId);
+                                // clear the content of the file ../../userhome/savedUserId.txt and save the userId
+                                try {
+                                    String projectRoot = System.getProperty("user.dir");
+                                    String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+                                    System.err.println("File path: " + filePath);
+                                    FileWriter writer = new FileWriter(filePath, false);
+                                    writer.write(userId);  // Write the new userId
+                                    writer.close();        // Always close the writer
+                                } catch (IOException e) {
+                                    System.err.println("Error writing to savedUserId.txt: " + e.getMessage());
+                                }
+                                latch.countDown();
+                            } else {
+                                System.out.println("Not logged in yet, retrying...");
+                                scheduleNext();
+                            }
                         } else {
+                            System.out.println("Unexpected code " + response);
                             scheduleNext();
                         }
                         response.close();
