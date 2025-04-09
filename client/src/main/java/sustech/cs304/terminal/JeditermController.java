@@ -16,12 +16,14 @@ import sustech.cs304.terminal.pty.PtyProcessTtyConnector;
 import com.techsenger.jeditermfx.core.TerminalColor;
 import com.techsenger.jeditermfx.core.TextStyle;
 import com.techsenger.jeditermfx.core.TtyConnector;
+import com.techsenger.jeditermfx.core.model.JediTerminal;
 import com.techsenger.jeditermfx.core.util.Platform;
 import com.techsenger.jeditermfx.ui.DefaultHyperlinkFilter;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import kotlin.text.Charsets;
 
@@ -49,6 +51,16 @@ public class JeditermController {
         terminalPane.getChildren().add(widget.getPane());
     }
 
+    @FXML
+    private void checkIfDragging(MouseEvent event) {
+        ideController.checkIfDragging(event);
+    } 
+
+    @FXML
+    private void dragTerminal(MouseEvent event) {
+        ideController.dragTerminal(event);
+    }
+
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
@@ -68,8 +80,8 @@ public class JeditermController {
                 this.xmarkImage.setImage(xmarkImage);
                 terminalBackPane.setStyle("-fx-background-color: #1e1e1e;");
                 settingsProvider.setBackgroundColor(new TerminalColor(30, 30, 30));
-                // settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
-                // settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(30, 30, 30));
+                settingsProvider.setForegroundColor(new TerminalColor(245, 245, 245));
+                settingsProvider.setDefaultStyle(new TerminalColor(245, 245, 245), new TerminalColor(30, 30, 30));
                 break;
             case "hc-black":
                 xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
@@ -83,15 +95,14 @@ public class JeditermController {
                 throw new IllegalArgumentException("Unknown theme: " + theme);
         }
         this.widget.getTerminalPanel().repaint();
-
     }
 
     public void close() {
-        terminalBackPane.setVisible(false);
+        ideController.closeTerminal();
     }
 
     public void open() {
-        terminalBackPane.setVisible(true);
+        ideController.openTerminal();
     }
 
     public void executeCommand(String command) throws Exception {
@@ -142,9 +153,8 @@ public class JeditermController {
 }
 
 final class CustomSettingsProvider extends DefaultSettingsProvider {
-    private TerminalColor foregroundColor = new TerminalColor(48, 20, 221);
+    private TerminalColor foregroundColor = new TerminalColor(30, 30, 30);
     private TerminalColor backgroundColor = new TerminalColor(245, 245, 245);
-    // private TextStyle defaultStyle = new TextStyle(new TerminalColor(30, 30, 30), backgroundColor);
     private TextStyle defaultStyle = new TextStyle(foregroundColor, backgroundColor);
 
     @Override
@@ -160,6 +170,11 @@ final class CustomSettingsProvider extends DefaultSettingsProvider {
     @Override
     public TerminalColor getDefaultForeground() {
         return foregroundColor;
+    }
+
+    @Override
+    public float getTerminalFontSize() {
+        return 12;
     }
 
     public void setBackgroundColor(TerminalColor color) {

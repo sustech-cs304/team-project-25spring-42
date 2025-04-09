@@ -4,11 +4,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Hyperlink;
 import sustech.cs304.pdfReader.pdfReaderController;
 import sustech.cs304.terminal.JeditermController;
@@ -50,6 +51,13 @@ public class IDEController {
     @FXML
     private ImageView codeImage, chatImage, classImage, userImage, settingImage;
 
+    private boolean isDragging = false;
+    private double initialY;
+    private double initialHeight;
+    private static final double DRAG_THRESHOLD = 10.0;
+    private AnchorPane terminalBackPane;
+    private TabPane editorTabPane;
+
     @FXML
     private void initialize() {
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
@@ -57,11 +65,15 @@ public class IDEController {
             backgroundPane.setLayoutY(-32);
         }
 
+        this.terminalBackPane = (AnchorPane) backgroundPane.lookup("#terminalBackPane");
+        this.editorTabPane = (TabPane) backgroundPane.lookup("#editorTabPane");
+
         menuBarController.setIdeController(this);
         fileTreeController.setIdeController(this);
         editorController.setIdeController(this);
         jeditermController.setIdeController(this);
-        editorController.setBackground("vs-dark");
+
+        editorController.setBackground("vs");
 
         ideContent = new ArrayList<>(modePane.getChildren());
         try {
@@ -150,5 +162,35 @@ public class IDEController {
         this.classImage.setImage(classImage);
         this.userImage.setImage(userImage);
         this.settingImage.setImage(settingImage);
+    }
+
+    public void checkIfDragging(MouseEvent event) {
+        if (event.getY() <= DRAG_THRESHOLD) {
+            isDragging = true;
+            initialY = event.getSceneY();
+            initialHeight = terminalBackPane.getPrefHeight();
+            event.consume();
+        }
+    }
+
+    public void dragTerminal(MouseEvent event) {
+        if (isDragging) {
+            double deltaY = initialY - event.getSceneY();
+            double newHeight = Math.max(0, Math.min(initialHeight + deltaY, editorPane.getHeight()));
+            terminalBackPane.setPrefHeight(newHeight);
+            AnchorPane.setBottomAnchor(editorTabPane, newHeight);
+            event.consume();
+        }
+    }
+
+    public void openTerminal() {
+        terminalBackPane.setVisible(true);
+        double terminalHeight = terminalBackPane.getPrefHeight();
+        AnchorPane.setBottomAnchor(editorTabPane, terminalHeight);
+    }
+
+    public void closeTerminal() {
+        terminalBackPane.setVisible(false);
+        AnchorPane.setBottomAnchor(editorTabPane, 0.0);
     }
 }
