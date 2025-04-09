@@ -28,8 +28,7 @@ public class CourseRelatedController {
             ClientCourse clientCourse = new ClientCourse(course.getId(), course.getCourseName(), course.getAdminId(), course.getOpenTime(), course.getCloseTime(), course.getOpening());
             return ResponseEntity.ok(clientCourse);
         } else {
-            return null; 
-        }
+            return ResponseEntity.notFound().build();
     }
 
     @GetMapping(value = "/getCourseName", produces = "application/json")
