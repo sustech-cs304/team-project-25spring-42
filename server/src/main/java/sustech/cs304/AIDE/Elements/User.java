@@ -34,8 +34,8 @@ public class User {
         this.platformId = platformId;
         this.username = username;
         this.avatarUrl = avatarUrl;   
-        this.registerTime = LocalDateTime.now();
-        this.lastLoginTime = LocalDateTime.now();
+        this.registerTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
+        this.lastLoginTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
         this.phoneNumber = null;
         this.email = null;
         this.bio = "Empty Bio";

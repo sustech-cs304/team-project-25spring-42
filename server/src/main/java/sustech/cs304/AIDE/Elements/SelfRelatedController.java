@@ -1,22 +1,8 @@
 package sustech.cs304.AIDE.Elements;
-import sustech.cs304.AIDE.Elements.User;
-import sustech.cs304.AIDE.Elements.UserRepository;
-import java.util.HashMap;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import java.util.Map;
 import java.util.Optional;
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
 
@@ -24,8 +10,6 @@ import javax.validation.constraints.Email;
 @RestController
 @RequestMapping("/self")
 public class SelfRelatedController {
-
-    private int currentSequence = 0;
 
     private final UserRepository userRepository;
 
@@ -260,23 +244,5 @@ class ClientUser{
     }
     public String getBio() {
         return bio;
-    }
-}
-class UserResponse {
-    private String content;
-    UserResponse(String content) {
-        this.content = content;
-    }
-    public String getContent() {
-        return content;
-    }
-}
-class SetResponse {
-    private boolean result;
-    SetResponse(boolean result) {
-        this.result = result;
-    }
-    public boolean getResult() {
-        return result;
     }
 }
