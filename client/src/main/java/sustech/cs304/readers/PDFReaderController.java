@@ -1,4 +1,4 @@
-package sustech.cs304.pdfReader;
+package sustech.cs304.readers;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 
-public class pdfReaderController {
+public class PDFReaderController {
 
     @FXML
     public AnchorPane rootAnchorPane;
@@ -45,11 +45,49 @@ public class pdfReaderController {
 
         pdfReaderPane.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showContextMenu);
 
-        // 监听视口大小变化以调整图像位置
         pdfScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> updateImageViewPosition());
+        setKeyboardEvents();
     }
 
-    public void getFile(File file) {
+    private void setKeyboardEvents() {
+        pdfScrollPane.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case LEFT:
+                    if (currentPage > 0) {
+                        currentPage--;
+                        try {
+                            renderPage(currentPage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case RIGHT:
+                    if (currentPage < document.getNumberOfPages() - 1) {
+                        currentPage++;
+                        try {
+                            renderPage(currentPage);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        pdfImageView.setOnZoom(event -> {
+            zoomFactor = Math.min(Math.max(zoomFactor * event.getZoomFactor(), 0.25), 4.0);
+            try {
+                renderPage(currentPage);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            event.consume();
+        });
+    }
+
+    public void setFile(File file) {
         try {
             File pdfFile = file;
             document = Loader.loadPDF(pdfFile);

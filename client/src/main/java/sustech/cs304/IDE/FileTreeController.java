@@ -112,10 +112,13 @@ public class FileTreeController {
         if (file.isDirectory()) {
             return;
         } else {
+            ideController.openEditor();
             String extension = FileUtils.getExtension(file);
             if(extension.equals("pdf") ){
-                ideController.getEditorController().addpdfPage(file);
-            }else{
+                ideController.getEditorController().addPDFPage(file);
+            } else if (extension.equals("pptx") || extension.equals("ppt")) {
+                ideController.getEditorController().addPPTPage(file);
+            } else {
                 try {
                     List<String> lines = Files.readAllLines(file.toPath(), Charset.forName("ISO-8859-1"));
                     ideController.getEditorController().addPage(lines, file);
