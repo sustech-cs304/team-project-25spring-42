@@ -185,11 +185,11 @@ class ClientAnnounce {
     }
 }
 class longList {
-    private List<Long> announceIdList;
-    public longList(List<Long> announceIdList) {
-        this.announceIdList = announceIdList;
+    private List<Long> longList;
+    public longList(List<Long> longList) {
+        this.longList = longList;
     }
-    public List<Long> getAnnounceIdList() {
-        return announceIdList;
+    public List<Long> getLongList() {
+        return longList;
     }
 }
