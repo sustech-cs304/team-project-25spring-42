@@ -11,7 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
-import sustech.cs304.pdfReader.pdfReaderController;
+import sustech.cs304.readers.PDFReaderController;
+import sustech.cs304.readers.PPTReaderController;
 import sustech.cs304.utils.FileUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -117,10 +118,9 @@ public class EditorController {
         editorTabPane.getSelectionModel().select(newTab);
         setText(monacoFX, lines);
         setTheme(background);
-        ideController.openEditor();
     }
 
-    public void addpdfPage(File file) throws IOException {
+    public void addPDFPage(File file) throws IOException {
         if (files.contains(file)) {
             Tab tab = findTabByFile(file);
             editorTabPane.getSelectionModel().select(tab);
@@ -137,8 +137,8 @@ public class EditorController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/pdfReader.fxml")); // 确保路径正确
         AnchorPane pdfPane = loader.load();
-        pdfReaderController pdfReaderController = loader.getController();
-        pdfReaderController.getFile(file);
+        PDFReaderController pdfReaderController = loader.getController();
+        pdfReaderController.setFile(file);
 
         newTab.setContent(pdfPane);
         editorTabPane.getTabs().add(newTab);
@@ -146,6 +146,34 @@ public class EditorController {
 
         files.add(file);
     }
+
+    public void addPPTPage(File file) throws IOException {
+        if (files.contains(file)) {
+            Tab tab = findTabByFile(file);
+            editorTabPane.getSelectionModel().select(tab);
+            return;
+        }
+
+        Tab newTab = new Tab();
+        newTab.setId(file.getAbsolutePath());
+        newTab.setText(file.getName());
+        newTab.setOnClosed(event -> {
+            files.remove(file);
+        });
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/pptReader.fxml")); // 确保路径正确
+        AnchorPane pptPane = loader.load();
+        PPTReaderController pptReaderController = loader.getController();
+        pptReaderController.setFile(file);
+
+        newTab.setContent(pptPane);
+        editorTabPane.getTabs().add(newTab);
+        editorTabPane.getSelectionModel().select(newTab);
+
+        files.add(file);
+    }
+
 
     private Tab findTabByFile(File file) {
         for (Tab tab : editorTabPane.getTabs()) {

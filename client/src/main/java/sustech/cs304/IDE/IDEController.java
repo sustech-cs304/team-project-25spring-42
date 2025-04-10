@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Hyperlink;
-import sustech.cs304.pdfReader.pdfReaderController;
+import sustech.cs304.readers.PDFReaderController;
 import sustech.cs304.terminal.JeditermController;
 import sustech.cs304.userhome.UserHomeController;
 
@@ -37,7 +37,7 @@ public class IDEController {
     private EditorController editorController;
 
     @FXML
-    private pdfReaderController MYpdfReaderController;
+    private PDFReaderController pdfReaderController;
 
     @FXML
     private JeditermController jeditermController;
@@ -112,8 +112,8 @@ public class IDEController {
         return editorController;
     }
 
-    public pdfReaderController getMYpdfReaderController() {
-        return MYpdfReaderController;
+    public PDFReaderController getMYpdfReaderController() {
+        return pdfReaderController;
     }
 
     public JeditermController getJeditermController() {
