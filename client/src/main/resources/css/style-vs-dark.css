@@ -17,12 +17,30 @@
 }
 
 .button {
+    -fx-background-color: #2b2b2b;
+    -fx-text-fill: #f5f5f5;
+    -fx-background-radius: 8;
+    -fx-border-color: #222222;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.3, 0, 2);
+    -fx-padding: 8 16;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.modeButton {
     -fx-background-color: #1e1e1e;
     -fx-text-fill: #f5f5f5;
+    -fx-background-radius: 0;
+    -fx-border-color: #1e1e1e;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-effect: null;
 }
 
 .button:hover {
-    -fx-background-color: #2b2b2b;
+    -fx-background-color: #3b3b3b;
 }
 
 .tree-view {

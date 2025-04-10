@@ -4,11 +4,18 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import sustech.cs304.App;
+import sustech.cs304.utils.AlterUtils;
+import sustech.cs304.utils.StringUtils;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -37,8 +44,88 @@ public class UserPageController {
     @FXML
     public void initialize() {
         bindUserDataToUI();
-
         returnbutton.setOnAction(event -> switchToIDE());
+    }
+
+    @FXML
+    private void updateUsername() {
+        String newUsername = usernameField.getText();
+        if (newUsername != null && !newUsername.trim().isEmpty()) {
+            boolean ifChange = AlterUtils.showConfirmationAlert(
+                    (Stage) usernameField.getScene().getWindow(),
+                    "Comfirmation",
+                    "Are you sure to change your username?",
+                    "New Username: " + newUsername
+            );
+            if (ifChange) {
+                App.user.setUsername(newUsername);
+                App.userApi.updateUsernameById(App.user.getUserId(), newUsername);
+            } else {
+                usernameField.setText(App.user.getUsername());
+            }
+        } else {
+            usernameField.setText(App.user.getUsername());
+            AlterUtils.showInfoAlert(
+                    (Stage) usernameField.getScene().getWindow(),
+                    "Error",
+                    "Invalid Username",
+                    "Please enter a valid username"
+            );
+        }
+    }
+
+    @FXML
+    private void updateEmail() {
+        String newEmail = mailField.getText();
+        if (newEmail != null && !newEmail.trim().isEmpty() && StringUtils.checkIfValidEmail(newEmail)) {
+            boolean ifChange = AlterUtils.showConfirmationAlert(
+                    (Stage) mailField.getScene().getWindow(),
+                    "Comfirmation",
+                    "Are you sure to change your email?",
+                    "New Email: " + newEmail
+            );
+            if (ifChange) {
+                App.user.setEmail(newEmail);
+                App.userApi.updateMailById(App.user.getUserId(), newEmail);
+            } else {
+                mailField.setText(App.user.getEmail());
+            }
+        } else {
+            mailField.setText(App.user.getEmail());
+            AlterUtils.showInfoAlert(
+                    (Stage) mailField.getScene().getWindow(),
+                    "Error",
+                    "Invalid Email",
+                    "Please enter a valid email"
+            );
+        }
+    }
+
+    @FXML
+    private void updatePhone() {
+        String newPhone = phoneField.getText();
+        if (newPhone != null && !newPhone.trim().isEmpty()) {
+            boolean ifChange = AlterUtils.showConfirmationAlert(
+                    (Stage) phoneField.getScene().getWindow(),
+                    "Comfirmation",
+                    "Are you sure to change your phone number?",
+                    "New Phone Number: " + newPhone
+            );
+            if (ifChange) {
+                App.user.setPhoneNumber(newPhone);
+                App.userApi.updatePhoneById(App.user.getUserId(), newPhone);
+            } else {
+                phoneField.setText(App.user.getPhoneNumber());
+            }
+        } else {
+            phoneField.setText(App.user.getPhoneNumber());
+            AlterUtils.showInfoAlert(
+                    (Stage) phoneField.getScene().getWindow(),
+                    "Error",
+                    "Invalid Phone Number",
+                    "Please enter a valid phone number"
+            );
+        }
     }
 
     private void bindUserDataToUI() {
@@ -51,12 +138,10 @@ public class UserPageController {
         lastLoginLabel.setText(App.user.getLastLogin());
 
         String avatarUrl = App.user.getAvatarPath();
-        // 加载头像
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
             try {
                 Image avatar = new Image(avatarUrl, true); // true 表示后台加载
                 avatarImageView.setImage(avatar);
-                // 可选：添加加载错误处理
                 avatar.exceptionProperty().addListener((obs, old, newVal) -> {
                     if (newVal != null) {
                         System.err.println("加载头像失败: " + newVal.getMessage() + " (URL: " + avatarUrl + ")");
