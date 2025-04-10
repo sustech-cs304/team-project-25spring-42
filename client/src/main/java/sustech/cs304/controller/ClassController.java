@@ -8,10 +8,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import sustech.cs304.App;
 import sustech.cs304.controller.components.button.ClassButton;
+import sustech.cs304.entity.Course;
+import sustech.cs304.service.CourseApi;
+import sustech.cs304.service.CourseApiImpl;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ClassController {
 
@@ -22,13 +27,16 @@ public class ClassController {
     public ScrollPane classChoiceScroll;
     @FXML
     public AnchorPane editorPane, fileTreePane;
-
     private VBox contentBox;
 
     private String css;
 
+    private CourseApi courseApi;
+    private List<Course> courseList;
+
     @FXML
     private void initialize() {
+        courseApi = new CourseApiImpl();
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
@@ -44,14 +52,21 @@ public class ClassController {
     }
 
     private void initializeClassChoiceScroll() {
-        addCourseButton("计算机科学导论", "张老师", true, "/img/x.png");
-        addCourseButton("数据结构与算法", "李老师", false, "/img/x.png");
+        List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
+        for (Long courseId : courseIds) {
+            Course course = courseApi.getCourseById(courseId);
+            String teacherName = App.userApi.getUsernameById(course.getAdminId());
+            if (course != null) {
+                addCourseButton(course.getCourseName(), teacherName,
+                        course.isOpening(), "/img/x.png", courseId);
+            }
+        }
     }
 
     private void addCourseButton(String course, String teacher,
-                                 boolean active, String imagePath) {
+                                 boolean active, String imagePath, Long courseId) {
         ClassButton btn = new ClassButton();
-        btn.setCourseInfo(course, teacher);
+        btn.setCourseInfo(course, teacher, courseId);
         btn.setStatus(active);
 
         try {
@@ -64,9 +79,8 @@ public class ClassController {
 
         // 设置点击事件
         btn.setOnAction(e -> {
-            System.out.println("已选择课程: " + course);
             btn.setStatus(!btn.isActive());
-            showCourseHomePage("课程主页", "请从左侧选择课程");
+            showCourseHomePage("课程主页", "请从左侧选择课程", courseId);
         });
 
         this.contentBox.getChildren().add(btn);
@@ -83,13 +97,15 @@ public class ClassController {
 
 
 
-    private void showCourseHomePage(String courseName, String teacherName) {
+    private void showCourseHomePage(String courseName, String teacherName, Long courseId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CourseHomePage.fxml"));
             Parent courseHomePage = loader.load();
 
             // 获取控制器实例
             CoursePageController controller = loader.getController();
+            controller.setCourseId(courseId);
+            controller.loadData();
 
             // 设置课程名称和教师姓名
             //controller.setCourseInfo(courseName, teacherName);

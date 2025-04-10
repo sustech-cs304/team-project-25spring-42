@@ -39,11 +39,24 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-            <TableView fx:id="announcementTable" prefHeight="150.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-              </columns>
+            <TableView fx:id="announcementTable" prefHeight="200">
+               <columns>
+                  <TableColumn prefWidth="200" text="Name">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="name" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="150" text="Time">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="time" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="150" text="Operation">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="action" />
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
             </TableView>
                 <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
                     <TextField fx:id="newAnnouncement" prefWidth="300" promptText="输入新公告..." />
