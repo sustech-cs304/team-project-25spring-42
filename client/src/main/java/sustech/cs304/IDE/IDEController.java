@@ -82,6 +82,8 @@ public class IDEController {
         } catch(IOException e) {
             e.printStackTrace();
         }
+
+        switchToEditor();
     }
 
     @FXML
@@ -120,12 +122,14 @@ public class IDEController {
 
     @FXML
     private void switchToEditor() {
+        menuBarController.changeMode("editor");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(ideContent);
     }
 
     @FXML
     private void switchToClass() {
+        menuBarController.changeMode("class");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(classContent);
         AnchorPane.setTopAnchor(classContent, 0.0);
@@ -136,6 +140,7 @@ public class IDEController {
 
     @FXML
     private void switchToUserhome() {
+        menuBarController.changeMode("userHome");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(userHomeContent);
         AnchorPane.setTopAnchor(userHomeContent, 0.0);

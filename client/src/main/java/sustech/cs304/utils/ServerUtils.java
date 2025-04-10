@@ -46,7 +46,6 @@ public final class ServerUtils{
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println("Error occurred while loading user data: " + e.getMessage());
             return new UserServerSide("test010100101", "tester" , "https://test.com" , "2025-04-07T18:11:20.059626" , "2025-04-08T14:37:04.979725072" , "1231123212" , "test@test.com", "test bio");
         }

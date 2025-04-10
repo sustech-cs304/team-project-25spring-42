@@ -8,8 +8,8 @@ import javafx.collections.FXCollections;
 public class CourseHomeController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
-    @FXML private ListView<String> announcementList;
     @FXML private TextField newAnnouncement;
+    @FXML private TableView<announcementItem> announcementTable;
     @FXML private TableView<ResourceItem> resourceTable;
     @FXML private TableView<HomeworkItem> homeworkTable;
     @FXML private TextField resourceSearch;
@@ -29,7 +29,7 @@ public class CourseHomeController {
                 "5月5日：作业提交截止日期延长至5月15日",
                 "4月28日：课程资料已更新"
         );
-        announcementList.setItems(announcements);
+        // announcementList.setItems(announcements);
     }
 
     private void initializeResources() {
@@ -51,11 +51,11 @@ public class CourseHomeController {
 
     @FXML
     private void publishAnnouncement() {
-        String announcement = newAnnouncement.getText();
-        if (!announcement.isEmpty()) {
-            announcementList.getItems().add(0, announcement);
-            newAnnouncement.clear();
-        }
+        // String announcement = newAnnouncement.getText();
+        // if (!announcement.isEmpty()) {
+        //     announcementList.getItems().add(0, announcement);
+        //     newAnnouncement.clear();
+        // }
     }
 
     @FXML
@@ -122,5 +122,15 @@ public class CourseHomeController {
         public String getDueDate() { return dueDate; }
         public String getStatus() { return status; }
         public String getAction() { return action; }
+    }
+
+    public static class announcementItem {
+        private final String content;
+
+        public announcementItem(String content) {
+            this.content = content;
+        }
+
+        public String getContent() { return content; }
     }
 }
