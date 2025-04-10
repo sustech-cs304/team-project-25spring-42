@@ -180,10 +180,10 @@ public class UserApiImpl implements UserApi {
     public boolean updateUsernameById(String userId, String newUsername) {
         Query [] queries = {
             new Query("platformId", userId),
-            new Query("newUsername", newUsername)
+            new Query("newUserName", newUsername)
         };
         try {
-            Response response = HttpUtils.get("/self", "/setUsername", queries);
+            Response response = HttpUtils.get("/self", "/setUserName", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 Gson gson = new Gson();
@@ -224,7 +224,7 @@ public class UserApiImpl implements UserApi {
     public boolean updateMailById(String userId, String newMail) {
         Query [] queries = {
             new Query("platformId", userId),
-            new Query("newEMail", newMail)
+            new Query("newEmail", newMail)
         };
         try {
             Response response = HttpUtils.get("/self", "/setUserEmail", queries);
