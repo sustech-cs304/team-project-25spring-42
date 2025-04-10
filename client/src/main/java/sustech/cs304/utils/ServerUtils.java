@@ -1,7 +1,7 @@
 package sustech.cs304.utils; 
 
 import okhttp3.*;
-import sustech.cs304.service.UserServerSide;
+import sustech.cs304.entity.UserServerSide;
 
 import java.awt.*;
 import java.io.IOException;

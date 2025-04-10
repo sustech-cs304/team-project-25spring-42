@@ -2,21 +2,15 @@ package sustech.cs304.entity;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
-import sustech.cs304.service.UserServerSide;
 import sustech.cs304.utils.ServerUtils;
 
 public class User {
-    // 用户数据模型
     private String userId;
     private String username;
     private String account;
-    private String password;
     private String bio;
     private String avatarPath;
     private String registerDate;
@@ -28,15 +22,8 @@ public class User {
 
     private static User instance;
 
-    private User() {
-        loadUserData();
-    }
-
-    public static User getInstance() {
-        if (instance == null) {
-            instance = new User();
-        }
-        return instance;
+    public User(String userId) {
+        this.userId = userId;
     }
 
     public static String getSavedUserId() {
@@ -65,7 +52,6 @@ public class User {
         this.email = serverSideUser.getEmail();
         this.bio = serverSideUser.getBio();
         this.account = "user@example.com";
-        this.password = "encryptedPassword123";
         this.coursesAsTeacher = new ArrayList<>();
         this.coursesAsStudent = new ArrayList<>();
     }
@@ -146,10 +132,6 @@ public class User {
 
     public void setAccount(String account) {
         this.account = account;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setBio(String bio) {

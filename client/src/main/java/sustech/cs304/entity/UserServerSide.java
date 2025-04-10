@@ -1,4 +1,4 @@
-package sustech.cs304.service;
+package sustech.cs304.entity;
 
 import java.time.LocalDateTime;
 public class UserServerSide {

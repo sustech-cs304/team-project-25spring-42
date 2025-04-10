@@ -1,7 +1,6 @@
 package sustech.cs304.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import sustech.cs304.entity.User;
+import sustech.cs304.App;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -18,17 +17,12 @@ import java.time.format.DateTimeFormatter;
 public class UserPageController {
 
     public Button returnbutton;
+
+    @FXML private TextField usernameField, mailField, phoneField;
     // 用户信息字段
-    @FXML private Label userIdLabel;
-    @FXML private TextField usernameField;
-    @FXML private Label accountLabel;
-    @FXML private PasswordField passwordField;
     @FXML private TextArea bioTextArea;
     @FXML private ImageView avatarImageView;
-    @FXML private Label registerDateLabel;
-    @FXML private Label lastLoginLabel;
-
-    private User user;
+    @FXML private Label userIdLabel, registerDateLabel, lastLoginLabel;
 
     public Parent getIDEpane() {
         return IDEpane;
@@ -42,24 +36,21 @@ public class UserPageController {
 
     @FXML
     public void initialize() {
-        user = User.getInstance();
-
-        // 绑定UI控件
         bindUserDataToUI();
 
         returnbutton.setOnAction(event -> switchToIDE());
     }
 
     private void bindUserDataToUI() {
-        userIdLabel.setText(user.getUserId());
-        usernameField.setText(user.getUsername());
-        accountLabel.setText(user.getAccount());
-        passwordField.setText("********"); // 不显示真实密码
-        bioTextArea.setText(user.getBio());
-        registerDateLabel.setText(user.getRegisterDate());
-        lastLoginLabel.setText(user.getLastLogin());
+        userIdLabel.setText(App.user.getUserId());
+        usernameField.setText(App.user.getUsername());
+        mailField.setText(App.user.getEmail());
+        phoneField.setText(App.user.getPhoneNumber());
+        bioTextArea.setText(App.user.getBio());
+        registerDateLabel.setText(App.user.getRegisterDate());
+        lastLoginLabel.setText(App.user.getLastLogin());
 
-        String avatarUrl = user.getAvatarPath();
+        String avatarUrl = App.user.getAvatarPath();
         // 加载头像
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
             try {
@@ -90,7 +81,7 @@ public class UserPageController {
             try {
                 Image newAvatar = new Image(selectedFile.toURI().toString());
                 avatarImageView.setImage(newAvatar);
-                user.setAvatarPath(selectedFile.getAbsolutePath());
+                App.user.setAvatarPath(selectedFile.getAbsolutePath());
 
                 // 在实际应用中，这里应该上传头像到服务器
                 showAlert("头像已更新", "头像已成功更改", Alert.AlertType.INFORMATION);
@@ -145,7 +136,6 @@ public class UserPageController {
         // 处理结果
         dialog.showAndWait().ifPresent(newPassword -> {
             // 在实际应用中，这里应该加密并保存新密码
-            user.setPassword(newPassword);
             showAlert("成功", "密码已更新", Alert.AlertType.INFORMATION);
         });
     }
@@ -153,11 +143,11 @@ public class UserPageController {
     @FXML
     private void handleSave() {
         // 获取UI上的修改
-        user.setUsername(usernameField.getText());
-        user.setBio(bioTextArea.getText());
+        App.user.setUsername(usernameField.getText());
+        App.user.setBio(bioTextArea.getText());
 
         // 验证用户名
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+        if (App.user.getUsername() == null || App.user.getUsername().trim().isEmpty()) {
             showAlert("错误", "用户名不能为空", Alert.AlertType.ERROR);
             return;
         }
@@ -166,8 +156,8 @@ public class UserPageController {
         showAlert("保存成功", "用户信息已保存", Alert.AlertType.INFORMATION);
 
         // 更新最后登录时间
-        user.setLastLogin(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        lastLoginLabel.setText(user.getLastLogin());
+        App.user.setLastLogin(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        lastLoginLabel.setText(App.user.getLastLogin());
     }
 
     @FXML
