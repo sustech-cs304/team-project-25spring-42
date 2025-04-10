@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
+import java.util.List;
 
 
 @RestController
@@ -12,9 +13,11 @@ import javax.validation.constraints.Email;
 public class CourseRelatedController {
 
     private final CourseRepository courseRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
-    public CourseRelatedController(CourseRepository courseRepository) {
+    public CourseRelatedController(CourseRepository courseRepository, EnrollmentRepository enrollmentRepository) {
         this.courseRepository = courseRepository;
+        this.enrollmentRepository = enrollmentRepository;
     }
 
     @GetMapping(value = "/allInfo", produces = "application/json")
@@ -29,6 +32,7 @@ public class CourseRelatedController {
             return ResponseEntity.ok(clientCourse);
         } else {
             return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/getCourseName", produces = "application/json")
@@ -179,6 +183,13 @@ public class CourseRelatedController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping(value = "/getCourseIdList", produces = "application/json")
+    public ResponseEntity<List<Long>> getCourseIdList(@RequestParam String userId) {
+        List<Long> courseIdList = enrollmentRepository.findCourseIdByUserId(userId);
+        System.out.println("Course ID list retrieved for user: " + userId);
+        return ResponseEntity.ok(courseIdList);
     }
 }
 class ClientCourse {
