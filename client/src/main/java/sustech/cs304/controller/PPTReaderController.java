@@ -138,15 +138,14 @@ public class PPTReaderController {
     }
     
     public void setFile(File file) {
-        try {
-            FileInputStream fis = new FileInputStream(file);
+        try (FileInputStream fis = new FileInputStream(file)) {
             ppt = new XMLSlideShow(fis);
             slides = ppt.getSlides();
             currentPage = 0;
             renderPage(currentPage);
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to load PDF file: " + e.getMessage());
+            System.err.println("Failed to load PPT file: " + e.getMessage());
         }
     }
 
