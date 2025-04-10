@@ -1,7 +1,8 @@
 package sustech.cs304.utils; 
 
 import okhttp3.*;
-import sustech.cs304.login.Elements.*;
+import sustech.cs304.service.UserServerSide;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -15,7 +16,6 @@ import javafx.fxml.FXMLLoader;
 import java.net.URL;
 import java.time.LocalDateTime;
 import com.google.gson.Gson;
-import sustech.cs304.userhome.UserServerSide;
 
 public final class ServerUtils{
     private ServerUtils() {
