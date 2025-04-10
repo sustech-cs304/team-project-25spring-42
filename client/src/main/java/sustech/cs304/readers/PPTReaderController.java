@@ -146,7 +146,7 @@ public class PPTReaderController {
             renderPage(currentPage);
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to load PDF file: " + e.getMessage());
+            System.err.println("Failed to load PPT file: " + e.getMessage());
         }
     }
 
