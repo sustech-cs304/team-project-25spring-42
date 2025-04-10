@@ -224,7 +224,7 @@ public class UserApiImpl implements UserApi {
     public boolean updateMailById(String userId, String newMail) {
         Query [] queries = {
             new Query("platformId", userId),
-            new Query("newMail", newMail)
+            new Query("newEMail", newMail)
         };
         try {
             Response response = HttpUtils.get("/self", "/setUserEmail", queries);
