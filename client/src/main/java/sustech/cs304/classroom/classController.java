@@ -4,31 +4,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.Parent;
-import sustech.cs304.classroom.MenuBarController;
 
 import java.io.IOException;
-import java.util.Objects;
 
-public class classController {
+public class ClassController {
 
 
     @FXML
     public AnchorPane backgroundPane;
-    public ScrollPane ClassChoiceScroll;
-    public AnchorPane editorPane;
     @FXML
-    private MenuBarController menuBarController;
+    public ScrollPane classChoiceScroll;
+    @FXML
+    public AnchorPane editorPane, fileTreePane;
+
+    private VBox contentBox;
 
     private String css;
 
@@ -38,38 +32,22 @@ public class classController {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
         }
-        //menuBarController.setFileTreeController(fileTreeController);
-        //menuBarController.setEditorController(editorController);
-       // menuBarController.setclassController(this);
-        //fileTreeController.setEditorController(editorController);
-        //fileTreeController.setMYpdfReaderController(MYpdfReaderController);
-        //editorController.setIdeController(this);
-        //editorController.setBackground("vs-dark");
 
+        this.contentBox = new VBox(10);
+        this.contentBox.getStyleClass().add("vbox");
+        this.contentBox.setPadding(new Insets(10));
+        classChoiceScroll.setFitToWidth(true);
+        classChoiceScroll.setContent(contentBox);
 
-
-
-
-        VBox contentBox = new VBox(10);
-        contentBox.setPadding(new Insets(10));
-        switchToClass(contentBox);
+        initializeClassChoiceScroll();
     }
 
-    @FXML
-    private void switchToClass(VBox contentBox) {
-
-
-
-        // 添加多个课程按钮示例
-        addCourseButton(contentBox, "Java编程", "张老师", true, "/img/x.png");
-        //addCourseButton(contentBox, "数据结构", "李教授", false, "/img/github.png");
-        //addCourseButton(contentBox, "算法分析", "王老师", true, "/img/google.png");
-
-        ClassChoiceScroll.setFitToWidth(true);
-        ClassChoiceScroll.setContent(contentBox);
+    private void initializeClassChoiceScroll() {
+        addCourseButton("计算机科学导论", "张老师", true, "/img/x.png");
+        addCourseButton("数据结构与算法", "李老师", false, "/img/x.png");
     }
 
-    private void addCourseButton(VBox container, String course, String teacher,
+    private void addCourseButton(String course, String teacher,
                                  boolean active, String imagePath) {
         ClassButton btn = new ClassButton();
         btn.setCourseInfo(course, teacher);
@@ -90,12 +68,10 @@ public class classController {
             showCourseHomePage("课程主页", "请从左侧选择课程");
         });
 
-        container.getChildren().add(btn);
+        this.contentBox.getChildren().add(btn);
     }
 
     public void changeTheme(String theme) {
-        //editorController.setBackground(theme);
-        //editorController.setTheme(theme);
         Scene scene = backgroundPane.getScene();
         if (scene != null) {
             scene.getStylesheets().remove(css);
@@ -108,7 +84,6 @@ public class classController {
 
     private void showCourseHomePage(String courseName, String teacherName) {
         try {
-            // 加载FXML文件
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CourseHomePage.fxml"));
             Parent courseHomePage = loader.load();
 

@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import sustech.cs304.utils.FileUtils;
 
@@ -12,12 +13,22 @@ public class MenuBarController {
     @FXML
     private MenuBar menuBar;
 
+    @FXML
+    private Menu fileMenu, colorMenu, terminalMenu, runMenu, helpMenu;
+
+    private Menu[] IDEMenus;
+    private Menu[] classMenus;
+    private Menu[] userHomeMenus;
+
     private String css;
 
     private IDEController ideController;
 
     @FXML
     private void initialize() {
+        IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
+        classMenus = new Menu[]{colorMenu, helpMenu};
+        userHomeMenus = new Menu[]{colorMenu, helpMenu};
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             menuBar.setUseSystemMenuBar(true);
         }
@@ -97,7 +108,7 @@ public class MenuBarController {
         }
     }
 
-    public void changeTheme(String theme) {
+    private void changeTheme(String theme) {
         ideController.getJeditermController().changeTheme(theme);
         ideController.getEditorController().setBackground(theme);
         ideController.getEditorController().setTheme(theme);
@@ -114,4 +125,40 @@ public class MenuBarController {
         this.ideController = ideController;
     }
 
+    public void changeMode(String mode) {
+        Scene scene = menuBar.getScene();
+        if (scene != null) {
+            if (mode.equals("editor")) {
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.IDEMenus) {
+                    menu.setVisible(true);
+                }
+            } else if (mode.equals("class")) {
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(true);
+                }
+            } else if (mode.equals("userHome")) {
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(true);
+                }
+            }
+        }
+    }
 }
