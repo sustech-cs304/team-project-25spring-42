@@ -138,8 +138,7 @@ public class PPTReaderController {
     }
     
     public void setFile(File file) {
-        try {
-            FileInputStream fis = new FileInputStream(file);
+        try (FileInputStream fis = new FileInputStream(file)) {
             ppt = new XMLSlideShow(fis);
             slides = ppt.getSlides();
             currentPage = 0;
