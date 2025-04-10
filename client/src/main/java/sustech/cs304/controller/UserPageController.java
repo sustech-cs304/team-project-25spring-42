@@ -44,7 +44,7 @@ public class UserPageController {
         if (newUsername != null && !newUsername.trim().isEmpty()) {
             boolean ifChange = AlterUtils.showConfirmationAlert(
                     (Stage) usernameField.getScene().getWindow(),
-                    "Comfirmation",
+                    "Confirmation",
                     "Are you sure to change your username?",
                     "New Username: " + newUsername
             );
