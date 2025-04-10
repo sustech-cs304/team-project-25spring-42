@@ -19,6 +19,7 @@ public class ClassButton extends Button {
     @FXML private ImageView courseIcon;
     @FXML private HBox rootContainer;
 
+    private Long courseId;
     private boolean isActive;
 
     public ClassButton() {
@@ -35,9 +36,10 @@ public class ClassButton extends Button {
         }
     }
 
-    public void setCourseInfo(String name, String teacher) {
+    public void setCourseInfo(String name, String teacher, Long courseId) {
         courseNameLabel.setText(name);
         teacherLabel.setText(teacher);
+        this.courseId = courseId;
     }
 
     public void setStatus(boolean isActive) {

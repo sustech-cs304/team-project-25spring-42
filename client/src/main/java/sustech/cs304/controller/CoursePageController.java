@@ -2,34 +2,76 @@ package sustech.cs304.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import sustech.cs304.App;
+import sustech.cs304.entity.Announce;
+import sustech.cs304.service.CourseApi;
+import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
+import sustech.cs304.utils.AlterUtils;
+
+
+import java.util.List;
+
 import javafx.collections.FXCollections;
 
 public class CoursePageController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
     @FXML private TextField newAnnouncement;
-    @FXML private TableView<announcementItem> announcementTable;
+    @FXML private TableView<AnnouncementItem> announcementTable;
     @FXML private TableView<ResourceItem> resourceTable;
     @FXML private TableView<HomeworkItem> homeworkTable;
     @FXML private TextField resourceSearch;
     @FXML private Button enterCourseBtn;
 
+    private CourseApi courseApi;
+    private Long courseId;
+
     @FXML
     private void initialize() {
-        // Initialize sample data
+        courseApi = new CourseApiImpl();
+    }
+
+    public void loadData() {
         initializeAnnouncements();
         initializeResources();
         initializeHomework();
     }
 
     private void initializeAnnouncements() {
-        ObservableList<String> announcements = FXCollections.observableArrayList(
-                "5月10日：下周将进行期中考试",
-                "5月5日：作业提交截止日期延长至5月15日",
-                "4月28日：课程资料已更新"
-        );
-        // announcementList.setItems(announcements);
+        List<Announce> announcements = courseApi.getAnnounceByCourseId(courseId);
+        ObservableList<AnnouncementItem> announcementItems = FXCollections.observableArrayList();
+        for (Announce announce : announcements) {
+            announcementItems.add(new AnnouncementItem(announce.getAnnounceName(), announce.getUpLoadTime(), announce));
+        }
+        announcementTable.setItems(announcementItems);
+
+        // set view button action
+           // 为第三列设置按钮行为
+        TableColumn<AnnouncementItem, String> actionColumn = (TableColumn<AnnouncementItem, String>) announcementTable.getColumns().get(2);
+        actionColumn.setCellFactory(col -> new TableCell<AnnouncementItem, String>() {
+            private final Button viewButton = new Button("View");
+
+            {
+                viewButton.setOnAction(event -> {
+                    AnnouncementItem item = getTableView().getItems().get(getIndex());
+                    AlterUtils.showInfoAlert(
+                        (Stage) viewButton.getScene().getWindow(),
+                        "Announcement", item.getAnnounce().getAnnounceName(), item.getAnnounce().getAnnounceContent());
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(viewButton);
+                }
+            }
+        });
     }
 
     private void initializeResources() {
@@ -83,6 +125,10 @@ public class CoursePageController {
         System.out.println("Enter course button clicked");
     }
 
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
     public static class ResourceItem {
         private final String fileName;
         private final String fileType;
@@ -124,13 +170,22 @@ public class CoursePageController {
         public String getAction() { return action; }
     }
 
-    public static class announcementItem {
-        private final String content;
+    public static class AnnouncementItem {
+        private final String name;
+        private final String time;
+        private final String action;
+        private final Announce announce;
 
-        public announcementItem(String content) {
-            this.content = content;
+        public AnnouncementItem(String name, String uploadTime, Announce announce) {
+            this.name = name;
+            this.time = uploadTime;
+            this.announce = announce;
+            this.action = "view";
         }
 
-        public String getContent() { return content; }
+        public String getName() { return name; }
+        public String getTime() { return time; }
+        public String getAction() { return action; }
+        public Announce getAnnounce() { return announce; }
     }
 }

@@ -20,9 +20,7 @@
     <top>
         <ToolBar>
             <items>
-                <Button fx:id="returnbutton" text="首页" />
-                <Button onAction="#handleSave" text="保存" />
-                <Button onAction="#handleLogout" text="退出" />
+                <Button onAction="#handleLogout" text="exit" />
             </items>
         </ToolBar>
     </top>

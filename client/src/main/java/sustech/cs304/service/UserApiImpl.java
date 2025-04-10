@@ -21,6 +21,8 @@ public class UserApiImpl implements UserApi {
                 String responseBody = response.body().string();
                 Gson gson = new Gson();
                 userServerSide = gson.fromJson(responseBody, UserServerSide.class);
+            } else {
+                System.err.println("Error fetching user data: " + response.message());
             }
         } catch(Exception e) {
             System.err.println("Error fetching user data: " + e.getMessage());
@@ -35,7 +37,7 @@ public class UserApiImpl implements UserApi {
             new Query("platformId", userId)
         };
         try {
-            Response response = HttpUtils.get("/self", "/getUsername", queries);
+            Response response = HttpUtils.get("/self", "/getUserName", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 Gson gson = new Gson();
