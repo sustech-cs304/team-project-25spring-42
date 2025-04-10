@@ -5,16 +5,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sustech.cs304.entity.User;
+import sustech.cs304.utils.UserUtils;
 
 import java.net.URL;
 
 public class App extends Application {
+    public static User user = UserUtils.loadUser();
+
     public static void main(String[] args) {
         Application.launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+
         URL fxmlUrl = getClass().getResource("/fxml/login.fxml");
         // URL fxmlUrl = getClass().getResource("/fxml/IDE/IDE.fxml");
         if (fxmlUrl == null) {

@@ -6,11 +6,11 @@ import okhttp3.Request;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import sustech.cs304.entity.RequestBodyy;
+import sustech.cs304.entity.RequestBodyy.Message;
+
 import com.google.gson.Gson;
 import java.io.IOException;
-import sustech.cs304.ai.RequestBodyy;
-import sustech.cs304.ai.RequestBodyy.Message;
-import java.util.List;
 import java.util.Collections;
 
 public class DeepseekClient {
