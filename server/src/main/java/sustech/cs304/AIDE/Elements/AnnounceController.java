@@ -47,6 +47,27 @@ public class AnnounceController {
         return ResponseEntity.ok(new longList(announceIdList));
     }
 
+    @PostMapping(value = "/getVisibleAnnounceList", produces = "application/json")
+    public ResponseEntity<List<ClientAnnounce>> getVisibleAnnounceList(@RequestParam String courseId) {
+        List<Announce> announceList = announceRepository.findByCourseIdAndVisible(courseId, true);
+        if (announceList.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+        System.out.println("The total number of announces is: " + announceList.size());
+        List<ClientAnnounce> clientAnnounceList = announceList.stream()
+                .map(announce -> new ClientAnnounce(
+                        announce.getId(),
+                        announce.getCourseId(),
+                        announce.getAnnounceName(),
+                        announce.getUpLoadTime().toString(),
+                        announce.getAnnounceContent(),
+                        announce.getVisible()
+                ))
+                .toList();
+        return ResponseEntity.ok(clientAnnounceList);
+    }
+
+
     @PostMapping(value = "/getVisibleAnnounceIdList", produces = "application/json")
     public ResponseEntity<longList> getVisibleAnnounceIdList(@RequestParam String courseId) {
         List<AnnounceProjection> announceList = announceRepository.findProjectByCourseIdAndVisible(courseId, true);
