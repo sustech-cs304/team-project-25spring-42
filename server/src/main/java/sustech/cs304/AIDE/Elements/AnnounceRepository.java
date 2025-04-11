@@ -13,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AnnounceRepository extends JpaRepository<Announce, Long> {
     List<AnnounceProjection> findProjectByCourseId(String courseId);
     List<AnnounceProjection> findProjectByCourseIdAndVisible(String courseId, boolean visible);
+    @Transactional(readOnly = true)
     Optional<Announce> findById(Long id);
     Optional<AnnounceProjection> findProjectById(Long id);
+    @Transactional(readOnly = true)
+    List<Announce> findByCourseIdAndVisible(String courseId, boolean visible);
     @Modifying
     @Transactional
     @Query("UPDATE Announce a SET a.visible = :visible WHERE a.id = :id")
@@ -27,4 +30,4 @@ public interface AnnounceRepository extends JpaRepository<Announce, Long> {
     @Transactional
     @Query("UPDATE Announce a SET a.announceContent = :announceContent WHERE a.id = :id")
     int updateAnnounceContentById(@Param("id") String id, @Param("announceContent") String announceContent);
-
+}

@@ -17,8 +17,26 @@
 }
 
 .button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1e1e1e;
+    -fx-background-radius: 8;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.3, 0, 2);
+    -fx-padding: 8 16;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.modeButton {
     -fx-background-color: #f5f5f5;
     -fx-text-fill: #1e1e1e;
+    -fx-background-radius: 0;
+    -fx-border-color: #f5f5f5;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-effect: null;
 }
 
 .button:hover {
@@ -58,4 +76,95 @@
 #terminalBackPane {
     -fx-background-color: #f5f5f5;
     -fx-border-color: #e5e5e5;
+}
+
+.label {
+    -fx-text-fill: #1e1e1e;
+}
+
+.userlabel {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #1e1e1e;
+}
+
+#coprintLabel {
+    -fx-text-fill: #1e1e1e;
+    -fx-background-color: transparent;
+}
+
+#copyrightBox {
+    -fx-background-color: #f5f5f5;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1e1e1e;
+    -fx-border-color: #e5e5e5;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.text-field:focused {
+    -fx-border-color: #007ACC;
+}
+
+.text-area {
+    -fx-text-fill: #1e1e1e;
+    -fx-background-color: transparent;
+    -fx-border-color: #e5e5e5;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.text-area .content {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 4;
+}
+
+.text-area:focused {
+    -fx-border-color: #007ACC;
+}
+
+.scroll-pane {
+    -fx-background-color: #e5e5e5;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #f5f5f5;
+}
+
+.grid-pane {
+    -fx-background-color: #f5f5f5;
+}
+
+Vbox {
+    -fx-background-color: #f5f5f5;
+    -fx-text-fill: #1e1e1e;
+    -fx-border-color: #e5e5e5;
+}
+
+.table-view {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #e5e5e5;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-cell {
+    -fx-text-fill: #1e1e1e;
+    -fx-border-color: #e5e5e5;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f5f5f5;
+}
+
+.table-view .filler {
+    -fx-background-color: #f5f5f5;
 }

@@ -8,11 +8,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="loginPane" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.login.LoginController">
+<StackPane fx:id="loginPane" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.LoginController">
    <children>
+      <Label styleClass="fancy-text" stylesheets="@../css/login.css" text="Welcome to AIDE!" StackPane.alignment="CENTER">
+         <StackPane.margin>
+            <Insets bottom="200.0" />
+         </StackPane.margin>
+      </Label>
       <Button fx:id="githubButton" mnemonicParsing="false" onAction="#loginWithGitHub" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With Github" StackPane.alignment="CENTER">
          <StackPane.margin>
-            <Insets top="300.0" />
+            <Insets top="170.0" />
          </StackPane.margin>
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-15.0">
@@ -21,26 +26,6 @@
                </image>
             </ImageView>
          </graphic>
-      </Button>
-      <Label styleClass="fancy-text" stylesheets="@../css/login.css" text="Welcome to AIDE!" StackPane.alignment="CENTER">
-         <StackPane.margin>
-            <Insets bottom="200.0" />
-         </StackPane.margin>
-      </Label>
-      <Button mnemonicParsing="false" onAction="#loginWithX" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With X" textAlignment="CENTER" StackPane.alignment="CENTER" fx:id="xButton">
-         <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" translateX="-32.0">
-               <image>
-                  <Image url="@../img/x.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-         </graphic>
-         <StackPane.margin>
-            <Insets top="170.0" />
-         </StackPane.margin>
       </Button>
       <Button fx:id="googleButton" mnemonicParsing="false" onAction="#loginWithGoogle" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Continue With Google" StackPane.alignment="CENTER">
          <graphic>
@@ -55,6 +40,11 @@
          </graphic>
          <StackPane.margin>
             <Insets top="40.0" />
+         </StackPane.margin>
+      </Button>
+      <Button mnemonicParsing="false" onAction="#lastLogin" prefHeight="45.0" prefWidth="250.0" styleClass="login-button" stylesheets="@../css/login.css" text="Last Login" textAlignment="CENTER" StackPane.alignment="CENTER">
+         <StackPane.margin>
+            <Insets top="300.0" />
          </StackPane.margin>
       </Button>
    </children>
