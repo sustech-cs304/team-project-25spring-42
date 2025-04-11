@@ -5,6 +5,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
+import sustech.cs304.entity.Assignment;
+import sustech.cs304.entity.Resource;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
@@ -47,8 +49,6 @@ public class CoursePageController {
         }
         announcementTable.setItems(announcementItems);
 
-        // set view button action
-           // 为第三列设置按钮行为
         TableColumn<AnnouncementItem, String> actionColumn = (TableColumn<AnnouncementItem, String>) announcementTable.getColumns().get(2);
         actionColumn.setCellFactory(col -> new TableCell<AnnouncementItem, String>() {
             private final Button viewButton = new Button("View");
@@ -75,20 +75,27 @@ public class CoursePageController {
     }
 
     private void initializeResources() {
-        ObservableList<ResourceItem> resources = FXCollections.observableArrayList(
-                new ResourceItem("Lecture1.pdf", "PDF", "2023-05-01", "2.4MB"),
-                new ResourceItem("Assignment1.docx", "Word", "2023-05-05", "1.2MB")
-        );
-        resourceTable.setItems(resources);
+        List<Resource> resources = courseApi.getResourceByCourseId(courseId);
+        ObservableList<ResourceItem> resourceItems = FXCollections.observableArrayList();
+        for (Resource resource : resources) {
+            resourceItems.add(new ResourceItem(resource.getResourceName(), resource.getType(), resource.getUploadTime(), resource.getSize()));
+        }
+        resourceTable.setItems(resourceItems);
     }
 
     private void initializeHomework() {
-        ObservableList<HomeworkItem> homework = FXCollections.observableArrayList(
-                new HomeworkItem("作业1", "2023-05-20", "未提交", "提交"),
-                new HomeworkItem("作业2", "2023-06-10", "已提交", "查看"),
-                new HomeworkItem("实验报告", "2023-06-15", "未开始", "开始")
-        );
-        homeworkTable.setItems(homework);
+        List<Assignment> assignments = courseApi.getAssignmentByCourseId(courseId, App.user.getUserId());
+        ObservableList<HomeworkItem> homeworkItems = FXCollections.observableArrayList();
+        for (Assignment assignment : assignments) {
+            String status;
+            if (assignment.getWhetherSubmitted()) {
+                status = "Submited";
+            } else {
+                status = "Not Submitted";
+            }
+            homeworkItems.add(new HomeworkItem(assignment.getAssignmentName(), assignment.getDeadline(), status, "Submit"));
+        }
+        homeworkTable.setItems(homeworkItems);
     }
 
     @FXML
