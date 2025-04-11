@@ -1,4 +1,4 @@
-package sustech.cs304.ai.ui;
+package sustech.cs304.toDelete;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import sustech.cs304.ai.ChatController;
+import sustech.cs304.controller.ChatController;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

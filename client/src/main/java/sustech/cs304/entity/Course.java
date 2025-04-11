@@ -1,52 +1,70 @@
 package sustech.cs304.entity;
 
-import java.util.ArrayList;
-import java.time.LocalDate;
-
 public class Course {
-    private User teacher;
-    private ArrayList<User> students = new ArrayList<>();
-    private ArrayList<Assignment> assignments = new ArrayList<>();
+    private Long id;
 
-    public Course() {
+    private String courseName;
+    private String adminId;
+    private String openTime;
+    private String closeTime;
+    private boolean opening;
 
+    public Course() {}
+
+    public Course(Long id, String courseName, String adminId, String openTime, String closeTime, boolean opening) {
+        this.id = id;
+        this.courseName = courseName;
+        this.adminId = adminId;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.opening = opening;
     }
 
-    public void setTeacher(User teacher) {
-        this.teacher = teacher;
+    public Long getId() {
+        return id;
     }
 
-    public User getTeacher() {
-        return teacher;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void addStudent(User student) {
-        if (!students.contains(student)) {
-            students.add(student);
-        }
+    public String getCourseName() {
+        return courseName;
     }
 
-    public boolean addAssignment(User user, String name, LocalDate dueDate, String status, String discription) {
-        if (this.teacher == user) {
-            Assignment assignment = new Assignment();
-            assignment.setName(name);
-            assignment.setCourseBelongTo(this);
-            assignment.setDueDate(dueDate);
-            assignment.setDiscription(discription);
-            this.assignments.add(assignment);
-            return true;
-        } else {
-            System.out.println("非老师无权限布置作业");
-            return false;
-        }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
-
-    public ArrayList<User> getStudents() {
-        return students;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public ArrayList<Assignment> getAssignments() {
-        return assignments;
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
+    }
+
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(String closeTime) {
+        this.closeTime = closeTime;
+    }
+
+    public boolean isOpening() {
+        return opening;
+    }
+
+    public void setOpening(boolean opening) {
+        this.opening = opening;
     }
 }

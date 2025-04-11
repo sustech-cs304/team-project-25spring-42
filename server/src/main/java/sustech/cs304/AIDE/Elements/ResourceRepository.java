@@ -53,29 +53,29 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.visible = :visible WHERE r.id = :id")
-    int updateVisibilityById(@Param("id") String id, @Param("visible") boolean visible);
+    int updateVisibilityById(@Param("id") Long id, @Param("visible") boolean visible);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.resourceName = :resourceName WHERE r.id = :id")
-    int updateResourceNameById(@Param("id") String id, @Param("resourceName") String resourceName);
+    int updateResourceNameById(@Param("id") Long id, @Param("resourceName") String resourceName);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.type = :type WHERE r.id = :id")
-    int updateTypeById(@Param("id") String id, @Param("type") String type);
+    int updateTypeById(@Param("id") Long id, @Param("type") String type);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.uploadTime = :uploadTime WHERE r.id = :id")
-    int updateUploadTimeById(@Param("id") String id, @Param("uploadTime") String uploadTime);
+    int updateUploadTimeById(@Param("id") Long id, @Param("uploadTime") String uploadTime);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.groupId = :groupId WHERE r.id = :id")
-    int updateGroupIdById(@Param("id") String id, @Param("groupId") Long groupId);
+    int updateGroupIdById(@Param("id") Long id, @Param("groupId") Long groupId);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.size = :size WHERE r.id = :id")
-    int updateSizeById(@Param("id") String id, @Param("size") String size);
+    int updateSizeById(@Param("id") Long id, @Param("size") String size);
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.address = :address WHERE r.id = :id")
-    int updateAddressById(@Param("id") String id, @Param("address") String address);
+    int updateAddressById(@Param("id") Long id, @Param("address") String address);
 }
