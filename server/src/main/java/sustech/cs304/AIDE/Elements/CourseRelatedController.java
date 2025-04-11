@@ -20,9 +20,9 @@ public class CourseRelatedController {
         this.enrollmentRepository = enrollmentRepository;
     }
 
-    @GetMapping(value = "/allInfo", produces = "application/json")
+    @GetMapping(value = "/getCourseById", produces = "application/json")
     @Transactional
-    public ResponseEntity<ClientCourse> getAllUserInfo(@RequestParam String courseId) {
+    public ResponseEntity<ClientCourse> getCourseById(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         System.out.println("Course ID: " + courseId);
         if (courseOptional.isPresent()) {
@@ -106,6 +106,8 @@ public class CourseRelatedController {
         Course course = new Course(courseName, adminId);
         courseRepository.save(course);
         System.out.println("Course created: " + course.getCourseName());
+        Enrollment enrollment = new Enrollment(course.getId(), adminId);
+        enrollmentRepository.save(enrollment);
         return ResponseEntity.ok(new SetResponse(true));
     }
 
