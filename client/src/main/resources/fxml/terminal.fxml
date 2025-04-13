@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="terminalBackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1670.0" visible="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.JeditermController">
+   <children>
+      <AnchorPane fx:id="terminalPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0" />
+      <ButtonBar buttonMinWidth="0.0" onMouseDragged="#dragTerminal" onMousePressed="#checkIfDragging" onMouseReleased="#dragTerminal" prefHeight="20.0" prefWidth="200.0" style="-fx-background-color: transparent;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <buttons>
+            <Button fx:id="closeButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" fx:id="xmarkImage">
+                     <image>
+                        <Image url="@../img/xmark-black.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>
