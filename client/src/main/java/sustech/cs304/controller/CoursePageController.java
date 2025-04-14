@@ -52,8 +52,8 @@ public class CoursePageController {
         TableColumn<AnnouncementItem, String> actionColumn = (TableColumn<AnnouncementItem, String>) announcementTable.getColumns().get(2);
         actionColumn.setCellFactory(col -> new TableCell<AnnouncementItem, String>() {
             private final Button viewButton = new Button("View");
-
             {
+                viewButton.getStyleClass().add("operation-button");
                 viewButton.setOnAction(event -> {
                     AnnouncementItem item = getTableView().getItems().get(getIndex());
                     AlterUtils.showInfoAlert(
@@ -81,6 +81,29 @@ public class CoursePageController {
             resourceItems.add(new ResourceItem(resource.getResourceName(), resource.getType(), resource.getUploadTime(), resource.getSize()));
         }
         resourceTable.setItems(resourceItems);
+
+        TableColumn<ResourceItem, String> actionColumn = (TableColumn<ResourceItem, String>) resourceTable.getColumns().get(4);
+        actionColumn.setCellFactory(col -> new TableCell<ResourceItem, String>() {
+            private final Button downloadButton = new Button("Download");
+            {
+                downloadButton.getStyleClass().add("operation-button");
+                downloadButton.setOnAction(event -> {
+                    ResourceItem item = getTableView().getItems().get(getIndex());
+                    // Implement download functionality here
+                    System.out.println("Downloading: " + item.getFileName());
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(downloadButton);
+                }
+            }
+        });
     }
 
     private void initializeHomework() {
@@ -96,6 +119,28 @@ public class CoursePageController {
             homeworkItems.add(new HomeworkItem(assignment.getAssignmentName(), assignment.getDeadline(), status, "Submit"));
         }
         homeworkTable.setItems(homeworkItems);
+        TableColumn<HomeworkItem, String> actionColumn = (TableColumn<HomeworkItem, String>) homeworkTable.getColumns().get(3);
+        actionColumn.setCellFactory(col -> new TableCell<HomeworkItem, String>() {
+            private final Button submitButton = new Button("Submit");
+            {
+                submitButton.getStyleClass().add("operation-button");
+                submitButton.setOnAction(event -> {
+                    HomeworkItem item = getTableView().getItems().get(getIndex());
+                    // Implement submit functionality here
+                    System.out.println("Submitting: " + item.getName());
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(submitButton);
+                }
+            }
+        });
     }
 
     @FXML
