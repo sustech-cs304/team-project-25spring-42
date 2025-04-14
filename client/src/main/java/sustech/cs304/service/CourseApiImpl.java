@@ -2,9 +2,7 @@ package sustech.cs304.service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,8 +31,13 @@ public class CourseApiImpl implements CourseApi {
                 String responseBody = response.body().string();
                 Type listType = new TypeToken<List<Long>>() {}.getType();
                 courseIds = new Gson().fromJson(responseBody, listType);
+            } else {
+                courseIds = new ArrayList<>();
+                courseIds.add(111111L);
             }
         } catch (Exception e) {
+            courseIds = new ArrayList<>();
+            courseIds.add(111111L);
             System.err.println("Error fetching course IDs: " + e.getMessage());
         }
 
@@ -133,7 +136,6 @@ public class CourseApiImpl implements CourseApi {
         if (assignmentIds == null) {
             return assignmentList;
         }
-        System.out.println("Assignment IDs: " + assignmentIds);
 
         for (Long assignmentId : assignmentIds) {
             RequestBody body1 = new FormBody.Builder()
