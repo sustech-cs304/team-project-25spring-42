@@ -15,6 +15,7 @@ import java.net.URL;
 public class App extends Application {
     public static User user = UserUtils.loadUser();
     public static UserApi userApi = new UserApiImpl();
+    public static Stage primaryStage;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -32,6 +33,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(fxmlUrl);
         Parent root = loader.load();
         Scene scene = new Scene(root);
+        primaryStage = stage;
         stage.setTitle("AIDE");
         String initialCSS = this.getClass().getResource("/css/style-vs.css").toExternalForm();
         scene.getStylesheets().add(initialCSS);

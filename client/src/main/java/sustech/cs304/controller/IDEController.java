@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import sustech.cs304.App;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -79,6 +80,10 @@ public class IDEController {
         } catch(IOException e) {
             e.printStackTrace();
         }
+
+        App.primaryStage.setOnCloseRequest(event -> {
+            jeditermController.close();
+        });
 
         switchToEditor();
     }
