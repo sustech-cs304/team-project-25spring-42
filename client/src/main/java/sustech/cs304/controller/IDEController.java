@@ -76,7 +76,7 @@ public class IDEController {
         ideContent = new ArrayList<>(modePane.getChildren());
         try {
             classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
-            userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+            userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
         }

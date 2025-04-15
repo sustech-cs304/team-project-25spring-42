@@ -13,7 +13,7 @@ import sustech.cs304.utils.StringUtils;
 
 import java.io.File;
 
-public class UserPageController {
+public class ProfileController {
 
     public Button returnbutton;
 

@@ -8,7 +8,9 @@ public class Assignment {
     private boolean visible;
     private boolean whetherSubmitted;
     private String address;
-    public Assignment(Long id, String assignmentName, String deadline, String courseId, boolean visible, String address) {
+    private String attachmentaddress;
+    private String attachmentName;
+    public Assignment(Long id, String assignmentName, String deadline, String courseId, boolean visible, String address, String attachmentName, String attachmentaddress) {
         this.id = id;
         this.assignmentName = assignmentName;
         this.deadline = deadline;
@@ -16,15 +18,8 @@ public class Assignment {
         this.visible = visible;
         this.whetherSubmitted = true;
         this.address = address;
-    }
-    public Assignment(Long id, String assignmentName, String deadline, String courseId, boolean visible) {
-        this.id = id;
-        this.assignmentName = assignmentName;
-        this.deadline = deadline;
-        this.courseId = courseId;
-        this.visible = visible;
-        this.whetherSubmitted = false;
-        this.address = null;
+        this.attachmentName = attachmentName;
+        this.attachmentaddress = attachmentaddress;
     }
     public Long getId() {
         return id;
@@ -46,5 +41,11 @@ public class Assignment {
     }
     public String getAddress() {
         return address;
+    }
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+    public String getAttachmentaddress() {
+        return attachmentaddress;
     }
 }
