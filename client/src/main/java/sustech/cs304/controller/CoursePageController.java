@@ -17,6 +17,16 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 
+
+
+/**
+ * AI-generated-content
+ * tool: deepseek
+ * version: latest
+ * usage: we ask deepseek to generate a classwelcome page, and
+ * this is the corresponding Controller.But AI can only do the structure work
+ * most of the function is added by us.
+ */
 public class CoursePageController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
