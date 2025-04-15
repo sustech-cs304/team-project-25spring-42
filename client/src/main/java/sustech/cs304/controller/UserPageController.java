@@ -13,6 +13,15 @@ import sustech.cs304.utils.StringUtils;
 
 import java.io.File;
 
+
+/**
+ * AI-generated-content
+ * tool: deepseek
+ * version: latest
+ * usage: we ask deepseek to generate a userhome page, and
+ * this is the corresponding Controller.But AI can only do the structure work
+ * most of the function is added by us.
+ */
 public class UserPageController {
 
     public Button returnbutton;
