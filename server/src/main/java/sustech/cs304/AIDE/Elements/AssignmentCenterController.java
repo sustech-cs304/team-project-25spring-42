@@ -142,37 +142,36 @@ public class AssignmentCenterController {
     }
 
     @PostMapping(value = "/getAssignmentIdList", produces = "application/json")
-     public ResponseEntity<longList> getAssignmentIdList(@RequestParam String courseId, @RequestParam String userId) {
+     public ResponseEntity<List<Long>> getAssignmentIdList(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (!courseOptional.isPresent()){
-            return ResponseEntity.ok(new longList(List.of()));
+            System.out.println("no assignment");
+            return ResponseEntity.ok(null);
         }
-        String adminId = courseOptional.get().getAdminId();
-        if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new longList(List.of()));
-        }
-        return ResponseEntity.ok(new longList(assignmentRepository.findAssignmentIdByCourseId(courseId)));
+        List<Long> assignmentIdList = assignmentRepository.findAssignmentIdByCourseId(courseId);
+        System.out.println("number of assignment: " + assignmentIdList.size());
+        return ResponseEntity.ok(assignmentIdList);
     }
 
     @PostMapping(value = "/getVisibleAssignmentIdList", produces = "application/json")
-     public ResponseEntity<longList> getVisibleAssignmentIdList(@RequestParam String courseId, @RequestParam String userId) {
+     public ResponseEntity<List<Long>> getVisibleAssignmentIdList(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (!courseOptional.isPresent()){
-            return ResponseEntity.ok(new longList(List.of()));
+            System.out.println("no assignment");
+            return ResponseEntity.ok(null);
         }
-        String adminId = courseOptional.get().getAdminId();
-        if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new longList(List.of()));
-        }
-        return ResponseEntity.ok(new longList(assignmentRepository.findVisibleAssignmentIdByCourseId(courseId)));
+        System.out.println("number of visible assignment: " + assignmentRepository.findVisibleAssignmentIdByCourseId(courseId).size());
+        return ResponseEntity.ok(assignmentRepository.findVisibleAssignmentIdByCourseId(courseId));
     }
 
     @PostMapping(value = "/getAssignment", produces = "application/json")
     public ResponseEntity<clientPersonalAssignment> getAssignment(@RequestParam String assignmentId, @RequestParam String userId) {
+        System.out.println("assignmentId: " + assignmentId);
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
         if (!assignmentOptional.isPresent()){
             return ResponseEntity.ok(new clientPersonalAssignment(-1L, "", "", "", false));
         }
+        System.out.println("assignment is present");
         Assignment assignment = assignmentOptional.get();
         List<Long> submissionIdList = submissionRepository.findSubmissionIdByAssignmentIdAndUserId(Long.parseLong(assignmentId), userId);
         if (submissionIdList.isEmpty()) {
