@@ -19,7 +19,7 @@ public class MenuBarController {
     private Menu[] IDEMenus;
     private Menu[] classMenus;
     private Menu[] userHomeMenus;
-
+    private Menu[] chatMenus;
     private String css;
 
     private IDEController ideController;
@@ -27,6 +27,7 @@ public class MenuBarController {
     @FXML
     private void initialize() {
         IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
+        chatMenus = new Menu[]{colorMenu, helpMenu};
         classMenus = new Menu[]{colorMenu, helpMenu};
         userHomeMenus = new Menu[]{colorMenu, helpMenu};
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
@@ -129,30 +130,52 @@ public class MenuBarController {
         Scene scene = menuBar.getScene();
         if (scene != null) {
             if (mode.equals("editor")) {
+                for (Menu menu : this.IDEMenus) {
+                    menu.setVisible(true);
+                }
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.userHomeMenus) {
                     menu.setVisible(false);
-                }
-                for (Menu menu : this.IDEMenus) {
-                    menu.setVisible(true);
                 }
             } else if (mode.equals("class")) {
-                for (Menu menu : this.userHomeMenus) {
+                for (Menu menu : this.IDEMenus) {
                     menu.setVisible(false);
                 }
-                for (Menu menu : this.IDEMenus) {
+                for (Menu menu : this.chatMenus) {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(true);
                 }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
             } else if (mode.equals("userHome")) {
+                for (Menu menu : IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(false);
                 }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(true);
+                }
+            } else if (mode.equals("chat")) {
                 for (Menu menu : IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(true);
+                }
+                for (Menu menu : this.classMenus) {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.userHomeMenus) {
