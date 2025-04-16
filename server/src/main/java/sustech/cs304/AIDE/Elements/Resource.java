@@ -54,6 +54,9 @@ public class Resource {
     public String getSize() { return size; }
     public boolean getVisible() { return visible; }
     public String getAssignmentId() { return assignmentId; }
+    public LocalDateTime getUploadTime() {        
+        return uploadTime;
+    }
     public void setAddress(String address) { this.address = address; }
     public void setCourseId(String courseId) {
         this.courseId = courseId;
