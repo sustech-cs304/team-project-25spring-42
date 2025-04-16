@@ -26,6 +26,11 @@
                 <Font size="16.0" />
             </font>
         </Label>
+      <Button mnemonicParsing="false" text="refresh">
+         <HBox.margin>
+            <Insets left="500.0" />
+         </HBox.margin>
+      </Button>
     </HBox>
 
     <!-- Main Content Area -->
