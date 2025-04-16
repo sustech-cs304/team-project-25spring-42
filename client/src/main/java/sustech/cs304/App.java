@@ -8,12 +8,11 @@ import javafx.stage.Stage;
 import sustech.cs304.entity.User;
 import sustech.cs304.service.UserApi;
 import sustech.cs304.service.UserApiImpl;
-import sustech.cs304.utils.UserUtils;
 
 import java.net.URL;
 
 public class App extends Application {
-    public static User user = UserUtils.loadUser();
+    public static User user;
     public static UserApi userApi = new UserApiImpl();
     public static Stage primaryStage;
 

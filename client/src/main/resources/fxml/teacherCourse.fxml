@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="900" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.TeacherCourseController">
+
+    <!-- Top Course Title Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #3f51b5; -fx-padding: 15;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Label fx:id="courseTitle" style="-fx-font-weight: bold; -fx-text-fill: white;" text="Course Name" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <Label fx:id="teacherName" style="-fx-text-fill: white;" text="Instructor: xxx" textFill="WHITE">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+    </HBox>
+
+    <!-- Main Content Area -->
+    <ScrollPane fitToWidth="true" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="70">
+        <VBox spacing="20" style="-fx-padding: 10;">
+            <!-- 1. Announcements Section -->
+            <VBox spacing="10" style="-fx-border-radius: 5; -fx-background-radius: 5;">
+                <Label style="-fx-font-weight: bold; -fx-padding: 10 10 5 10;" text="Course Announcements">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            <TableView fx:id="announcementTable" prefHeight="200">
+               <columns>
+                  <TableColumn prefWidth="200" text="Name">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="name" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="150" text="Time">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="time" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="150" text="Operation">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="action" />
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
+            </TableView>
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
+                    <Button onAction="#publishAnnouncement" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Announcement" />
+                </HBox>
+            </VBox>
+
+            <!-- 2. Homework Section -->
+            <VBox spacing="10" style="-fx-border-radius: 5; -fx-background-radius: 5;">
+                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 10 5 10;">
+                    <Label style="-fx-font-weight: bold;" text="Assignments List">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                </HBox>
+                <TableView fx:id="assignmentTable" prefHeight="200">
+                    <columns>
+                        <TableColumn prefWidth="200" text="Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Attachment">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="attachment" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150.0" text="Deadline">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="deadline" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100.0" text="Status">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="status" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Operation">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="action" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
+               <children>
+                  <Button onAction="#publishAssignment" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Assignment" />
+               </children>
+            </HBox>
+            </VBox>
+
+            <!-- 3. Course Resources Section -->
+            <VBox spacing="10" style="-fx-border-radius: 5; -fx-background-radius: 5;">
+                <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 10 10 5 10;">
+                    <Label style="-fx-font-weight: bold;" text="Course Resources">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                </HBox>
+                <TableView fx:id="resourceTable" prefHeight="200">
+                    <columns>
+                        <TableColumn prefWidth="200" text="Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fileName" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Type">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fileType" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Date">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="date" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="Size">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="size" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="Operation">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="action" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
+               <children>
+                  <Button onAction="#publishResource" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Resource" />
+               </children>
+            </HBox>
+            </VBox>
+
+            <!-- 4. Enter Course Button -->
+            <Button fx:id="enterCourseBtn" onAction="#enterCourse" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="进入课程">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets top="20.0" />
+                </VBox.margin>
+                <padding>
+                    <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                </padding>
+            </Button>
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

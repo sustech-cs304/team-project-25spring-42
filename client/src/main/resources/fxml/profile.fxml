@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.ProfileController">
 
 
 <!--/**-->
@@ -25,11 +26,6 @@
 <!--* usage: we ask deepseek to generate a userhome page-->
 <!--* we adapt the generated code to make it more suitable for this project.-->
 <!--*/-->
-
-
-
-
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.UserPageController">
     <top>
         <ToolBar>
             <items>
@@ -49,7 +45,7 @@
                                 <Image url="@../../img/user.png" />
                             </image>
                         </ImageView>
-                        <Button fx:id="updateUserAvatarButton" onAction="#handleChangeAvatar" style="-fx-background-radius: 15; -fx-padding: 5 10;" text="update" />
+                        <Button fx:id="updateUserAvatarButton" onAction="#handleChangeAvatar" style="-fx-background-radius: 15; -fx-padding: 5 10;" text="update" StackPane.alignment="BOTTOM_CENTER" />
                     </StackPane>
 
                     <VBox spacing="5">
@@ -90,6 +86,7 @@
                 <VBox spacing="10" style="-fx-padding: 15; -fx-background-radius: 5;">
                     <Label style="-fx-font-size: 16; -fx-font-weight: bold;" styleClass="userlabel" text="Self Introduction" />
                     <TextArea fx:id="bioTextArea" prefRowCount="5" promptText="Introduce yourself here..." wrapText="true" />
+               <Button mnemonicParsing="false" onAction="#updateBio" text="update" />
                 </VBox>
 
                 <!-- 其他信息 -->
