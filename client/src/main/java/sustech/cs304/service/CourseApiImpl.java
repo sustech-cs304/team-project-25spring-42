@@ -268,4 +268,51 @@ public class CourseApiImpl implements CourseApi {
             System.out.println("Error downloading resource: " + e.getMessage());
         }
     }
+
+    public void submitAssignment(Long assignmentId, String userId, String address) {
+        File file = new File(address);
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/octet-stream"));
+
+        RequestBody body = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("assignmentId", assignmentId.toString())
+            .addFormDataPart("file", file.getName(), fileBody)
+            .addFormDataPart("userId", userId)
+            .build();
+
+        try (Response response = HttpUtils.postForm("/assignment", "/submitAssignment", body)) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                System.out.println("Assignment submitted successfully: " + responseBody);
+            } else {
+                System.out.println("Failed to submit assignment");
+            }
+        } catch (Exception e) {
+            System.out.println("Error submitting assignment: " + e.getMessage());
+        }
+    }
+
+    public void uploadResource(Long courseId, String address, String userId) {
+        File file = new File(address);
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/octet-stream"));
+
+        RequestBody body = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("courseId", courseId.toString())
+            .addFormDataPart("file", file.getName(), fileBody)
+            .addFormDataPart("userId", userId)
+            .addFormDataPart("groupId", "0")
+            .build();
+
+        try (Response response = HttpUtils.postForm("/resource", "/uploadResource", body)) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                System.out.println("Resource uploaded successfully: " + responseBody);
+            } else {
+                System.out.println("Failed to upload resource");
+            }
+        } catch (Exception e) {
+            System.out.println("Error uploading resource: " + e.getMessage());
+        }
+    }
 }

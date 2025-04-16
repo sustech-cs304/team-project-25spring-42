@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import sustech.cs304.App;
+import sustech.cs304.utils.UserUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -58,6 +59,7 @@ public class IDEController {
 
     @FXML
     private void initialize() {
+        App.user = UserUtils.loadUser();
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);

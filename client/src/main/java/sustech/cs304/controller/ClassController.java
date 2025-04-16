@@ -79,7 +79,7 @@ public class ClassController {
 
         btn.setOnAction(e -> {
             btn.setStatus(!btn.isActive());
-            showCourseHomePage(courseId);
+            showCourseHomePage(courseId, course, teacher);
         });
 
         this.contentBox.getChildren().add(btn);
@@ -96,17 +96,18 @@ public class ClassController {
 
 
 
-    private void showCourseHomePage(Long courseId) {
+    private void showCourseHomePage(Long courseId, String courseName, String teacherName) {
         try {
             FXMLLoader loader;
             Parent coursePage;
-            if (true) {
+            if (false) {
                 loader = new FXMLLoader(getClass().getResource("/fxml/studentCourse.fxml"));
                 coursePage = loader.load();
                 StudentCourseController controller = loader.getController();
 
                 controller.setCourseId(courseId);
                 controller.loadData();
+                controller.setTitle(courseName, teacherName);
                 
             } else {
                 loader = new FXMLLoader(getClass().getResource("/fxml/teacherCourse.fxml"));
@@ -115,6 +116,7 @@ public class ClassController {
 
                 controller.setCourseId(courseId);
                 controller.loadData();
+                controller.setTitle(courseName, teacherName);
             }
 
             editorPane.getChildren().clear();

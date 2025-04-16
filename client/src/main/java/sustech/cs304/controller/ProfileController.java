@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.utils.AlterUtils;
 import sustech.cs304.utils.StringUtils;
+import sustech.cs304.utils.UserUtils;
 
 import java.io.File;
 
@@ -119,6 +120,33 @@ public class ProfileController {
         }
     }
 
+    @FXML
+    private void updateBio() {
+        String newBio = bioTextArea.getText();
+        if (newBio != null && !newBio.trim().isEmpty()) {
+            boolean ifChange = AlterUtils.showConfirmationAlert(
+                    (Stage) bioTextArea.getScene().getWindow(),
+                    "Comfirmation",
+                    "Are you sure to change your bio?",
+                    "New Bio: " + newBio
+            );
+            if (ifChange) {
+                App.user.setBio(newBio);
+                App.userApi.updateBioById(App.user.getUserId(), newBio);
+            } else {
+                bioTextArea.setText(App.user.getBio());
+            }
+        } else {
+            bioTextArea.setText(App.user.getBio());
+            AlterUtils.showInfoAlert(
+                    (Stage) bioTextArea.getScene().getWindow(),
+                    "Error",
+                    "Invalid Bio",
+                    "Please enter a valid bio"
+            );
+        }
+    }
+
     private void bindUserDataToUI() {
         userIdLabel.setText(App.user.getUserId());
         usernameField.setText(App.user.getUsername());
@@ -155,15 +183,9 @@ public class ProfileController {
         File selectedFile = fileChooser.showOpenDialog(avatarImageView.getScene().getWindow());
         if (selectedFile != null) {
             try {
-                Image newAvatar = new Image(selectedFile.toURI().toString());
-                avatarImageView.setImage(newAvatar);
-                App.user.setAvatarPath(selectedFile.getAbsolutePath());
-                AlterUtils.showInfoAlert(
-                        (Stage) avatarImageView.getScene().getWindow(),
-                        "Success",
-                        "Avatar Changed",
-                        "Your avatar has been changed successfully."
-                );
+                App.userApi.updateAvatarById(App.user.getUserId(), selectedFile.getAbsolutePath());
+                App.user.setAvatarPath(App.userApi.getUserAvatarById(App.user.getUserId()));
+                bindUserDataToUI();
             } catch (Exception e) {
                 AlterUtils.showInfoAlert(
                         (Stage) avatarImageView.getScene().getWindow(),

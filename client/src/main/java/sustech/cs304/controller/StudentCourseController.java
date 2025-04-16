@@ -3,6 +3,7 @@ package sustech.cs304.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
@@ -14,9 +15,7 @@ import javafx.collections.ObservableList;
 import sustech.cs304.utils.AlterUtils;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javafx.collections.FXCollections;
 
@@ -40,6 +39,12 @@ public class StudentCourseController {
         initializeAnnouncements();
         initializeResources();
         initializeAssignment();
+    }
+
+    public void setTitle(String courseName, String teacherName) {
+        this.courseTitle.setText(courseName);
+        this.teacherName.setText(teacherName);
+
     }
 
     private void initializeAnnouncements() {
@@ -128,9 +133,17 @@ public class StudentCourseController {
             {
                 submitButton.getStyleClass().add("operation-button");
                 submitButton.setOnAction(event -> {
-                    AssignmentItem item = getTableView().getItems().get(getIndex());
-                    // Implement submit functionality here
-                    System.out.println("Submitting: " + item.getAssignment().getAssignmentName());
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Select File to Submit");
+                    Stage stage = (Stage) submitButton.getScene().getWindow();
+
+                    File selectedFile = fileChooser.showOpenDialog(stage);
+                    if (selectedFile != null) {
+                        String filePath = selectedFile.getAbsolutePath();
+                        AssignmentItem item = getTableView().getItems().get(getIndex());
+                        courseApi.submitAssignment(item.getAssignment().getId(), App.user.getUserId(), filePath);
+                        loadData();
+                    }
                 });
             }
 
@@ -180,30 +193,6 @@ public class StudentCourseController {
                 }
             }
         });
-    }
-
-    @FXML
-    private void publishAnnouncement() {
-        Announce announce = AlterUtils.showAnnounceInputForm(App.primaryStage, String.valueOf(courseId));
-        if (announce != null) {
-            courseApi.createAnnouncment(courseId, announce.getAnnounceName(), announce.getAnnounceContent(), App.user.getUserId());
-            loadData();
-        }
-    }
-
-    @FXML
-    private void publishResource() {
-        List<String> fields = Arrays.asList("Resource Name", "Resource Type", "Resource Size");
-        Map<String, String> values = AlterUtils.showInputForm(App.primaryStage, "New Resource", fields);
-    }
-
-    @FXML
-    private void publishAssignment() {
-        Assignment assignment = AlterUtils.showAssignmentInputForm(App.primaryStage);
-        if (assignment != null) {
-            courseApi.createAssignment(courseId, assignment.getAssignmentName(), assignment.getDeadline(), App.user.getUserId(), assignment.getAddress());
-            loadData();
-        }
     }
 
     @FXML

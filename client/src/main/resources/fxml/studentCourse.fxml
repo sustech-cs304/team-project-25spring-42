@@ -57,9 +57,7 @@
                   </TableColumn>
                </columns>
             </TableView>
-                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
-                    <Button onAction="#publishAnnouncement" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Announcement" />
-                </HBox>
+                <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;" />
             </VBox>
 
             <!-- 2. Homework Section -->
@@ -100,11 +98,6 @@
                         </TableColumn>
                     </columns>
                 </TableView>
-            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
-               <children>
-                  <Button onAction="#publishAssignment" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Assignment" />
-               </children>
-            </HBox>
             </VBox>
 
             <!-- 3. Course Resources Section -->
@@ -145,15 +138,11 @@
                         </TableColumn>
                     </columns>
                 </TableView>
-            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
-               <children>
-                  <Button style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Assignment" />
-               </children>
-            </HBox>
+            <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;" />
             </VBox>
 
             <!-- 4. Enter Course Button -->
-            <Button fx:id="enterCourseBtn" onAction="#enterCourse" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="进入课程">
+            <Button fx:id="enterCourseBtn" onAction="#enterCourse" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="Enter Course">
                 <font>
                     <Font size="18.0" />
                 </font>

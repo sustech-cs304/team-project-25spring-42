@@ -147,7 +147,7 @@
                 </TableView>
             <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;">
                <children>
-                  <Button style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Assignment" />
+                  <Button onAction="#publishResource" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Publish New Resource" />
                </children>
             </HBox>
             </VBox>

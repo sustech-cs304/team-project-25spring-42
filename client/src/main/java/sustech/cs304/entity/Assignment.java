@@ -16,7 +16,11 @@ public class Assignment {
         this.deadline = deadline;
         this.courseId = courseId;
         this.visible = visible;
-        this.whetherSubmitted = true;
+        if (address == null) {
+            this.whetherSubmitted = false;
+        } else {
+            this.whetherSubmitted = true;
+        }
         this.address = address;
         this.attachmentName = attachmentName;
         this.attachmentaddress = attachmentaddress;

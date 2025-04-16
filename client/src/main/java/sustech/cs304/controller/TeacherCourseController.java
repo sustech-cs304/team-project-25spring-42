@@ -3,6 +3,7 @@ package sustech.cs304.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
@@ -13,7 +14,7 @@ import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
 import sustech.cs304.utils.AlterUtils;
 
-import java.time.LocalDate;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,11 @@ public class TeacherCourseController {
         initializeAnnouncements();
         initializeResources();
         initializeAssignment();
+    }
+
+    public void setTitle(String courseName, String teacherName) {
+        this.courseTitle.setText(courseName);
+        this.teacherName.setText(teacherName);
     }
 
     private void initializeAnnouncements() {
@@ -93,10 +99,12 @@ public class TeacherCourseController {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     directoryChooser.setTitle("Select Download Directory");
                     Stage stage = (Stage) downloadButton.getScene().getWindow();
-                    if (directoryChooser.showDialog(stage) == null) {
+
+                    File selectedDirectory = directoryChooser.showDialog(stage);
+                    if (selectedDirectory == null) {
                         return; // User canceled the dialog
                     }
-                    String downloadPath = directoryChooser.showDialog(stage).getAbsolutePath();
+                    String downloadPath = selectedDirectory.getAbsolutePath();
                     courseApi.downloadResource(item.getResource().getAddress(), downloadPath);
                 });
             }
@@ -126,9 +134,17 @@ public class TeacherCourseController {
             {
                 submitButton.getStyleClass().add("operation-button");
                 submitButton.setOnAction(event -> {
-                    AssignmentItem item = getTableView().getItems().get(getIndex());
-                    // Implement submit functionality here
-                    System.out.println("Submitting: " + item.getAssignment().getAssignmentName());
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Select File to Submit");
+                    Stage stage = (Stage) submitButton.getScene().getWindow();
+
+                    File selectedFile = fileChooser.showOpenDialog(stage);
+                    if (selectedFile != null) {
+                        String filePath = selectedFile.getAbsolutePath();
+                        AssignmentItem item = getTableView().getItems().get(getIndex());
+                        courseApi.submitAssignment(item.getAssignment().getId(), App.user.getUserId(), filePath);
+                        loadData();
+                    }
                 });
             }
 
@@ -147,9 +163,7 @@ public class TeacherCourseController {
             private final Button attachmentButton = new Button("View Attachment");
             {
                 attachmentButton.getStyleClass().add("operation-button");
-                
             }
-
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -157,9 +171,8 @@ public class TeacherCourseController {
                     setGraphic(null);
                 } else {
                     AssignmentItem currentItem = getTableView().getItems().get(getIndex());
-                    Resource attachment = courseApi.getAttachmentByAssignmentId(currentItem.getAssignment().getId());
-                    if (attachment != null) {
-                        attachmentButton.setText(attachment.getResourceName());
+                    if (currentItem.getAssignment().getAttachmentName() != null) {
+                        attachmentButton.setText(currentItem.getAssignment().getAttachmentName());
                     } else {
                         attachmentButton.setText("No Attachment");
                         attachmentButton.setDisable(true);
@@ -169,11 +182,13 @@ public class TeacherCourseController {
                         DirectoryChooser directoryChooser = new DirectoryChooser();
                         directoryChooser.setTitle("Select Download Directory");
                         Stage stage = (Stage) attachmentButton.getScene().getWindow();
-                        if (directoryChooser.showDialog(stage) == null) {
+
+                        File selectedDirectory = directoryChooser.showDialog(stage);
+                        if (selectedDirectory == null) {
                             return; // User canceled the dialog
                         }
-                        String downloadPath = directoryChooser.showDialog(stage).getAbsolutePath();
-                        courseApi.downloadResource(attachment.getAddress(), downloadPath);
+                        String downloadPath = selectedDirectory.getAbsolutePath();
+                        courseApi.downloadResource(currentItem.getAssignment().getAttachmentaddress(), downloadPath);
                     });
                     setGraphic(attachmentButton);
                 }
@@ -192,8 +207,11 @@ public class TeacherCourseController {
 
     @FXML
     private void publishResource() {
-        List<String> fields = Arrays.asList("Resource Name", "Resource Type", "Resource Size");
-        Map<String, String> values = AlterUtils.showInputForm(App.primaryStage, "New Resource", fields);
+        Resource resource = AlterUtils.showResourceInputForm(App.primaryStage);
+        if (resource != null) {
+            courseApi.uploadResource(courseId, resource.getAddress(), App.user.getUserId());
+            loadData();
+        }
     }
 
     @FXML

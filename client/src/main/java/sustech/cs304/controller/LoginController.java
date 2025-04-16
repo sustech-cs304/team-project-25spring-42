@@ -36,7 +36,6 @@ public class LoginController {
         response.close();
 
         //switchToAuthPage(loginUrl);
-
         if (Desktop.isDesktopSupported()) {
             Desktop.getDesktop().browse(URI.create(loginUrl));
         } else {
@@ -121,9 +120,6 @@ public class LoginController {
         scene.setRoot(loader.load());
         stage.sizeToScene();
         stage.centerOnScreen();
-
     }
-
-    
 }
 

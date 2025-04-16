@@ -218,7 +218,7 @@ public class AlterUtils {
             int minute = minuteSpinner.getValue();
             LocalDateTime deadline = LocalDateTime.of(deadlinePicker.getValue(), LocalTime.of(hour, minute, 0));
 
-            result[0] = new Assignment(null, nameField.getText(), deadline.toString(), null, visibleCheckBox.isSelected(), fileField.getText());
+            result[0] = new Assignment(null, nameField.getText(), deadline.toString(), null, visibleCheckBox.isSelected(), fileField.getText(), null, null);
             submitted[0] = true;
             dialogStage.close();
         });
@@ -242,8 +242,6 @@ public class AlterUtils {
         VBox vbox = new VBox(10);
         vbox.setPadding(new Insets(20));
         vbox.setAlignment(Pos.CENTER_LEFT);
-        Label nameLabel = new Label("Resource Name:");
-        TextField nameField = new TextField();
         Label fileLabel = new Label("File:");
         TextField fileField = new TextField();
         fileField.setEditable(false);
@@ -258,6 +256,7 @@ public class AlterUtils {
                 fileField.setText(file.getAbsolutePath());
             }
         });
+        vbox.getChildren().addAll(fileLabel, fileField, fileButton);
 
         Button okButton = new Button("Submit");
         Button cancelButton = new Button("Cancel");
@@ -270,9 +269,10 @@ public class AlterUtils {
             dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
         }
         dialogStage.setScene(dialogScene);
-        final Resource result = null;
+        final Resource[] result = {null};
         final boolean[] submitted = {false};
         okButton.setOnAction(e -> {
+            result[0] = new Resource(null, fileField.getText(), null, null, null, null, null, true);
             submitted[0] = true;
             dialogStage.close();
         });
@@ -280,7 +280,7 @@ public class AlterUtils {
         dialogStage.centerOnScreen();
         dialogStage.showAndWait();
         if (submitted[0]) {
-            return result;
+            return result[0];
         } else {
             return null;
         }
