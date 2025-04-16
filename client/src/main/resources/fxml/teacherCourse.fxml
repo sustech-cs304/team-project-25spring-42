@@ -26,9 +26,9 @@
                 <Font size="16.0" />
             </font>
         </Label>
-      <Button mnemonicParsing="false" text="refresh">
+      <Button mnemonicParsing="false" onAction="#loadData" text="refresh">
          <HBox.margin>
-            <Insets left="500.0" />
+            <Insets />
          </HBox.margin>
       </Button>
     </HBox>
