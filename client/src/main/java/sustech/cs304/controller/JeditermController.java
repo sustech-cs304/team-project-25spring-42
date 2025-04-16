@@ -35,35 +35,20 @@ public class JeditermController {
     private IDEController ideController;
 
     private JediTermFxWidget widget;
-
-    private JediTermFxWidget vsWidget;
-    private JediTermFxWidget vsDarkWidget;
-    private JediTermFxWidget hcBlackWidget;
+    private PtyProcess process;
 
     @FXML
     public void initialize() {
-        vsWidget =  createTerminalWidget("vs");
-        vsDarkWidget = createTerminalWidget("vs-dark");
-        hcBlackWidget = createTerminalWidget("hc-black");
+        widget =  createTerminalWidget("vs");
 
-        vsWidget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
-        vsWidget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
-        vsDarkWidget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
-        vsDarkWidget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
-        hcBlackWidget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
-        hcBlackWidget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
+        widget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
+        widget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
 
-        vsWidget.addListener(terminalWidget -> {
-            vsWidget.close();
-        });
-        vsDarkWidget.addListener(terminalWidget -> {
-            vsDarkWidget.close();
-        });
-        hcBlackWidget.addListener(terminalWidget -> {
-            hcBlackWidget.close();
+        widget.addListener(terminalWidget -> {
+            widget.close();
         });
 
-        terminalPane.getChildren().add(vsWidget.getPane());
+        terminalPane.getChildren().add(widget.getPane());
     }
 
     @FXML
@@ -81,44 +66,53 @@ public class JeditermController {
     }
 
     public void changeTheme(String theme) {
+        process.destroy();
         try {
             switch (theme) {
                 case "vs":
-                    widget = vsWidget;
+                    widget = createTerminalWidget("vs");
                     executeCommand("clear");
                     Image xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-black.png"));
                     this.xmarkImage.setImage(xmarkImage);
                     terminalBackPane.setStyle("-fx-background-color: #f5f5f5;");
-                    terminalPane.getChildren().clear();
-                    terminalPane.getChildren().add(vsWidget.getPane());
                     break;
                 case "vs-dark":
-                    widget = vsDarkWidget;
+                    widget = createTerminalWidget("vs-dark");
                     executeCommand("clear");
                     xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
                     this.xmarkImage.setImage(xmarkImage);
                     terminalBackPane.setStyle("-fx-background-color: #1e1e1e;");
-                    terminalPane.getChildren().clear();
-                    terminalPane.getChildren().add(vsDarkWidget.getPane());
                     break;
                 case "hc-black":
-                    widget = hcBlackWidget;
+                    widget = createTerminalWidget("hc-black");
                     executeCommand("clear");
                     xmarkImage = new Image(getClass().getResourceAsStream("/img/xmark-white.png"));
                     this.xmarkImage.setImage(xmarkImage);
                     terminalBackPane.setStyle("-fx-background-color: #000000;");
-                    terminalPane.getChildren().clear();
-                    terminalPane.getChildren().add(hcBlackWidget.getPane());
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown theme: " + theme);
             }
+            widget.getPane().prefWidthProperty().bind(terminalPane.widthProperty());
+            widget.getPane().prefHeightProperty().bind(terminalPane.heightProperty());
+            widget.addListener(terminalWidget -> {
+                widget.close();
+            });
+            terminalPane.getChildren().clear();
+            terminalPane.getChildren().add(widget.getPane());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void close() {
+        if (widget != null) {
+            widget.close();
+        }
+        if (process != null && process.isAlive()) {
+            process.destroy();
+        }
         ideController.closeTerminal();
     }
 
@@ -171,7 +165,7 @@ public class JeditermController {
                 envs.put("LC_CTYPE", Charsets.UTF_8.name());
                 envs.put("PATH", System.getenv("PATH"));
             }
-            PtyProcess process = new PtyProcessBuilder()
+            process = new PtyProcessBuilder()
                     .setCommand(command)
                     .setEnvironment(envs)
                     .start();

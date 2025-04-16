@@ -168,3 +168,20 @@ Vbox {
 .table-view .filler {
     -fx-background-color: #1e1e1e;
 }
+
+.operation-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #007ACC;
+    -fx-font-size: 12px;
+    -fx-padding: 1px 4px;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-effect: null;
+}
+
+.operation-button:hover {
+    -fx-background-color: transparent;
+    -fx-underline: true;
+}

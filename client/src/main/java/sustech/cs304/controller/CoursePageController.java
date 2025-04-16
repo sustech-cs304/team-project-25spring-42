@@ -5,6 +5,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
+import sustech.cs304.entity.Assignment;
+import sustech.cs304.entity.Resource;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
@@ -15,6 +17,16 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 
+
+
+/**
+ * AI-generated-content
+ * tool: deepseek
+ * version: latest
+ * usage: we ask deepseek to generate a classwelcome page, and
+ * this is the corresponding Controller.But AI can only do the structure work
+ * most of the function is added by us.
+ */
 public class CoursePageController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
@@ -47,13 +59,11 @@ public class CoursePageController {
         }
         announcementTable.setItems(announcementItems);
 
-        // set view button action
-           // 为第三列设置按钮行为
         TableColumn<AnnouncementItem, String> actionColumn = (TableColumn<AnnouncementItem, String>) announcementTable.getColumns().get(2);
         actionColumn.setCellFactory(col -> new TableCell<AnnouncementItem, String>() {
             private final Button viewButton = new Button("View");
-
             {
+                viewButton.getStyleClass().add("operation-button");
                 viewButton.setOnAction(event -> {
                     AnnouncementItem item = getTableView().getItems().get(getIndex());
                     AlterUtils.showInfoAlert(
@@ -75,20 +85,72 @@ public class CoursePageController {
     }
 
     private void initializeResources() {
-        ObservableList<ResourceItem> resources = FXCollections.observableArrayList(
-                new ResourceItem("Lecture1.pdf", "PDF", "2023-05-01", "2.4MB"),
-                new ResourceItem("Assignment1.docx", "Word", "2023-05-05", "1.2MB")
-        );
-        resourceTable.setItems(resources);
+        List<Resource> resources = courseApi.getResourceByCourseId(courseId);
+        ObservableList<ResourceItem> resourceItems = FXCollections.observableArrayList();
+        for (Resource resource : resources) {
+            resourceItems.add(new ResourceItem(resource.getResourceName(), resource.getType(), resource.getUploadTime(), resource.getSize()));
+        }
+        resourceTable.setItems(resourceItems);
+
+        TableColumn<ResourceItem, String> actionColumn = (TableColumn<ResourceItem, String>) resourceTable.getColumns().get(4);
+        actionColumn.setCellFactory(col -> new TableCell<ResourceItem, String>() {
+            private final Button downloadButton = new Button("Download");
+            {
+                downloadButton.getStyleClass().add("operation-button");
+                downloadButton.setOnAction(event -> {
+                    ResourceItem item = getTableView().getItems().get(getIndex());
+                    // Implement download functionality here
+                    System.out.println("Downloading: " + item.getFileName());
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(downloadButton);
+                }
+            }
+        });
     }
 
     private void initializeHomework() {
-        ObservableList<HomeworkItem> homework = FXCollections.observableArrayList(
-                new HomeworkItem("作业1", "2023-05-20", "未提交", "提交"),
-                new HomeworkItem("作业2", "2023-06-10", "已提交", "查看"),
-                new HomeworkItem("实验报告", "2023-06-15", "未开始", "开始")
-        );
-        homeworkTable.setItems(homework);
+        List<Assignment> assignments = courseApi.getAssignmentByCourseId(courseId, App.user.getUserId());
+        ObservableList<HomeworkItem> homeworkItems = FXCollections.observableArrayList();
+        for (Assignment assignment : assignments) {
+            String status;
+            if (assignment.getWhetherSubmitted()) {
+                status = "Submited";
+            } else {
+                status = "Not Submitted";
+            }
+            homeworkItems.add(new HomeworkItem(assignment.getAssignmentName(), assignment.getDeadline(), status, "Submit"));
+        }
+        homeworkTable.setItems(homeworkItems);
+        TableColumn<HomeworkItem, String> actionColumn = (TableColumn<HomeworkItem, String>) homeworkTable.getColumns().get(3);
+        actionColumn.setCellFactory(col -> new TableCell<HomeworkItem, String>() {
+            private final Button submitButton = new Button("Submit");
+            {
+                submitButton.getStyleClass().add("operation-button");
+                submitButton.setOnAction(event -> {
+                    HomeworkItem item = getTableView().getItems().get(getIndex());
+                    // Implement submit functionality here
+                    System.out.println("Submitting: " + item.getName());
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(submitButton);
+                }
+            }
+        });
     }
 
     @FXML
