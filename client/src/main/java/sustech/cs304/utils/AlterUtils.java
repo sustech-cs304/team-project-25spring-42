@@ -29,6 +29,12 @@ import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Resource;
 
+/**
+ * AI-generated-content
+ * tool: copilot
+ * version: latest
+ * usage: copilot is used to generate the AlterUtils class, which provides utility methods.
+ */
 public class AlterUtils {
     public static boolean showConfirmationAlert(Stage owner, String title, String header, String content) {
         Stage dialogStage = new Stage();

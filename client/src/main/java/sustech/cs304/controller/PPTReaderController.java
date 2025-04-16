@@ -20,6 +20,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * AI-generated-content
+ * tool: chatGPT
+ * version: latest
+ * usage: we ask chatGPT to generate a PPT reader controller
+ * But we modify it a lot.
+ */
 public class PPTReaderController {
 
     @FXML public AnchorPane rootAnchorPane;
@@ -156,7 +163,6 @@ public class PPTReaderController {
         pptImageView.setLayoutX(Math.max(offsetX, 0));
         pptImageView.setLayoutY(Math.max(offsetY, 0));
     }
-
 
     private void renderPage(int index) throws IOException {
         Dimension pgsize = ppt.getPageSize();

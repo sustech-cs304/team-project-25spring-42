@@ -8,6 +8,13 @@ public class FileUtils {
         return path.substring(path.lastIndexOf("/") + 1);
     }
 
+
+    /**
+     * AI-generated-content
+     * tool: copilot
+     * version: latest
+     * usage: copilot help us to generate a function to get the file extension
+     */
     public static String getExtension(File file){
         String fileName = file.getName();
         String extension = "";
