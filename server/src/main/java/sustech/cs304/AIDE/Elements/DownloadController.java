@@ -20,7 +20,7 @@ public class DownloadController {
     public ResponseEntity<Resource> downloadBinaryByPath(
             @RequestParam String filePath,
             @RequestParam(required = false) String customFilename) {
-        
+        System.out.println("Received request to download file: " + filePath);        
         try {
             Path requestedPath = ALLOWED_BASE_DIR.resolve(filePath).normalize();
             if (!requestedPath.startsWith(ALLOWED_BASE_DIR)) {

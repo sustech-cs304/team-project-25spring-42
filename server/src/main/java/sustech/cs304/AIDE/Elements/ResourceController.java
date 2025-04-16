@@ -179,7 +179,11 @@ class ClientResource{
         this.address = address;
         this.resourceName = resourceName;
         this.type = type;
-        this.uploadTime = uploadTime.toString();
+        if (uploadTime == null) {
+            this.uploadTime = null;
+        } else {
+            this.uploadTime = uploadTime.toString();
+        }
         this.groupId = groupId;
         this.size = size;
         this.visible = visible;

@@ -5,6 +5,10 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -141,18 +145,32 @@ public class SelfRelatedController {
         }
     }
 
-    @GetMapping(value = "/setUserAvatar", produces = "application/json")
+    @PostMapping(value = "/setUserAvatar", produces = "application/json")
     @Transactional
-    public ResponseEntity<SetResponse> setUserAvatar(@RequestParam String platformId, @RequestParam String newAvatarUrl) {
-        Optional<User> userOptional = userRepository.findByPlatformId(platformId);
+    public ResponseEntity<String> setUserAvatar(@RequestParam String userId, @RequestParam("file") MultipartFile file) {
+        Optional<User> userOptional = userRepository.findByPlatformId(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             System.out.println("User found: " + user.getUsername());
+            String home = System.getProperty("user.home");
+            String originalFilename = file.getOriginalFilename();
+            String savePath = Paths.get(home, "Documents", "Save", userId, "avatar",originalFilename).toString();
+            File directory = new File(Paths.get(home, "Documents", "Save", userId, "avatar").toString());
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            try {
+                file.transferTo(new File(savePath));
+            } catch (IOException e) {
+                return ResponseEntity.ok(null);
+            } 
+            String filePath = Paths.get(userId, "avatar", originalFilename).toString();
+            String newAvatarUrl = "http://139.180.143.70:8080/static/" + filePath;
             user.setAvatarUrl(newAvatarUrl);
             userRepository.save(user);
-            return ResponseEntity.ok(new SetResponse(true));
+            return ResponseEntity.ok(newAvatarUrl);
         } else {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(null);
         }
     }
 

@@ -48,6 +48,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     @Query("SELECT r.size FROM Resource r WHERE r.id = :id")
     String findSizeById(@Param("id") Long id);
     
+    @Query("SELECT r.id FROM Resource r WHERE r.assignmentId = :assignmentId")
+    List<Long> findIdByAssignmentId(@Param("assignmentId") String assignmentId);
+
     @Query("SELECT r.visible FROM Resource r WHERE r.id = :id")
     boolean findVisibleById(@Param("id") Long id);
     @Modifying
