@@ -17,6 +17,15 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sustech.cs304.controller.ProfileController">
+
+
+<!--/**-->
+<!--* AI-generated-content-->
+<!--* tool: deepseek-->
+<!--* version: latest-->
+<!--* usage: we ask deepseek to generate a userhome page-->
+<!--* we adapt the generated code to make it more suitable for this project.-->
+<!--*/-->
     <top>
         <ToolBar>
             <items>

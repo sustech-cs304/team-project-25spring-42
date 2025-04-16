@@ -24,7 +24,7 @@ public class IDEController {
     private AnchorPane backgroundPane, modePane, editorPane, profilePane;
 
     List<Node> ideContent;
-    private Parent classContent, userHomeContent;
+    private Parent classContent, userHomeContent, chatContent;
 
     @FXML
     private FileTreeController fileTreeController;
@@ -79,6 +79,7 @@ public class IDEController {
         try {
             classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
+            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chatWelcome.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -129,6 +130,17 @@ public class IDEController {
         menuBarController.changeMode("editor");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(ideContent);
+    }
+
+    @FXML
+    private void switchToChat() {
+        menuBarController.changeMode("chat");
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(chatContent);
+        AnchorPane.setTopAnchor(chatContent, 0.0);
+        AnchorPane.setBottomAnchor(chatContent, 0.0);
+        AnchorPane.setLeftAnchor(chatContent, 0.0);
+        AnchorPane.setRightAnchor(chatContent, 0.0);
     }
 
     @FXML

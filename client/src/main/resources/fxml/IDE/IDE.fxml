@@ -29,7 +29,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="secondModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="modeButton">
+                  <Button fx:id="secondModeButton" maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToChat" prefHeight="60.0" prefWidth="60.0" styleClass="modeButton">
                      <graphic>
                         <ImageView fx:id="chatImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>

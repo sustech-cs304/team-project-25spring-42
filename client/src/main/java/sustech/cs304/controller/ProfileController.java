@@ -16,6 +16,15 @@ import java.io.File;
 
 public class ProfileController {
 
+/**
+ * AI-generated-content
+ * tool: deepseek
+ * version: latest
+ * usage: we ask deepseek to generate a userhome page, and
+ * this is the corresponding Controller.But AI can only do the structure work
+ * most of the function is added by us.
+ */
+
     public Button returnbutton;
 
     @FXML private TextField usernameField, mailField, phoneField;
