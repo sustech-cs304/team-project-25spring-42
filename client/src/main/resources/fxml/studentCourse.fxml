@@ -142,7 +142,7 @@
             </VBox>
 
             <!-- 4. Enter Course Button -->
-            <Button fx:id="enterCourseBtn" onAction="#enterCourse" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="Enter Course">
+            <Button fx:id="enterCourseBtn" onAction="#enterClassroom" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="Enter Course">
                 <font>
                     <Font size="18.0" />
                 </font>
