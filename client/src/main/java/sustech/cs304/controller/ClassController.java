@@ -77,10 +77,9 @@ public class ClassController {
 
         }
 
-        // 设置点击事件
         btn.setOnAction(e -> {
             btn.setStatus(!btn.isActive());
-            showCourseHomePage("课程主页", "请从左侧选择课程", courseId);
+            showCourseHomePage(courseId, course, teacher);
         });
 
         this.contentBox.getChildren().add(btn);
@@ -97,33 +96,38 @@ public class ClassController {
 
 
 
-    private void showCourseHomePage(String courseName, String teacherName, Long courseId) {
+    private void showCourseHomePage(Long courseId, String courseName, String teacherName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CourseHomePage.fxml"));
-            Parent courseHomePage = loader.load();
+            FXMLLoader loader;
+            Parent coursePage;
+            if (false) {
+                loader = new FXMLLoader(getClass().getResource("/fxml/studentCourse.fxml"));
+                coursePage = loader.load();
+                StudentCourseController controller = loader.getController();
 
-            // 获取控制器实例
-            CoursePageController controller = loader.getController();
-            controller.setCourseId(courseId);
-            controller.loadData();
+                controller.setCourseId(courseId);
+                controller.loadData();
+                controller.setTitle(courseName, teacherName);
+                
+            } else {
+                loader = new FXMLLoader(getClass().getResource("/fxml/teacherCourse.fxml"));
+                coursePage = loader.load();
+                TeacherCourseController controller = loader.getController();
 
-            // 设置课程名称和教师姓名
-            //controller.setCourseInfo(courseName, teacherName);
+                controller.setCourseId(courseId);
+                controller.loadData();
+                controller.setTitle(courseName, teacherName);
+            }
 
-            // 清空原有内容
             editorPane.getChildren().clear();
 
-            // 将加载的FXML内容添加到编辑器面板
-            editorPane.getChildren().add(courseHomePage);
-            AnchorPane.setTopAnchor(courseHomePage, 0.0);
-            AnchorPane.setLeftAnchor(courseHomePage, 0.0);
-            AnchorPane.setRightAnchor(courseHomePage, 0.0);
-            AnchorPane.setBottomAnchor(courseHomePage, 0.0);
+            editorPane.getChildren().add(coursePage);
+            AnchorPane.setTopAnchor(coursePage, 0.0);
+            AnchorPane.setLeftAnchor(coursePage, 0.0);
+            AnchorPane.setRightAnchor(coursePage, 0.0);
+            AnchorPane.setBottomAnchor(coursePage, 0.0);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
-
 }

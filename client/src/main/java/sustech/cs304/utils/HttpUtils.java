@@ -54,6 +54,23 @@ public class HttpUtils {
         return client.newCall(request).execute();
     }
 
+    public static Response postForm2(String apiUrl, String apiPath, RequestBody formBody) throws Exception {
+        OkHttpClient client = new OkHttpClient();
+
+        String urlString = getBaseUrl() + apiUrl + apiPath;
+        HttpUrl url = HttpUrl.parse(urlString).newBuilder().build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .post(formBody)
+            // .addHeader("Accept", "application/json")
+            // .addHeader("Content-Type", "application/x-www-form-urlencoded") // 表单类型
+            .build();
+
+        return client.newCall(request).execute();
+    }
+
+
     public static String getBaseUrl() {
         return "http://139.180.143.70:8080";
     }

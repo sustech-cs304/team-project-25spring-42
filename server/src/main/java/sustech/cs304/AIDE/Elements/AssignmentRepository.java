@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     Optional<Assignment> findById(Long id); 
+    
+    @Query("SELECT a.id FROM Assignment a WHERE a.deadline = :deadline AND a.assignmentName = :assignmentName")
+    Long findAssignmentIdByAssignmentNameAndDeadline(String assignmentName, LocalDateTime deadline);
 
     @Query("SELECT a.id FROM Assignment a WHERE a.courseId = :courseId")
     List<Long> findAssignmentIdByCourseId(@Param("courseId") String courseId);

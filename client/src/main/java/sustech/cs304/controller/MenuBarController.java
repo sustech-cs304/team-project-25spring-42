@@ -19,7 +19,7 @@ public class MenuBarController {
     private Menu[] IDEMenus;
     private Menu[] classMenus;
     private Menu[] userHomeMenus;
-
+    private Menu[] chatMenus;
     private String css;
 
     private IDEController ideController;
@@ -27,6 +27,7 @@ public class MenuBarController {
     @FXML
     private void initialize() {
         IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
+        chatMenus = new Menu[]{colorMenu, helpMenu};
         classMenus = new Menu[]{colorMenu, helpMenu};
         userHomeMenus = new Menu[]{colorMenu, helpMenu};
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
@@ -86,9 +87,11 @@ public class MenuBarController {
                     String command = "python" + " " + filePath;
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("c")) {
-                    String command = "gcc" + " " + filePath + " -o " + file.getName().replace(".c", "");
+                    String command = "gcc" + " " + filePath + " -o " + file.getAbsolutePath().replace(".c", "");
                     ideController.getJeditermController().executeCommand(command);
-                    command = "./" + file.getName().replace(".c", "");
+                    command = file.getAbsolutePath().replace(".c", "");
+                    ideController.getJeditermController().executeCommand(command);
+                    command = "rm" + " " + file.getAbsolutePath().replace(".c", "");
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("sh")) {
                     String command = "bash" + " " + filePath;
@@ -97,9 +100,11 @@ public class MenuBarController {
                     String command = "node" + " " + filePath;
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("cpp")) {
-                    String command = "g++" + " " + filePath + " -o " + file.getName().replace(".cpp", "");
+                    String command = "g++" + " " + filePath + " -o " + file.getAbsolutePath().replace(".cpp", "");
                     ideController.getJeditermController().executeCommand(command);
-                    command = "./" + file.getName().replace(".cpp", "");
+                    command = file.getAbsolutePath().replace(".cpp", "");
+                    ideController.getJeditermController().executeCommand(command);
+                    command = "rm" + " " + file.getAbsolutePath().replace(".cpp", "");
                     ideController.getJeditermController().executeCommand(command);
                 }
             } catch (Exception e) {
@@ -129,6 +134,9 @@ public class MenuBarController {
         Scene scene = menuBar.getScene();
         if (scene != null) {
             if (mode.equals("editor")) {
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(false);
                 }
@@ -139,23 +147,42 @@ public class MenuBarController {
                     menu.setVisible(true);
                 }
             } else if (mode.equals("class")) {
-                for (Menu menu : this.userHomeMenus) {
+                for (Menu menu : this.IDEMenus) {
                     menu.setVisible(false);
                 }
-                for (Menu menu : this.IDEMenus) {
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.userHomeMenus) {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(true);
                 }
-            } else if (mode.equals("userHome")) {
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(false);
-                }
+           } else if (mode.equals("userHome")) {
                 for (Menu menu : IDEMenus) {
                     menu.setVisible(false);
                 }
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(true);
+                }
+            } else if (mode.equals("chat")) {
+                for (Menu menu : IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
+                 for (Menu menu : this.chatMenus) {
                     menu.setVisible(true);
                 }
             }

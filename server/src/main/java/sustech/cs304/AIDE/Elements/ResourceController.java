@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 
 @RestController
 @RequestMapping("/resource")
@@ -49,7 +50,23 @@ public class ResourceController {
         } catch (IOException e) {
             return ResponseEntity.ok(new SetResponse(false));
         } 
-        Resource resource = new Resource(savePath, courseId, originalFilename, file.getContentType(), groupId, String.valueOf(file.getSize()));
+        String contentType = null;
+        try {
+            contentType = Files.probeContentType(Paths.get(savePath));
+        } catch (IOException e) {
+            contentType = null;
+        }
+        if (contentType == null) {
+            contentType = "application/octet-stream"; 
+        }
+        switch (contentType) {
+        case "text/x-java":
+            contentType = "java";
+            break;
+        default:
+            break;
+    }
+        Resource resource = new Resource(savePath, courseId, originalFilename, contentType, groupId, String.valueOf(file.getSize()));
         resourceRepository.save(resource); 
         return ResponseEntity.ok(new SetResponse(true));
     }
@@ -123,7 +140,7 @@ public class ResourceController {
     }
 
     @PostMapping(value = "/getResourceList", produces = "application/json")
-    public ResponseEntity<List<ClientResource>> getResourceList(@RequestParam String courseId, @RequestParam String userId) {
+    public ResponseEntity<List<ClientResource>> getResourceList(@RequestParam String courseId) {
         List<Resource> resources = resourceRepository.findByCourseId(courseId);
         if (resources.isEmpty()) {
             return ResponseEntity.ok(List.of());
@@ -135,11 +152,12 @@ public class ResourceController {
     }
 
     @PostMapping(value = "/getVisibleResourceList", produces = "application/json")  
-    public ResponseEntity<List<ClientResource>> getVisibleResourceList(@RequestParam String courseId, @RequestParam String userId) {
+    public ResponseEntity<List<ClientResource>> getVisibleResourceList(@RequestParam String courseId) {
         List<Resource> resources = resourceRepository.findVisibleByCourseId(courseId);
         if (resources.isEmpty()) {
             return ResponseEntity.ok(List.of());
         }
+        System.out.println("Visible resources found: " + resources.size());
         List<ClientResource> clientResources = resources.stream()
                 .map(resource -> new ClientResource(resource.getId(), resource.getAddress(), resource.getResourceName(), resource.getType(), resource.getUpLoadTime(), resource.getGroupId(), resource.getSize(), resource.getVisible()))
                 .toList();
@@ -151,7 +169,7 @@ class ClientResource{
     private String address;
     private String resourceName;
     private String type;
-    private LocalDateTime uploadTime;
+    private String uploadTime;
     private Long groupId;
     private String size;
     private boolean visible;
@@ -161,7 +179,11 @@ class ClientResource{
         this.address = address;
         this.resourceName = resourceName;
         this.type = type;
-        this.uploadTime = uploadTime;
+        if (uploadTime == null) {
+            this.uploadTime = null;
+        } else {
+            this.uploadTime = uploadTime.toString();
+        }
         this.groupId = groupId;
         this.size = size;
         this.visible = visible;
@@ -179,7 +201,7 @@ class ClientResource{
     public String getType() {
         return type;
     }
-    public LocalDateTime getUploadTime() {
+    public String getUploadTime() {
         return uploadTime;
     }
     public Long getGroupId() {

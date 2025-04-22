@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import sustech.cs304.App;
+import sustech.cs304.utils.UserUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -22,7 +24,7 @@ public class IDEController {
     private AnchorPane backgroundPane, modePane, editorPane, profilePane;
 
     List<Node> ideContent;
-    private Parent classContent, userHomeContent;
+    private Parent classContent, userHomeContent, chatContent;
 
     @FXML
     private FileTreeController fileTreeController;
@@ -57,6 +59,7 @@ public class IDEController {
 
     @FXML
     private void initialize() {
+        App.user = UserUtils.loadUser();
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             backgroundPane.setPrefHeight(1048);
             backgroundPane.setLayoutY(-32);
@@ -75,10 +78,15 @@ public class IDEController {
         ideContent = new ArrayList<>(modePane.getChildren());
         try {
             classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
-            userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/UserHome.fxml")));
+            userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
+            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chatWelcome.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
         }
+
+        App.primaryStage.setOnCloseRequest(event -> {
+            jeditermController.close();
+        });
 
         switchToEditor();
     }
@@ -122,6 +130,17 @@ public class IDEController {
         menuBarController.changeMode("editor");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(ideContent);
+    }
+
+    @FXML
+    private void switchToChat() {
+        menuBarController.changeMode("chat");
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(chatContent);
+        AnchorPane.setTopAnchor(chatContent, 0.0);
+        AnchorPane.setBottomAnchor(chatContent, 0.0);
+        AnchorPane.setLeftAnchor(chatContent, 0.0);
+        AnchorPane.setRightAnchor(chatContent, 0.0);
     }
 
     @FXML

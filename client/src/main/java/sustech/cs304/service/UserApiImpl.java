@@ -1,7 +1,12 @@
 package sustech.cs304.service;
 
+import java.io.File;
+
 import com.google.gson.Gson;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import sustech.cs304.entity.Query;
 import sustech.cs304.entity.User;
@@ -202,25 +207,29 @@ public class UserApiImpl implements UserApi {
     }
 
     public boolean updateAvatarById(String userId, String newAvatarUrl) {
-        Query [] queries = {
-            new Query("platformId", userId),
-            new Query("newAvatarUrl", newAvatarUrl)
-        };
+        File file = new File(newAvatarUrl);
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/octet-stream"));
+
+        RequestBody body = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("userId", userId)
+            .addFormDataPart("file", file.getName(), fileBody)
+            .build();
+
         try {
-            Response response = HttpUtils.get("/self", "/setUserAvatar", queries);
+            Response response = HttpUtils.postForm2("/self", "/setUserAvatar", body);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
-                Gson gson = new Gson();
-                SetResponse result = gson.fromJson(responseBody, SetResponse.class);
-                return result.getResult();
+                return true;
             } else {
                 System.err.println("Error updating avatar: " + response.message());
                 return false;
             }
         } catch(Exception e) {
-            System.err.println("Error updating avatar: " + e.getMessage());
+            System.err.println("Errorrrrr updating avatar: " + e.getMessage());
             return false;
         }
+        
     }
 
     public boolean updateMailById(String userId, String newMail) {

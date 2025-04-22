@@ -41,6 +41,14 @@ public class FileTreeController {
         treeView.setRoot(rootItem);
     }
 
+    public void refresh() {
+        if (rootItem != null) {
+            rootItem.getChildren().clear();
+            File selectedDirectory = new File(rootItem.getValue().getPath());
+            buildFileTree(rootItem, selectedDirectory);
+        }
+    }
+
     public void handleSelectFolder() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a Folder");

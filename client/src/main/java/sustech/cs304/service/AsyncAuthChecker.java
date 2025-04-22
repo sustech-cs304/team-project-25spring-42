@@ -8,7 +8,8 @@ import java.io.FileWriter;
 
 public class AsyncAuthChecker {
     private final OkHttpClient client;
-    private final String url = "http://JingqiSUN.christmas:8080/auth/callback/loginStatus";
+    // private final String url = "http://JingqiSUN.christmas:8080/auth/callback/loginStatus";
+    private final String url = "http://139.180.143.70:8080/auth/callback/loginStatus";
     private volatile boolean result = false;
     private final int state;
     
@@ -33,12 +34,14 @@ public class AsyncAuthChecker {
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        System.out.println("Request failed: " + e.getMessage());
                         latch.countDown();
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         if (response.isSuccessful()) {
+                            // System.out.println("Response: " + response.body().string());
                             String[] parts = response.body().string().split(" ");
                             if ("1".equals(parts[0])){
                                 System.out.println("Logged in successfully");

@@ -1,55 +1,55 @@
 package sustech.cs304.entity;
 
-import java.time.LocalDate;
-
 public class Assignment {
-    private String name;
-    private Course courseBelongTo;
-    private LocalDate dueDate;
-    private String status;
-    private String discription;
-
-    public Assignment() {
-
+    private Long id;
+    private String assignmentName;
+    private String deadline;
+    private String courseId;
+    private boolean visible;
+    private boolean whetherSubmitted;
+    private String address;
+    private String attachmentaddress;
+    private String attachmentName;
+    public Assignment(Long id, String assignmentName, String deadline, String courseId, boolean visible, String address, String attachmentName, String attachmentaddress) {
+        this.id = id;
+        this.assignmentName = assignmentName;
+        this.deadline = deadline;
+        this.courseId = courseId;
+        this.visible = visible;
+        if (address == null) {
+            this.whetherSubmitted = false;
+        } else {
+            this.whetherSubmitted = true;
+        }
+        this.address = address;
+        this.attachmentName = attachmentName;
+        this.attachmentaddress = attachmentaddress;
     }
-
-    public String getName() {
-        return name;
+    public Long getId() {
+        return id;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getAssignmentName() {
+        return assignmentName;
     }
-
-    public LocalDate getDueDate() {
-        return dueDate;
+    public String getDeadline() {
+        return deadline;
     }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
+    public String getCourseId() {
+        return courseId;
     }
-
-    public String getStatus() {
-        return status;
+    public boolean getVisible() {
+        return visible;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public boolean getWhetherSubmitted() {
+        return whetherSubmitted;
     }
-
-    public Course getCourseBelongTo() {
-        return courseBelongTo;
+    public String getAddress() {
+        return address;
     }
-
-    public void setCourseBelongTo(Course courseBelongTo) {
-        this.courseBelongTo = courseBelongTo;
+    public String getAttachmentName() {
+        return attachmentName;
     }
-
-    public String getDiscription() {
-        return discription;
-    }
-
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public String getAttachmentaddress() {
+        return attachmentaddress;
     }
 }
