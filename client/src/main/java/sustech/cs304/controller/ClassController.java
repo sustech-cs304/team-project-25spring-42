@@ -14,7 +14,6 @@ import sustech.cs304.entity.Course;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.scene.Parent;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -27,10 +26,10 @@ public class ClassController {
     public ScrollPane classChoiceScroll;
     @FXML
     public AnchorPane editorPane, fileTreePane;
+    @FXML
+
     private VBox contentBox;
-
     private String css;
-
     private CourseApi courseApi;
     private List<Course> courseList;
 
@@ -94,12 +93,11 @@ public class ClassController {
         scene.getStylesheets().add(css);
     }
 
-
-
     private void showCourseHomePage(Long courseId, String courseName, String teacherName) {
         try {
             FXMLLoader loader;
             Parent coursePage;
+            // Todo: Add a check for user type
             if (false) {
                 loader = new FXMLLoader(getClass().getResource("/fxml/studentCourse.fxml"));
                 coursePage = loader.load();
@@ -120,7 +118,6 @@ public class ClassController {
             }
 
             editorPane.getChildren().clear();
-
             editorPane.getChildren().add(coursePage);
             AnchorPane.setTopAnchor(coursePage, 0.0);
             AnchorPane.setLeftAnchor(coursePage, 0.0);

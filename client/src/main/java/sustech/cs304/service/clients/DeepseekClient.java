@@ -10,6 +10,10 @@ import sustech.cs304.entity.RequestBodyy;
 import sustech.cs304.entity.RequestBodyy.Message;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.util.Collections;
 
@@ -36,7 +40,13 @@ public class DeepseekClient {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
-            return response.body().string();
+            String responseBody = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+            JsonArray choices = jsonObject.getAsJsonArray("choices");
+            JsonObject messageObj = choices.get(0).getAsJsonObject().getAsJsonObject("message");
+            return messageObj.get("content").getAsString();
+
+            // return response.body().string();
         }
     }
     
