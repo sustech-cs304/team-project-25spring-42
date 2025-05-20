@@ -1,8 +1,7 @@
-package sustech.cs304.AIDE.Elements; 
+package sustech.cs304.AIDE.model; 
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Entity
 @Table(name = "assignment")

@@ -1,13 +1,11 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.repository;
 
-import sustech.cs304.AIDE.Elements.Assignment;
+import org.hibernate.sql.ast.tree.update.Assignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.List;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {

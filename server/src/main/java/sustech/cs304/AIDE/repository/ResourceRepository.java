@@ -1,6 +1,5 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.repository;
 
-import sustech.cs304.AIDE.Elements.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.List;
@@ -8,10 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import sustech.cs304.AIDE.model.Resource;
+
 import java.time.LocalDateTime;
 
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
     Optional<Resource> findById(Long id); 
+
     @Query("SELECT r.id FROM Resource r WHERE r.courseId = :courseId")
     List<Long> findResourceIdByCourseId(@Param("courseId") String courseId);
     
@@ -50,30 +53,37 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     
     @Query("SELECT r.visible FROM Resource r WHERE r.id = :id")
     boolean findVisibleById(@Param("id") Long id);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.visible = :visible WHERE r.id = :id")
     int updateVisibilityById(@Param("id") Long id, @Param("visible") boolean visible);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.resourceName = :resourceName WHERE r.id = :id")
     int updateResourceNameById(@Param("id") Long id, @Param("resourceName") String resourceName);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.type = :type WHERE r.id = :id")
     int updateTypeById(@Param("id") Long id, @Param("type") String type);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.uploadTime = :uploadTime WHERE r.id = :id")
     int updateUploadTimeById(@Param("id") Long id, @Param("uploadTime") String uploadTime);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.groupId = :groupId WHERE r.id = :id")
     int updateGroupIdById(@Param("id") Long id, @Param("groupId") Long groupId);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.size = :size WHERE r.id = :id")
     int updateSizeById(@Param("id") Long id, @Param("size") String size);
+
     @Modifying
     @Transactional
     @Query("UPDATE Resource r SET r.address = :address WHERE r.id = :id")

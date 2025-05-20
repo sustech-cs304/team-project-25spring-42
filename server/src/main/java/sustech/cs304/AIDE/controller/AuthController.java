@@ -1,7 +1,8 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.controller;
 
-import sustech.cs304.AIDE.Elements.User;
-import sustech.cs304.AIDE.Elements.UserRepository;
+import sustech.cs304.AIDE.model.User;
+import sustech.cs304.AIDE.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import java.util.Map;
 import java.util.Optional;
 
