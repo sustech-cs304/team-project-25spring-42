@@ -246,6 +246,21 @@ public class TeacherCourseController {
         }
     }
 
+    @FXML
+    private void showMemberList() {
+        // TODO: Implement member list functionality
+        AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), List.of(App.user));
+    }
+
+    @FXML
+    private void inviteNewMember() {
+        List<String> invitationList = AlterUtils.showInvitationInputForm((Stage) this.courseIdLabel.getScene().getWindow());
+        if (invitationList != null) {
+            courseApi.createCourseInvitation(courseId, invitationList);
+        } else {
+        }
+    }
+
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;

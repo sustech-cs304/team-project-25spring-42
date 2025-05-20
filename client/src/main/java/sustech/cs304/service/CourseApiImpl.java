@@ -373,4 +373,85 @@ public class CourseApiImpl implements CourseApi {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
+    public void createCourseInvitation(Long courseId, List<String> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return;
+        }
+        String joinedUserIds = String.join(",", userIds);
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userIds", joinedUserIds)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/createInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation created successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to create course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+
+    }
+
+    public void acceptCourseInvitation(Long courseId, String userId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/acceptInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation accepted successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to accept course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void rejectCourseInvitation(Long courseId, String userId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/rejectInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation rejected successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to reject course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public List<Course> getCourseInvitationByUserId(String userId) {
+        List<Course> courseList = null;
+        Query[] queries = {
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/getInvitationCourses", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<Course>>() {}.getType();
+                courseList = new Gson().fromJson(responseBody, listType);
+            } else {
+                throw new RuntimeException("Failed to get course invitations: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            Course course = new Course((Long) 111111L, "DSAA", "admin", "2023-10-01", "2023-10-31", true);
+            courseList = List.of(course);
+        }
+        return courseList;
+    }
 }

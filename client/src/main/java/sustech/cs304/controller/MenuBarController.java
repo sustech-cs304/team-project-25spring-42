@@ -1,6 +1,7 @@
 package sustech.cs304.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import sustech.cs304.App;
 import sustech.cs304.service.CourseApiImpl;
 import sustech.cs304.utils.AlterUtils;
 import sustech.cs304.utils.FileUtils;
+import sustech.cs304.entity.Course;
 
 public class MenuBarController {
 
@@ -205,7 +207,10 @@ public class MenuBarController {
         ideController.getClassController().initializeClassChoiceScroll();
     }
 
-    public void joinCourse() {
+    public void invitationList() {
+        CourseApiImpl courseApi = new CourseApiImpl();
+        String userId = App.user.getUserId();
+        List<Course> courseList = courseApi.getCourseInvitationByUserId(userId);
 
     }
 

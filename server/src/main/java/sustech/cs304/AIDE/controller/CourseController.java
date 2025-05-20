@@ -9,6 +9,7 @@ import sustech.cs304.AIDE.model.Course;
 import sustech.cs304.AIDE.model.Enrollment;
 import sustech.cs304.AIDE.repository.AnnounceRepository;
 import sustech.cs304.AIDE.repository.AssignmentRepository;
+import sustech.cs304.AIDE.repository.CourseInvitationRepository;
 import sustech.cs304.AIDE.repository.CourseRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class CourseController {
     private final ResourceRepository resourceRepository;
     private final AnnounceRepository announceRepository;
     private final SubmissionRepository submissionRepository;
+    private final CourseInvitationRepository courseInvitationRepository;
 
     public CourseController(
         CourseRepository courseRepository, 
@@ -35,7 +37,8 @@ public class CourseController {
         AssignmentRepository assignmentRepository,
         ResourceRepository resourceRepository,
         AnnounceRepository announceRepository,
-        SubmissionRepository submissionRepository
+        SubmissionRepository submissionRepository,
+        CourseInvitationRepository courseInvitationRepository
     ) {
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
@@ -43,6 +46,7 @@ public class CourseController {
         this.resourceRepository = resourceRepository;
         this.announceRepository = announceRepository;
         this.submissionRepository = submissionRepository;
+        this.courseInvitationRepository = courseInvitationRepository;
     }
 
     @GetMapping(value = "/deleteCourse", produces = "application/json")
@@ -53,6 +57,7 @@ public class CourseController {
             Course course = courseOptional.get();
             if (course.getAdminId().equals(userId)) {
                 courseRepository.delete(course);
+                courseInvitationRepository.deleteByCourseId(Long.parseLong(courseId));
                 enrollmentRepository.deleteByCourseId(Long.parseLong(courseId));
                 resourceRepository.deleteByCourseId(Long.parseLong(courseId));
                 announceRepository.deleteByCourseId(Long.parseLong(courseId));

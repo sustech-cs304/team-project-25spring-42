@@ -207,25 +207,8 @@ public class StudentCourseController {
     }
 
     @FXML
-    private void searchResources() {
-    }
-
-    @FXML
-    private void uploadResource() {
-        // Implement resource upload
-        System.out.println("Upload resource button clicked");
-    }
-
-    @FXML
-    private void viewAllHomework() {
-        // Implement view all homework
-        System.out.println("View all homework button clicked");
-    }
-
-    @FXML
-    private void enterCourse() {
-        // Implement enter course
-        System.out.println("Enter course button clicked");
+    private void showMemberList() {
+        AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), List.of(App.user));
     }
 
     public void setCourseId(Long courseId) {

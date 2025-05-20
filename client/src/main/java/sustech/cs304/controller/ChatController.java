@@ -1,5 +1,7 @@
 package sustech.cs304.controller;
 
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,12 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import sustech.cs304.App;
 import sustech.cs304.controller.components.button.FriendButton;
 import sustech.cs304.entity.Friend;
+import sustech.cs304.utils.AlterUtils;
 
 public class ChatController {
 
@@ -132,4 +136,9 @@ public class ChatController {
         return response;
     }
 
+    @FXML
+    private void showNewRequestList() {
+        AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), List.of(App.user));
+
+    }
 }

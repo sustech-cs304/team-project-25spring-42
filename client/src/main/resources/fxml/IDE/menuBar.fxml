@@ -27,7 +27,7 @@
       <Menu fx:id="courseMenu" mnemonicParsing="false" text="Course">
          <items>
             <MenuItem mnemonicParsing="false" onAction="#createCourse" text="Create Course" />
-            <MenuItem mnemonicParsing="false" onAction="#joinCourse" text="Join Course" />
+            <MenuItem mnemonicParsing="false" onAction="#invitationList" text="Course Invitation" />
          </items>
       </Menu>
       <Menu fx:id="terminalMenu" mnemonicParsing="false" text="Terminal">

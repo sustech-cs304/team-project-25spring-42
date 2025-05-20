@@ -22,4 +22,9 @@ public interface CourseApi {
     void createCourse(String courseName, String userId);
     String getAdminIdByCourseId(Long courseId);
     void deleteCourse(Long courseId, String adminId);
+
+    void createCourseInvitation(Long courseId, List<String> userIds);
+    void acceptCourseInvitation(Long courseId, String userId);
+    void rejectCourseInvitation(Long courseId, String userId);
+    List<Course> getCourseInvitationByUserId(String userId);
 }

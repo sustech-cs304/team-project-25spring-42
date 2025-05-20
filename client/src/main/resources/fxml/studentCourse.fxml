@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -28,7 +27,8 @@
             </font>
         </Label>
       <Button mnemonicParsing="false" onAction="#loadData" text="refresh" />
-      <Region prefHeight="10.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
+      <Button mnemonicParsing="false" onAction="#showMemberList" text="member list" />
+      <Region prefHeight="10.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
       <Label fx:id="courseIdLabel" style="-fx-text-fill: white;" text="courseId: xxx" textFill="WHITE">
          <font>
             <Font size="16.0" />
@@ -148,19 +148,6 @@
                 </TableView>
             <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 0 10 10 10;" />
             </VBox>
-
-            <!-- 4. Enter Course Button -->
-            <Button fx:id="enterCourseBtn" onAction="#enterCourse" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="Enter Course">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <VBox.margin>
-                    <Insets top="20.0" />
-                </VBox.margin>
-                <padding>
-                    <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-                </padding>
-            </Button>
         </VBox>
     </ScrollPane>
 </AnchorPane>
