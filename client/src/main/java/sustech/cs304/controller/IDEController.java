@@ -79,7 +79,7 @@ public class IDEController {
         try {
             classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
-            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chatWelcome.fxml")));
+            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chat.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
         }

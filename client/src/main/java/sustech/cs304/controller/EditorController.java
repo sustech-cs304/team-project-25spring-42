@@ -136,6 +136,7 @@ public class EditorController {
         loader.setLocation(getClass().getResource("/fxml/pdfReader.fxml")); // 确保路径正确
         AnchorPane pdfPane = loader.load();
         PDFReaderController pdfReaderController = loader.getController();
+        pdfReaderController.setIdeController(ideController);
         pdfReaderController.setFile(file);
 
         newTab.setContent(pdfPane);

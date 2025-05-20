@@ -7,6 +7,10 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.util.Collections;
 
@@ -39,7 +43,14 @@ public class GeminiClient {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
-            return response.body().string();
+
+            String responseBody = response.body().string();
+            JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
+            JsonArray choices = jsonObject.getAsJsonArray("choices");
+            JsonObject messageObj = choices.get(0).getAsJsonObject().getAsJsonObject("message");
+            return messageObj.get("content").getAsString();
+
+            // return response.body().string();
         }
     }
     
