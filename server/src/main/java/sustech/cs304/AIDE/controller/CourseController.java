@@ -26,6 +26,24 @@ public class CourseController {
         this.enrollmentRepository = enrollmentRepository;
     }
 
+    @GetMapping(value = "/deleteCourse", produces = "application/json")
+    @Transactional
+    public ResponseEntity<SetResponse> deleteCourse(@RequestParam String courseId, @RequestParam String userId) {
+        Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            if (course.getAdminId().equals(userId)) {
+                courseRepository.delete(course);
+                System.out.println("Course deleted: " + course.getCourseName());
+                return ResponseEntity.ok(new SetResponse(true));
+            } else {
+                return ResponseEntity.status(403).body(new SetResponse(false));
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping(value = "/getCourseById", produces = "application/json")
     @Transactional
     public ResponseEntity<ClientCourse> getCourseById(@RequestParam String courseId) {

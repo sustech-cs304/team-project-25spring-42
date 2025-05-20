@@ -26,6 +26,7 @@ public class StudentCourseController {
     @FXML private TableView<ResourceItem> resourceTable;
     @FXML private TableView<AssignmentItem> assignmentTable;
     @FXML private Button enterCourseBtn;
+    @FXML private Label courseIdLabel;
 
     private CourseApi courseApi;
     private Long courseId;
@@ -44,11 +45,15 @@ public class StudentCourseController {
     public void setTitle(String courseName, String teacherName) {
         this.courseTitle.setText(courseName);
         this.teacherName.setText(teacherName);
+        this.courseIdLabel.setText("Course ID: " + courseId);
 
     }
 
     private void initializeAnnouncements() {
         List<Announce> announcements = courseApi.getAnnounceByCourseId(courseId);
+        if (announcements == null || announcements.isEmpty()) {
+            return;
+        }
         ObservableList<AnnouncementItem> announcementItems = FXCollections.observableArrayList();
         for (Announce announce : announcements) {
             announcementItems.add(new AnnouncementItem(announce));
@@ -82,6 +87,9 @@ public class StudentCourseController {
 
     private void initializeResources() {
         List<Resource> resources = courseApi.getResourceByCourseId(courseId);
+        if (resources == null || resources.isEmpty()) {
+            return;
+        }
         ObservableList<ResourceItem> resourceItems = FXCollections.observableArrayList();
         for (Resource resource : resources) {
             resourceItems.add(new ResourceItem(resource));
@@ -122,6 +130,9 @@ public class StudentCourseController {
 
     private void initializeAssignment() {
         List<Assignment> assignments = courseApi.getAssignmentByCourseId(courseId, App.user.getUserId());
+        if (assignments == null || assignments.isEmpty()) {
+            return;
+        }
         ObservableList<AssignmentItem> assignmentItems = FXCollections.observableArrayList();
         for (Assignment assignment : assignments) {
             assignmentItems.add(new AssignmentItem(assignment));

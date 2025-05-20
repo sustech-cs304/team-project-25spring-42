@@ -15,9 +15,7 @@ import javafx.collections.ObservableList;
 import sustech.cs304.utils.AlterUtils;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javafx.collections.FXCollections;
 
@@ -27,7 +25,8 @@ public class TeacherCourseController {
     @FXML private TableView<AnnouncementItem> announcementTable;
     @FXML private TableView<ResourceItem> resourceTable;
     @FXML private TableView<AssignmentItem> assignmentTable;
-    @FXML private Button enterCourseBtn;
+    @FXML private Button deleteCourseButton;
+    @FXML private Label courseIdLabel;
 
     private CourseApi courseApi;
     private Long courseId;
@@ -46,10 +45,14 @@ public class TeacherCourseController {
     public void setTitle(String courseName, String teacherName) {
         this.courseTitle.setText(courseName);
         this.teacherName.setText(teacherName);
+        this.courseIdLabel.setText("Course ID: " + String.valueOf(courseId));
     }
 
     private void initializeAnnouncements() {
         List<Announce> announcements = courseApi.getAnnounceByCourseId(courseId);
+        if (announcements == null || announcements.isEmpty()) {
+            return;
+        }
         ObservableList<AnnouncementItem> announcementItems = FXCollections.observableArrayList();
         for (Announce announce : announcements) {
             announcementItems.add(new AnnouncementItem(announce));
@@ -83,6 +86,9 @@ public class TeacherCourseController {
 
     private void initializeResources() {
         List<Resource> resources = courseApi.getResourceByCourseId(courseId);
+        if (resources == null || resources.isEmpty()) {
+            return;
+        }
         ObservableList<ResourceItem> resourceItems = FXCollections.observableArrayList();
         for (Resource resource : resources) {
             resourceItems.add(new ResourceItem(resource));
@@ -123,6 +129,9 @@ public class TeacherCourseController {
 
     private void initializeAssignment() {
         List<Assignment> assignments = courseApi.getAssignmentByCourseId(courseId, App.user.getUserId());
+        if (assignments == null || assignments.isEmpty()) {
+            return;
+        }
         ObservableList<AssignmentItem> assignmentItems = FXCollections.observableArrayList();
         for (Assignment assignment : assignments) {
             assignmentItems.add(new AssignmentItem(assignment));
@@ -224,26 +233,19 @@ public class TeacherCourseController {
     }
 
     @FXML
-    private void searchResources() {
+    private void deleteCourse() {
+        
+        boolean confirm = AlterUtils.showConfirmationAlert(
+            (Stage) this.courseIdLabel.getScene().getWindow(), 
+            "Delete Course", "Are you sure you want to delete this course?",
+            "Please confirm."
+        );
+
+        if (confirm) {
+            courseApi.deleteCourse(courseId);
+        }
     }
 
-    @FXML
-    private void uploadResource() {
-        // Implement resource upload
-        System.out.println("Upload resource button clicked");
-    }
-
-    @FXML
-    private void viewAllHomework() {
-        // Implement view all homework
-        System.out.println("View all homework button clicked");
-    }
-
-    @FXML
-    private void enterCourse() {
-        // Implement enter course
-        System.out.println("Enter course button clicked");
-    }
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;

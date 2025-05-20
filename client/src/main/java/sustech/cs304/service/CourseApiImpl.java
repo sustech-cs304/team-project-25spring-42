@@ -106,9 +106,9 @@ public class CourseApiImpl implements CourseApi {
                 Type listType = new TypeToken<List<Resource>>() {}.getType();
                 resourceList = new Gson().fromJson(responseBody, listType);
             } else {
-                System.out.println("No resources found for course ID: " + courseId);
-                Resource resource = new Resource(11111L, "test", "test", "test", null, 11111L, "test", true);
-                resourceList = List.of(resource);
+                // System.out.println("No resources found for course ID: " + courseId);
+                // Resource resource = new Resource(11111L, "test", "test", "test", null, 11111L, "test", true);
+                resourceList = null;
             }
         } catch (Exception e) {
             System.out.println("Error fetching resources: " + e.getMessage());
@@ -131,9 +131,9 @@ public class CourseApiImpl implements CourseApi {
                 Type listType = new TypeToken<List<Assignment>>() {}.getType();
                 assignmentList = new Gson().fromJson(responseBody, listType);
             } else {
-                System.out.println("No assignments found for course ID: " + courseId);
-                Assignment assignment = new Assignment(11111L, "test", "test", "test", true, null, null, null);
-                assignmentList = List.of(assignment);
+                // System.out.println("No assignments found for course ID: " + courseId);
+                // Assignment assignment = new Assignment(11111L, "test", "test", "test", true, null, null, null);
+                assignmentList = null;
             }
         } catch (Exception e) {
             System.out.println("Error fetching assignments: " + e.getMessage());
@@ -354,5 +354,22 @@ public class CourseApiImpl implements CourseApi {
             adminId = "111111";
         }
         return adminId;
+    }
+
+    public void deleteCourse(Long courseId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString())
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/deleteCourse", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course deleted successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to delete course: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
     }
 }
