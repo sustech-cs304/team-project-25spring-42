@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1" spacing="10" alignment="CENTER_LEFT" >
+    <ImageView fx:id="avatarImage" fitWidth="32" fitHeight="32" preserveRatio="true" />
+    <VBox spacing="5">
+        <Label fx:id="nameLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <Circle fx:id="statusDot" radius="5" fill="#aaaaaa" />
+            <Label fx:id="statusLabel" style="-fx-font-size: 11px; -fx-text-fill: #777;" />
+        </HBox>
+    </VBox>
+</fx:root>

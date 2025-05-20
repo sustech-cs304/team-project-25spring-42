@@ -24,6 +24,12 @@
             <MenuItem mnemonicParsing="false" onAction="#setColorHcBlack" text="hc-black" />
          </items>
       </Menu>
+      <Menu fx:id="courseMenu" mnemonicParsing="false" text="Course">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#createCourse" text="Create Course" />
+            <MenuItem mnemonicParsing="false" onAction="#joinCourse" text="Join Course" />
+         </items>
+      </Menu>
       <Menu fx:id="terminalMenu" mnemonicParsing="false" text="Terminal">
         <items>
           <MenuItem mnemonicParsing="false" onAction="#openTerminal" text="Open" />

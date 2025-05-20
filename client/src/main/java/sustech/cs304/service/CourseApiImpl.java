@@ -315,4 +315,23 @@ public class CourseApiImpl implements CourseApi {
             System.out.println("Error uploading resource: " + e.getMessage());
         }
     }
+
+    // Get Method: create a new course
+    public void createCourse(String courseName, String adminId){
+        Query[] queries = {
+            new Query("courseName", courseName),
+            new Query("adminId", adminId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/createCourse", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course created successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to create course: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
 }

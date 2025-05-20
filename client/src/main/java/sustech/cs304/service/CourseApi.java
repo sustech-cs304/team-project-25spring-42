@@ -19,4 +19,5 @@ public interface CourseApi {
     Resource getAttachmentByAssignmentId(Long assignmentId);
     void downloadResource(String address, String savePath);
     void submitAssignment(Long assignmentId, String userId, String address);
+    void createCourse(String courseName, String userId);
 }
