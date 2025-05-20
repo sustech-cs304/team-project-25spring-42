@@ -176,7 +176,6 @@
             </padding>
          </Button>
 
-            <!-- 4. Enter Course Button -->
             <Button fx:id="deleteCourseButton" onAction="#deleteCourse" prefWidth="210.0" style="-fx-background-color: #FF5722; -fx-text-fill: white; -fx-font-size: 18;" text="Delete the Course">
                 <font>
                     <Font size="18.0" />

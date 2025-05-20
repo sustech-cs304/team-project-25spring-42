@@ -223,6 +223,7 @@ public class AuthController {
     }
     @GetMapping("/callback/loginStatus/{x}")
     public String handleCallback(@PathVariable("x") String x) {
+        System.out.println("person called");
         int statusInt = loginStatus[Integer.parseInt(x)];
         String loginIDString = loginID[Integer.parseInt(x)];
         return statusInt + " " + loginIDString;

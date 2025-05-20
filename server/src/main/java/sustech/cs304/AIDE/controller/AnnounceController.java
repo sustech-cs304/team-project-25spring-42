@@ -26,18 +26,18 @@ public class AnnounceController {
 
     @PostMapping(value = "/createAnnounce", produces = "application/json")
     @Transactional
-    public ResponseEntity<SetResponse> createAnnounce(@RequestParam String courseId, @RequestParam String announceName, @RequestParam String announceContent, @RequestParam String userId) {
+    public ResponseEntity<Boolean> createAnnounce(@RequestParam String courseId, @RequestParam String announceName, @RequestParam String announceContent, @RequestParam String userId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (!courseOptional.isPresent()){
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         String adminId = courseOptional.get().getAdminId();
         if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         Announce announce = new Announce(courseId, announceName, announceContent);
         announceRepository.save(announce);
-        return ResponseEntity.ok(new SetResponse(true));
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping(value = "/getAnnounceIdList", produces = "application/json")
@@ -106,54 +106,54 @@ public class AnnounceController {
     }
 
     @PostMapping(value = "/closeAnnounce", produces = "application/json")
-    public ResponseEntity<SetResponse> closeAnnounce(@RequestParam Long id, @RequestParam String userId) {
+    public ResponseEntity<Boolean> closeAnnounce(@RequestParam Long id, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
         if (!announceOptional.isPresent()) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         String courseId = announceOptional.get().getCourseId();
         String adminId = courseRepository.findAdminIdById(Long.parseLong(courseId));
         if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         announceRepository.updateVisibilityById(id.toString(), false);
-        return ResponseEntity.ok(new SetResponse(true));
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping(value = "/reOpenAnnounce", produces = "application/json")
-    public ResponseEntity<SetResponse> reOpenAnnounce(@RequestParam Long id, @RequestParam String userId) {
+    public ResponseEntity<Boolean> reOpenAnnounce(@RequestParam Long id, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
         if (!announceOptional.isPresent()) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         String courseId = announceOptional.get().getCourseId();
         String adminId = courseRepository.findAdminIdById(Long.parseLong(courseId));
         if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         announceRepository.updateVisibilityById(id.toString(), true);
-        return ResponseEntity.ok(new SetResponse(true));
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping(value = "/setAnnounceName", produces = "application/json")
     @Transactional
-    public ResponseEntity<SetResponse> setAnnounceName(@RequestParam Long id, @RequestParam String announceName, @RequestParam String userId) {
+    public ResponseEntity<Boolean> setAnnounceName(@RequestParam Long id, @RequestParam String announceName, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
         if (!announceOptional.isPresent()) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         String courseId = announceOptional.get().getCourseId();
         String adminId = courseRepository.findAdminIdById(Long.parseLong(courseId));
         if (!adminId.equals(userId)) {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
         announceRepository.updateAnnounceNameById(id.toString(), announceName);
-        return ResponseEntity.ok(new SetResponse(true));
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping(value = "/setAnnounceContent", produces = "application/json")
     @Transactional
-    public ResponseEntity<SetResponse> setAnnounceContent(@RequestParam Long id, @RequestParam String announceContent, @RequestParam String userId) {
+    public ResponseEntity<Boolean> setAnnounceContent(@RequestParam Long id, @RequestParam String announceContent, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
         if (announceOptional.isPresent()) {
             Announce announce = announceOptional.get();
@@ -164,15 +164,15 @@ public class AnnounceController {
                 if (course.getAdminId().equals(userId)) {
                     announce.setannounceContent(announceContent);
                     announceRepository.save(announce);
-                    return ResponseEntity.ok(new SetResponse(true));
+                    return ResponseEntity.ok(true);
                 } else {
-                    return ResponseEntity.ok(new SetResponse(false));
+                    return ResponseEntity.ok(false);
                 }
             } else {
-                return ResponseEntity.ok(new SetResponse(false));
+                return ResponseEntity.ok(false);
             }
         } else {
-            return ResponseEntity.ok(new SetResponse(false));
+            return ResponseEntity.ok(false);
         }
     }
 }
