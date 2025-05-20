@@ -1,23 +1,84 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.controller;
+
 import org.springframework.web.bind.annotation.*;
+
+import sustech.cs304.AIDE.repository.EnrollmentRepository;
+import sustech.cs304.AIDE.repository.ResourceRepository;
+import sustech.cs304.AIDE.repository.SubmissionRepository;
+import sustech.cs304.AIDE.repository.UserRepository;
+import sustech.cs304.AIDE.model.Course;
+import sustech.cs304.AIDE.model.Enrollment;
+import sustech.cs304.AIDE.model.User;
+import sustech.cs304.AIDE.repository.AnnounceRepository;
+import sustech.cs304.AIDE.repository.AssignmentRepository;
+import sustech.cs304.AIDE.repository.CourseInvitationRepository;
+import sustech.cs304.AIDE.repository.CourseRepository;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Email;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/course")
-public class CourseRelatedController {
+public class CourseController {
 
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final AssignmentRepository assignmentRepository;
+    private final ResourceRepository resourceRepository;
+    private final AnnounceRepository announceRepository;
+    private final SubmissionRepository submissionRepository;
+    private final CourseInvitationRepository courseInvitationRepository;
+    private final UserRepository userRepository;
 
-    public CourseRelatedController(CourseRepository courseRepository, EnrollmentRepository enrollmentRepository) {
+    public CourseController(
+        CourseRepository courseRepository, 
+        EnrollmentRepository enrollmentRepository, 
+        AssignmentRepository assignmentRepository,
+        ResourceRepository resourceRepository,
+        AnnounceRepository announceRepository,
+        SubmissionRepository submissionRepository,
+        CourseInvitationRepository courseInvitationRepository,
+        UserRepository userRepository
+    ) {
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
+        this.assignmentRepository = assignmentRepository;
+        this.resourceRepository = resourceRepository;
+        this.announceRepository = announceRepository;
+        this.submissionRepository = submissionRepository;
+        this.courseInvitationRepository = courseInvitationRepository;
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping(value = "/deleteCourse", produces = "application/json")
+    @Transactional
+    public ResponseEntity<SetResponse> deleteCourse(@RequestParam String courseId, @RequestParam String userId) {
+        Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            if (course.getAdminId().equals(userId)) {
+                courseRepository.delete(course);
+                courseInvitationRepository.deleteByCourseId(Long.parseLong(courseId));
+                enrollmentRepository.deleteByCourseId(Long.parseLong(courseId));
+                resourceRepository.deleteByCourseId(Long.parseLong(courseId));
+                announceRepository.deleteByCourseId(Long.parseLong(courseId));
+                List<Long> assignmentIds = assignmentRepository.findAssignmentIdByCourseId(courseId);
+                for (Long assignmentId : assignmentIds) {
+                    submissionRepository.deleteByAssignmentId(assignmentId);
+                }
+                assignmentRepository.deleteByCourseId(Long.parseLong(courseId));
+                return ResponseEntity.ok(new SetResponse(true));
+            } else {
+                return ResponseEntity.status(403).body(new SetResponse(false));
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/getCourseById", produces = "application/json")
@@ -50,12 +111,12 @@ public class CourseRelatedController {
     
     @GetMapping(value = "/getAdminId", produces = "application/json")
     @Transactional
-    public ResponseEntity<UserResponse> getAdminId(@RequestParam String courseId) {
+    public ResponseEntity<String> getAdminId(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             System.out.println("Course found: " + course.getCourseName());
-            return ResponseEntity.ok(new UserResponse(course.getAdminId()));
+            return ResponseEntity.ok(course.getAdminId());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -63,12 +124,12 @@ public class CourseRelatedController {
 
     @GetMapping(value = "/getOpenTime", produces = "application/json")
     @Transactional
-    public ResponseEntity<UserResponse> getOpenTime(@RequestParam String courseId) {
+    public ResponseEntity<String> getOpenTime(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             System.out.println("Course found: " + course.getCourseName());
-            return ResponseEntity.ok(new UserResponse(course.getOpenTime().toString()));
+            return ResponseEntity.ok(course.getOpenTime().toString());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -186,6 +247,21 @@ public class CourseRelatedController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping(value = "/getUserByCourseId", produces = "application/json")
+    @Transactional
+    public ResponseEntity<List<User>> getUserByCourseId(@RequestParam String courseId) {
+        List<String> userIdList = enrollmentRepository.findUserIdByCourseId(Long.parseLong(courseId));
+        List<User> userList = new ArrayList<>();
+        for (String userId : userIdList) {
+            Optional<User> userOptional = userRepository.findByPlatformId(userId);
+            if (userOptional.isPresent()) {
+                userList.add(userOptional.get());
+            }
+        }
+        return ResponseEntity.ok(userList);
+    }
+
 
     @PostMapping(value = "/getCourseIdList", produces = "application/json")
     public ResponseEntity<List<Long>> getCourseIdList(@RequestParam String userId) {

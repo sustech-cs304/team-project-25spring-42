@@ -1,5 +1,7 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.model;
+
 import java.time.LocalDateTime;
+
 public interface AnnounceProjection {
     Long getId();
     String getCourseId();

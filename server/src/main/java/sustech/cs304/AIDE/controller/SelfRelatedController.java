@@ -1,5 +1,10 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.controller;
+
 import org.springframework.web.bind.annotation.*;
+
+import sustech.cs304.AIDE.model.User;
+import sustech.cs304.AIDE.repository.UserRepository;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;

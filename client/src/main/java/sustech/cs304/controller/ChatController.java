@@ -1,14 +1,22 @@
 package sustech.cs304.controller;
 
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import sustech.cs304.App;
+import sustech.cs304.controller.components.button.FriendButton;
+import sustech.cs304.entity.Friend;
+import sustech.cs304.utils.AlterUtils;
 
 public class ChatController {
 
@@ -19,23 +27,42 @@ public class ChatController {
     private TextArea messageField;
 
     @FXML
-    private ListView<String> contactsList;
+    private ListView<Friend> contactsList;
 
     @FXML
     private Label chatPartnerLabel;
 
-    private String currentContact = null;
+    private Friend currentContact = null;
 
     @FXML
     private void initialize() {
-        contactsList.getItems().addAll("Gemini", "Deepseek", "ChatGPT");
+        contactsList.setCellFactory(list -> new ListCell<Friend>() {
+            @Override
+            protected void updateItem(Friend item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    FriendButton button = new FriendButton();
+                    button.setName(item.getName()); 
+                    button.setStatus(item.getStatus());
+                    button.setAvatar(item.getAvatar() != null ? new Image(item.getAvatar()) : null);
+                    setGraphic(button);
+                }
+            }
+        });
+        contactsList.getItems().addAll(
+                new Friend("Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
+                new Friend("Deepseek", "Bot", getClass().getResource("/img/deepseek.png").toString()),
+                new Friend("ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString())
+        );
         // TODO: Get the friends list from the server
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(currentContact)) {
                 currentContact = newVal;
                 chatBox.getChildren().clear();
-                chatPartnerLabel.setText(newVal);
+                chatPartnerLabel.setText(newVal.getName());
             }
         });
         //enter to send message
@@ -53,9 +80,9 @@ public class ChatController {
             addUserMessage(message);
             // TODO: Send the message to the server
             messageField.clear();
-            if (currentContact == "Gemini" || currentContact == "Deepseek" || currentContact == "ChatGPT") {
+            if (currentContact.getName() == "Gemini" || currentContact.getName() == "Deepseek" || currentContact.getName() == "ChatGPT") {
                 // Simulate a response from the AI
-                String response = getAIResponse(message, currentContact);
+                String response = getAIResponse(message, currentContact.getName());
                 showReceivedMessage(response);
             }
         }
@@ -109,4 +136,9 @@ public class ChatController {
         return response;
     }
 
+    @FXML
+    private void showNewRequestList() {
+        AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), List.of(App.user));
+
+    }
 }

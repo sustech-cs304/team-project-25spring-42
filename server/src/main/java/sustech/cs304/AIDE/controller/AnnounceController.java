@@ -1,11 +1,16 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.controller;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
-import java.time.LocalDateTime;
 import java.util.List;
-import sustech.cs304.AIDE.Elements.Course;
+
+import sustech.cs304.AIDE.model.Announce;
+import sustech.cs304.AIDE.model.AnnounceProjection;
+import sustech.cs304.AIDE.model.Course;
+import sustech.cs304.AIDE.repository.AnnounceRepository;
+import sustech.cs304.AIDE.repository.CourseRepository;
 
 @RestController
 @RequestMapping("/announce")

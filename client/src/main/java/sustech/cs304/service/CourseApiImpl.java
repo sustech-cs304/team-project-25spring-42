@@ -22,7 +22,10 @@ import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Query;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
+import sustech.cs304.entity.UserServerSide;
 import sustech.cs304.utils.HttpUtils;
+import sustech.cs304.utils.UserUtils;
 
 public class CourseApiImpl implements CourseApi {
 
@@ -106,9 +109,9 @@ public class CourseApiImpl implements CourseApi {
                 Type listType = new TypeToken<List<Resource>>() {}.getType();
                 resourceList = new Gson().fromJson(responseBody, listType);
             } else {
-                System.out.println("No resources found for course ID: " + courseId);
-                Resource resource = new Resource(11111L, "test", "test", "test", null, 11111L, "test", true);
-                resourceList = List.of(resource);
+                // System.out.println("No resources found for course ID: " + courseId);
+                // Resource resource = new Resource(11111L, "test", "test", "test", null, 11111L, "test", true);
+                resourceList = null;
             }
         } catch (Exception e) {
             System.out.println("Error fetching resources: " + e.getMessage());
@@ -131,9 +134,9 @@ public class CourseApiImpl implements CourseApi {
                 Type listType = new TypeToken<List<Assignment>>() {}.getType();
                 assignmentList = new Gson().fromJson(responseBody, listType);
             } else {
-                System.out.println("No assignments found for course ID: " + courseId);
-                Assignment assignment = new Assignment(11111L, "test", "test", "test", true, null, null, null);
-                assignmentList = List.of(assignment);
+                // System.out.println("No assignments found for course ID: " + courseId);
+                // Assignment assignment = new Assignment(11111L, "test", "test", "test", true, null, null, null);
+                assignmentList = null;
             }
         } catch (Exception e) {
             System.out.println("Error fetching assignments: " + e.getMessage());
@@ -314,5 +317,173 @@ public class CourseApiImpl implements CourseApi {
         } catch (Exception e) {
             System.out.println("Error uploading resource: " + e.getMessage());
         }
+    }
+
+    // Get Method: create a new course
+    public void createCourse(String courseName, String adminId){
+        Query[] queries = {
+            new Query("courseName", courseName),
+            new Query("adminId", adminId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/createCourse", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course created successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to create course: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public String getAdminIdByCourseId(Long courseId) {
+        String adminId = null;
+        Query[] queries = {
+            new Query("courseId", courseId.toString())
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/getAdminId", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Gson gson = new Gson();
+                adminId = gson.fromJson(responseBody, String.class);
+            } else {
+                throw new RuntimeException("Failed to get admin ID: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            adminId = "111111";
+        }
+        return adminId;
+    }
+
+    public void deleteCourse(Long courseId, String adminId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userId", adminId)
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/deleteCourse", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course deleted successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to delete course: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public List<User> getUserByCourseId(Long courseId) {
+        List<UserServerSide> userSidesList = null;
+        Query[] queries = {
+            new Query("courseId", courseId.toString())
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/getUserByCourseId", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<UserServerSide>>() {}.getType();
+                userSidesList = new Gson().fromJson(responseBody, listType);
+            } else {
+                throw new RuntimeException("Failed to get users by course ID: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+
+        }
+        if (userSidesList == null || userSidesList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<User> userList = new ArrayList<>();
+        for (UserServerSide userServerSide :userSidesList) {
+            User user = UserUtils.loadUser(userServerSide);
+            userList.add(user);
+        }
+        return userList;
+    }
+
+    public void createCourseInvitation(Long courseId, List<String> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return;
+        }
+        String joinedUserIds = String.join(",", userIds);
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userIds", joinedUserIds)
+        };
+        try {
+            Response response = HttpUtils.get("/course-invitation", "/createInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation created successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to create course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+
+    }
+
+    public void acceptCourseInvitation(Long courseId, String userId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course-invitation", "/acceptInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation accepted successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to accept course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void rejectCourseInvitation(Long courseId, String userId) {
+        Query[] queries = {
+            new Query("courseId", courseId.toString()),
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course-invitation", "/rejectInvitation", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                System.out.println("Course invitation rejected successfully: " + responseBody);
+            } else {
+                throw new RuntimeException("Failed to reject course invitation: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public List<Course> getCourseInvitationByUserId(String userId) {
+        List<Course> courseList = null;
+        Query[] queries = {
+            new Query("userId", userId)
+        };
+        try {
+            Response response = HttpUtils.get("/course-invitation", "/getInvitationCourses", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<Course>>() {}.getType();
+                courseList = new Gson().fromJson(responseBody, listType);
+            } else {
+                throw new RuntimeException("Failed to get course invitations: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            Course course = new Course((Long) 111111L, "DSAA", "admin", "2023-10-01", "2023-10-31", true);
+            courseList = List.of(course);
+        }
+        return courseList;
     }
 }

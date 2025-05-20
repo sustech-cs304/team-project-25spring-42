@@ -10,6 +10,7 @@ import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
@@ -29,6 +30,7 @@ public class StudentCourseController {
     @FXML private TableView<ResourceItem> resourceTable;
     @FXML private TableView<AssignmentItem> assignmentTable;
     @FXML private Button enterCourseBtn;
+    @FXML private Label courseIdLabel;
 
     private CourseApi courseApi;
     private Long courseId;
@@ -47,11 +49,15 @@ public class StudentCourseController {
     public void setTitle(String courseName, String teacherName) {
         this.courseTitle.setText(courseName);
         this.teacherName.setText(teacherName);
+        this.courseIdLabel.setText("Course ID: " + courseId);
 
     }
 
     private void initializeAnnouncements() {
         List<Announce> announcements = courseApi.getAnnounceByCourseId(courseId);
+        if (announcements == null || announcements.isEmpty()) {
+            return;
+        }
         ObservableList<AnnouncementItem> announcementItems = FXCollections.observableArrayList();
         for (Announce announce : announcements) {
             announcementItems.add(new AnnouncementItem(announce));
@@ -85,6 +91,9 @@ public class StudentCourseController {
 
     private void initializeResources() {
         List<Resource> resources = courseApi.getResourceByCourseId(courseId);
+        if (resources == null || resources.isEmpty()) {
+            return;
+        }
         ObservableList<ResourceItem> resourceItems = FXCollections.observableArrayList();
         for (Resource resource : resources) {
             resourceItems.add(new ResourceItem(resource));
@@ -125,6 +134,9 @@ public class StudentCourseController {
 
     private void initializeAssignment() {
         List<Assignment> assignments = courseApi.getAssignmentByCourseId(courseId, App.user.getUserId());
+        if (assignments == null || assignments.isEmpty()) {
+            return;
+        }
         ObservableList<AssignmentItem> assignmentItems = FXCollections.observableArrayList();
         for (Assignment assignment : assignments) {
             assignmentItems.add(new AssignmentItem(assignment));
@@ -198,36 +210,11 @@ public class StudentCourseController {
         });
     }
 
+    
     @FXML
-    private void searchResources() {
-    }
-
-    @FXML
-    private void uploadResource() {
-        // Implement resource upload
-        System.out.println("Upload resource button clicked");
-    }
-
-    @FXML
-    private void viewAllHomework() {
-        // Implement view all homework
-        System.out.println("View all homework button clicked");
-    }
-
-    @FXML
-    private void enterClassroom() {
-        // Implement enter classroom
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/classroom.fxml"));
-            Parent classroomPage = loader.load();
-
-            ClassroomController controller = loader.getController();
-            controller.setCourseId(courseId);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Enter course button clicked");
+    private void showMemberList() {
+        List<User> members = courseApi.getUserByCourseId(courseId);
+        AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), members);
     }
 
     public void setCourseId(Long courseId) {

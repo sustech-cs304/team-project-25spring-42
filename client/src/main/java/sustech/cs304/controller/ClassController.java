@@ -50,14 +50,15 @@ public class ClassController {
         initializeClassChoiceScroll();
     }
 
-    private void initializeClassChoiceScroll() {
+    public void initializeClassChoiceScroll() {
+        this.contentBox.getChildren().clear();
         List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
         for (Long courseId : courseIds) {
             Course course = courseApi.getCourseById(courseId);
             String teacherName = App.userApi.getUsernameById(course.getAdminId());
             if (course != null) {
                 addCourseButton(course.getCourseName(), teacherName,
-                        course.isOpening(), "/img/x.png", courseId);
+                        course.isOpening(), "/img/course.png", courseId);
             }
         }
     }
@@ -72,7 +73,7 @@ public class ClassController {
             Image img = new Image(getClass().getResourceAsStream(imagePath));
             btn.setCourseImage(img);
         } catch (Exception e) {
-            System.err.println("无法加载图片: " + imagePath);
+            System.err.println("Cant load image: " + imagePath);
 
         }
 
@@ -97,8 +98,8 @@ public class ClassController {
         try {
             FXMLLoader loader;
             Parent coursePage;
-            // Todo: Add a check for user type
-            if (false) {
+            String adminId = courseApi.getAdminIdByCourseId(courseId);
+            if (!App.user.getUserId().equals(adminId)) {
                 loader = new FXMLLoader(getClass().getResource("/fxml/studentCourse.fxml"));
                 coursePage = loader.load();
                 StudentCourseController controller = loader.getController();

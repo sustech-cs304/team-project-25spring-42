@@ -25,7 +25,7 @@ public class ClassButton extends Button {
     public ClassButton() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ClassButton.fxml"));
         loader.setRoot(this);
-        loader.setController(this);  // 在这里设置控制器
+        loader.setController(this);
 
         try {
             loader.load();

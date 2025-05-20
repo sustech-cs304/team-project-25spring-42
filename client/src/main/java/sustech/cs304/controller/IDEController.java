@@ -42,6 +42,9 @@ public class IDEController {
     private JeditermController jeditermController;
 
     @FXML
+    private ClassController classController;
+
+    @FXML
     private Label welcomeLabel;
 
     @FXML
@@ -77,7 +80,9 @@ public class IDEController {
 
         ideContent = new ArrayList<>(modePane.getChildren());
         try {
-            classContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/class.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/class.fxml"));
+            classContent = loader.load();
+            classController = loader.getController();
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
             chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chat.fxml")));
         } catch(IOException e) {
@@ -124,6 +129,11 @@ public class IDEController {
     public JeditermController getJeditermController() {
         return jeditermController;
     }
+
+    public ClassController getClassController() {
+        return classController;
+    }
+
 
     @FXML
     private void switchToEditor() {

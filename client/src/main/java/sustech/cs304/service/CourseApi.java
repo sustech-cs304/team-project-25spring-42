@@ -6,6 +6,7 @@ import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
 
 public interface CourseApi {
     List<Long> getCourseIdByUserId(String userId);
@@ -19,4 +20,13 @@ public interface CourseApi {
     Resource getAttachmentByAssignmentId(Long assignmentId);
     void downloadResource(String address, String savePath);
     void submitAssignment(Long assignmentId, String userId, String address);
+    void createCourse(String courseName, String userId);
+    String getAdminIdByCourseId(Long courseId);
+    void deleteCourse(Long courseId, String adminId);
+    List<User> getUserByCourseId(Long courseId);
+
+    void createCourseInvitation(Long courseId, List<String> userIds);
+    void acceptCourseInvitation(Long courseId, String userId);
+    void rejectCourseInvitation(Long courseId, String userId);
+    List<Course> getCourseInvitationByUserId(String userId);
 }

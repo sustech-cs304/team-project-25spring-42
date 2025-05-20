@@ -1,14 +1,21 @@
-package sustech.cs304.AIDE.Elements;
+package sustech.cs304.AIDE.controller;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import java.util.List;
-import sustech.cs304.AIDE.Elements.Assignment;
-import sustech.cs304.AIDE.Elements.Course;
-import sustech.cs304.AIDE.Elements.Resource;
-import sustech.cs304.AIDE.Elements.Submission;
+
+import sustech.cs304.AIDE.model.Assignment;
+import sustech.cs304.AIDE.model.Course;
+import sustech.cs304.AIDE.model.Resource;
+import sustech.cs304.AIDE.model.Submission;
+import sustech.cs304.AIDE.repository.AssignmentRepository;
+import sustech.cs304.AIDE.repository.CourseRepository;
+import sustech.cs304.AIDE.repository.ResourceRepository;
+import sustech.cs304.AIDE.repository.SubmissionRepository;
+
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
