@@ -16,12 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/course")
-public class CourseRelatedController {
+public class CourseController {
 
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
 
-    public CourseRelatedController(CourseRepository courseRepository, EnrollmentRepository enrollmentRepository) {
+    public CourseController(CourseRepository courseRepository, EnrollmentRepository enrollmentRepository) {
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
     }
@@ -69,12 +69,12 @@ public class CourseRelatedController {
 
     @GetMapping(value = "/getOpenTime", produces = "application/json")
     @Transactional
-    public ResponseEntity<UserResponse> getOpenTime(@RequestParam String courseId) {
+    public ResponseEntity<String> getOpenTime(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             System.out.println("Course found: " + course.getCourseName());
-            return ResponseEntity.ok(new UserResponse(course.getOpenTime().toString()));
+            return ResponseEntity.ok(course.getOpenTime().toString());
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -99,7 +99,9 @@ public class ClassController {
             FXMLLoader loader;
             Parent coursePage;
             // Todo: Add a check for user type
-            if (false) {
+            String adminId = courseApi.getAdminIdByCourseId(courseId);
+            System.out.println("adminId: " + adminId);
+            if (!App.user.getUserId().equals(adminId)) {
                 loader = new FXMLLoader(getClass().getResource("/fxml/studentCourse.fxml"));
                 coursePage = loader.load();
                 StudentCourseController controller = loader.getController();

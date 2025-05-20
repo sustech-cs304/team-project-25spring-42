@@ -334,4 +334,25 @@ public class CourseApiImpl implements CourseApi {
             System.err.println("Error: " + e.getMessage());
         }
     }
+
+    public String getAdminIdByCourseId(Long courseId) {
+        String adminId = null;
+        Query[] queries = {
+            new Query("courseId", courseId.toString())
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/getAdminId", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Gson gson = new Gson();
+                adminId = gson.fromJson(responseBody, String.class);
+            } else {
+                throw new RuntimeException("Failed to get admin ID: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            adminId = "111111";
+        }
+        return adminId;
+    }
 }
