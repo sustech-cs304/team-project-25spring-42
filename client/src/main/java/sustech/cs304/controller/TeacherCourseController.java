@@ -242,7 +242,7 @@ public class TeacherCourseController {
         );
 
         if (confirm) {
-            courseApi.deleteCourse(courseId);
+            courseApi.deleteCourse(courseId, App.user.getUserId());
         }
     }
 

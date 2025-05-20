@@ -88,4 +88,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     @Transactional
     @Query("UPDATE Resource r SET r.address = :address WHERE r.id = :id")
     int updateAddressById(@Param("id") Long id, @Param("address") String address);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Resource r WHERE r.courseId = :courseId")
+    void deleteByCourseId(@Param("courseId") Long courseId);
 }

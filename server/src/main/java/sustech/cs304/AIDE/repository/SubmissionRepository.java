@@ -26,4 +26,11 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     @Transactional
     @Query("UPDATE Submission s SET s.address = :address WHERE s.id = :id")
     int updateAddressById(@Param("id") Long id, @Param("address") String address);
+
+    // delete by assignmentid
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Submission s WHERE s.assignmentId = :assignmentId")
+    void deleteByAssignmentId(@Param("assignmentId") Long assignmentId);
+
 }

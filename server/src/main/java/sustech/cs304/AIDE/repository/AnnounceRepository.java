@@ -39,4 +39,9 @@ public interface AnnounceRepository extends JpaRepository<Announce, Long> {
     @Transactional
     @Query("UPDATE Announce a SET a.announceContent = :announceContent WHERE a.id = :id")
     int updateAnnounceContentById(@Param("id") String id, @Param("announceContent") String announceContent);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Announce a WHERE a.courseId = :courseId")
+    void deleteByCourseId(@Param("courseId") Long courseId);
 }

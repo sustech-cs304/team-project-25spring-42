@@ -356,9 +356,10 @@ public class CourseApiImpl implements CourseApi {
         return adminId;
     }
 
-    public void deleteCourse(Long courseId) {
+    public void deleteCourse(Long courseId, String adminId) {
         Query[] queries = {
-            new Query("courseId", courseId.toString())
+            new Query("courseId", courseId.toString()),
+            new Query("userId", adminId)
         };
         try {
             Response response = HttpUtils.get("/course", "/deleteCourse", queries);

@@ -13,4 +13,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     @Query("SELECT e.courseId FROM Enrollment e WHERE e.userId = :userId")
     List<Long> findCourseIdByUserId(@Param("userId") String userId);
+
+    @Query("DELETE FROM Enrollment e WHERE e.courseId = :courseId")
+    void deleteByCourseId(@Param("courseId") Long courseId);
 }

@@ -3,8 +3,12 @@ package sustech.cs304.AIDE.controller;
 import org.springframework.web.bind.annotation.*;
 
 import sustech.cs304.AIDE.repository.EnrollmentRepository;
+import sustech.cs304.AIDE.repository.ResourceRepository;
+import sustech.cs304.AIDE.repository.SubmissionRepository;
 import sustech.cs304.AIDE.model.Course;
 import sustech.cs304.AIDE.model.Enrollment;
+import sustech.cs304.AIDE.repository.AnnounceRepository;
+import sustech.cs304.AIDE.repository.AssignmentRepository;
 import sustech.cs304.AIDE.repository.CourseRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +24,25 @@ public class CourseController {
 
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final AssignmentRepository assignmentRepository;
+    private final ResourceRepository resourceRepository;
+    private final AnnounceRepository announceRepository;
+    private final SubmissionRepository submissionRepository;
 
-    public CourseController(CourseRepository courseRepository, EnrollmentRepository enrollmentRepository) {
+    public CourseController(
+        CourseRepository courseRepository, 
+        EnrollmentRepository enrollmentRepository, 
+        AssignmentRepository assignmentRepository,
+        ResourceRepository resourceRepository,
+        AnnounceRepository announceRepository,
+        SubmissionRepository submissionRepository
+    ) {
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
+        this.assignmentRepository = assignmentRepository;
+        this.resourceRepository = resourceRepository;
+        this.announceRepository = announceRepository;
+        this.submissionRepository = submissionRepository;
     }
 
     @GetMapping(value = "/deleteCourse", produces = "application/json")
@@ -34,7 +53,14 @@ public class CourseController {
             Course course = courseOptional.get();
             if (course.getAdminId().equals(userId)) {
                 courseRepository.delete(course);
-                System.out.println("Course deleted: " + course.getCourseName());
+                enrollmentRepository.deleteByCourseId(Long.parseLong(courseId));
+                resourceRepository.deleteByCourseId(Long.parseLong(courseId));
+                announceRepository.deleteByCourseId(Long.parseLong(courseId));
+                List<Long> assignmentIds = assignmentRepository.findAssignmentIdByCourseId(courseId);
+                for (Long assignmentId : assignmentIds) {
+                    submissionRepository.deleteByAssignmentId(assignmentId);
+                }
+                assignmentRepository.deleteByCourseId(Long.parseLong(courseId));
                 return ResponseEntity.ok(new SetResponse(true));
             } else {
                 return ResponseEntity.status(403).body(new SetResponse(false));

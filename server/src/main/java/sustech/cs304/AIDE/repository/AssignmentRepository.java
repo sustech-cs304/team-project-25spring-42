@@ -1,10 +1,13 @@
 package sustech.cs304.AIDE.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+
 import java.util.Optional;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import sustech.cs304.AIDE.model.Assignment;
 
@@ -27,4 +30,9 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
     @Query("SELECT a.courseId FROM Assignment a WHERE a.id = :id")
     String findCourseIdById(@Param("id") Long id);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Assignment a WHERE a.courseId = :courseId")
+    void deleteByCourseId(@Param("courseId") Long courseId);
 }

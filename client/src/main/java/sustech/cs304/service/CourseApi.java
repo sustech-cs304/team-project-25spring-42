@@ -21,5 +21,5 @@ public interface CourseApi {
     void submitAssignment(Long assignmentId, String userId, String address);
     void createCourse(String courseName, String userId);
     String getAdminIdByCourseId(Long courseId);
-    void deleteCourse(Long courseId);
+    void deleteCourse(Long courseId, String adminId);
 }
