@@ -249,11 +249,7 @@ public class TeacherCourseController {
 
     @FXML
     private void showMemberList() {
-        // TODO: Implement member list functionality
         List<User> members = courseApi.getUserByCourseId(courseId);
-        for(User member : members) {
-            System.out.println(member.getUsername());
-        }
         AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), members);
     }
 
