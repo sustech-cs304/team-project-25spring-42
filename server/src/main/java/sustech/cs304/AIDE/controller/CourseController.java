@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import sustech.cs304.AIDE.repository.EnrollmentRepository;
 import sustech.cs304.AIDE.repository.ResourceRepository;
 import sustech.cs304.AIDE.repository.SubmissionRepository;
+import sustech.cs304.AIDE.repository.UserRepository;
 import sustech.cs304.AIDE.model.Course;
 import sustech.cs304.AIDE.model.Enrollment;
+import sustech.cs304.AIDE.model.User;
 import sustech.cs304.AIDE.repository.AnnounceRepository;
 import sustech.cs304.AIDE.repository.AssignmentRepository;
 import sustech.cs304.AIDE.repository.CourseInvitationRepository;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +33,7 @@ public class CourseController {
     private final AnnounceRepository announceRepository;
     private final SubmissionRepository submissionRepository;
     private final CourseInvitationRepository courseInvitationRepository;
+    private final UserRepository userRepository;
 
     public CourseController(
         CourseRepository courseRepository, 
@@ -38,7 +42,8 @@ public class CourseController {
         ResourceRepository resourceRepository,
         AnnounceRepository announceRepository,
         SubmissionRepository submissionRepository,
-        CourseInvitationRepository courseInvitationRepository
+        CourseInvitationRepository courseInvitationRepository,
+        UserRepository userRepository
     ) {
         this.courseRepository = courseRepository;
         this.enrollmentRepository = enrollmentRepository;
@@ -47,6 +52,7 @@ public class CourseController {
         this.announceRepository = announceRepository;
         this.submissionRepository = submissionRepository;
         this.courseInvitationRepository = courseInvitationRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping(value = "/deleteCourse", produces = "application/json")
@@ -241,6 +247,21 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping(value = "/getUserByCourseId", produces = "application/json")
+    @Transactional
+    public ResponseEntity<List<User>> getUserByCourseId(@RequestParam String courseId) {
+        List<String> userIdList = enrollmentRepository.findUserIdByCourseId(Long.parseLong(courseId));
+        List<User> userList = new ArrayList<>();
+        for (String userId : userIdList) {
+            Optional<User> userOptional = userRepository.findByPlatformId(userId);
+            if (userOptional.isPresent()) {
+                userList.add(userOptional.get());
+            }
+        }
+        return ResponseEntity.ok(userList);
+    }
+
 
     @PostMapping(value = "/getCourseIdList", produces = "application/json")
     public ResponseEntity<List<Long>> getCourseIdList(@RequestParam String userId) {

@@ -629,7 +629,25 @@ public class AlterUtils {
                     setGraphic(hbox);
                 }
             }
+
         });
+        tableView.getColumns().addAll(courseNameCol, courseIdCol, actionCol);
+        tableView.getItems().addAll(courses);
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10, okButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+        VBox vbox = new VBox(10, tableView, buttonBox);
+        vbox.setPadding(new Insets(20));
+        Scene dialogScene = new Scene(vbox, 500, 350);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+        dialogStage.setScene(dialogScene);
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
     }
 
 }

@@ -211,7 +211,8 @@ public class MenuBarController {
         CourseApiImpl courseApi = new CourseApiImpl();
         String userId = App.user.getUserId();
         List<Course> courseList = courseApi.getCourseInvitationByUserId(userId);
-
+        AlterUtils.showInvitationList((Stage) this.menuBar.getScene().getWindow(), courseList);
+        ideController.getClassController().initializeClassChoiceScroll();
     }
 
 }

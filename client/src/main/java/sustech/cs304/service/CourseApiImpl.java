@@ -22,7 +22,10 @@ import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Query;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
+import sustech.cs304.entity.UserServerSide;
 import sustech.cs304.utils.HttpUtils;
+import sustech.cs304.utils.UserUtils;
 
 public class CourseApiImpl implements CourseApi {
 
@@ -374,6 +377,35 @@ public class CourseApiImpl implements CourseApi {
         }
     }
 
+    public List<User> getUserByCourseId(Long courseId) {
+        List<UserServerSide> userSidesList = null;
+        Query[] queries = {
+            new Query("courseId", courseId.toString())
+        };
+        try {
+            Response response = HttpUtils.get("/course", "/getUserByCourseId", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<UserServerSide>>() {}.getType();
+                userSidesList = new Gson().fromJson(responseBody, listType);
+            } else {
+                throw new RuntimeException("Failed to get users by course ID: " + response.message());
+            }
+        } catch(Exception e) {
+            System.err.println("Error: " + e.getMessage());
+
+        }
+        if (userSidesList == null || userSidesList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<User> userList = new ArrayList<>();
+        for (UserServerSide userServerSide :userSidesList) {
+            User user = UserUtils.loadUser(userServerSide);
+            userList.add(user);
+        }
+        return userList;
+    }
+
     public void createCourseInvitation(Long courseId, List<String> userIds) {
         if (userIds == null || userIds.isEmpty()) {
             return;
@@ -384,7 +416,7 @@ public class CourseApiImpl implements CourseApi {
             new Query("userIds", joinedUserIds)
         };
         try {
-            Response response = HttpUtils.get("/course", "/createInvitation", queries);
+            Response response = HttpUtils.get("/course-invitation", "/createInvitation", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 System.out.println("Course invitation created successfully: " + responseBody);
@@ -403,7 +435,7 @@ public class CourseApiImpl implements CourseApi {
             new Query("userId", userId)
         };
         try {
-            Response response = HttpUtils.get("/course", "/acceptInvitation", queries);
+            Response response = HttpUtils.get("/course-invitation", "/acceptInvitation", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 System.out.println("Course invitation accepted successfully: " + responseBody);
@@ -421,7 +453,7 @@ public class CourseApiImpl implements CourseApi {
             new Query("userId", userId)
         };
         try {
-            Response response = HttpUtils.get("/course", "/rejectInvitation", queries);
+            Response response = HttpUtils.get("/course-invitation", "/rejectInvitation", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 System.out.println("Course invitation rejected successfully: " + responseBody);
@@ -439,7 +471,7 @@ public class CourseApiImpl implements CourseApi {
             new Query("userId", userId)
         };
         try {
-            Response response = HttpUtils.get("/course", "/getInvitationCourses", queries);
+            Response response = HttpUtils.get("/course-invitation", "/getInvitationCourses", queries);
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 Type listType = new TypeToken<List<Course>>() {}.getType();

@@ -9,6 +9,7 @@ import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
@@ -206,9 +207,15 @@ public class StudentCourseController {
         });
     }
 
+    
     @FXML
     private void showMemberList() {
-        AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), List.of(App.user));
+        // TODO: Implement member list functionality
+        List<User> members = courseApi.getUserByCourseId(courseId);
+        for(User member : members) {
+            System.out.println(member.getUsername());
+        }
+        AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), members);
     }
 
     public void setCourseId(Long courseId) {
