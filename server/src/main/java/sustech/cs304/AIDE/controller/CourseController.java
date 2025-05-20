@@ -56,12 +56,12 @@ public class CourseController {
     
     @GetMapping(value = "/getAdminId", produces = "application/json")
     @Transactional
-    public ResponseEntity<UserResponse> getAdminId(@RequestParam String courseId) {
+    public ResponseEntity<String> getAdminId(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             System.out.println("Course found: " + course.getCourseName());
-            return ResponseEntity.ok(new UserResponse(course.getAdminId()));
+            return ResponseEntity.ok(course.getAdminId());
         } else {
             return ResponseEntity.notFound().build();
         }
