@@ -2,16 +2,16 @@ package sustech.cs304.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sustech.cs304.App;
+import sustech.cs304.controller.components.button.FriendButton;
 import sustech.cs304.service.StompChatClient;
+import sustech.cs304.service.clients.GeminiClient;
 import sustech.cs304.entity.Friend;
 import sustech.cs304.entity.User;
 import sustech.cs304.service.FriendApi;
@@ -51,30 +51,31 @@ public class ChatController {
             e.printStackTrace();
         }
 
-        // 联系人列表配置
-        contactsList.setCellFactory(list -> new ListCell<>() {
+        contactsList.setCellFactory(list -> new ListCell<Friend>() {
             @Override
             protected void updateItem(Friend item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    Label label = new Label(item.getName());
-                    label.setGraphic(new ImageView(new Image(item.getAvatar())));
-                    setGraphic(label);
+                    FriendButton button = new FriendButton();
+                    button.setName(item.getName()); 
+                    button.setStatus(item.getStatus());
+                    button.setAvatar(item.getAvatar() != null ? new Image(item.getAvatar()) : null);
+                    setGraphic(button);
                 }
             }
         });
-
         contactsList.getItems().addAll(
-                new Friend("Gemini", "Bot", getClass().getResource("/img/gemini.png").toString())
-                // 可添加更多
+            new Friend("Bot", "Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
+            new Friend("Bot", "ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString()),
+            new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
         );
 
         FriendApi friendApi = new FriendApiImpl();
         List<User> friendList = friendApi.getFriendList(App.user.getUserId());
         for (User user : friendList) {
-            contactsList.getItems().add(new Friend(user.getUsername(), "Friend", getClass().getResource("/img/user-black.png").toString()));
+            contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", getClass().getResource("/img/user-black.png").toString()));
         }
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -100,8 +101,36 @@ public class ChatController {
             addUserMessage(message);
             messageField.clear();
 
+            String contactName = currentContact.getName();
+            
+            if (contactName.equals("Gemini")) {
+                final String model = "gemini-2.0-flash";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            } else if (contactName.equals("ChatGPT")) {
+                final String model = "gpt-3.5-turbo";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            } else if (contactName.equals("DeepSeek")) {
+                final String model = "deepseek-chat";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            }
+            
             try {
-                client.sendPrivateMessage(currentContact.getName(), message); // 注意这里用的是名字
+                client.sendPrivateMessage(currentContact.getId(), message);
             } catch (Exception e) {
                 e.printStackTrace();
             }

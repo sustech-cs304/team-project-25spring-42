@@ -1,5 +1,7 @@
 package sustech.cs304.AIDE.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -21,6 +23,7 @@ public class ChatController {
     @MessageMapping("/chat/private")
     public void sendPrivateMessage(@Payload ChatMessage message) {
         // Save the message to the database
+        message.setTimestamp(LocalDateTime.now());
         chatMessageRepository.save(message);
 
         // Send the message to the specific user
@@ -34,6 +37,7 @@ public class ChatController {
     @MessageMapping("/chat/group")
     public void sendGroupMessage(@Payload ChatMessage message) {
         // Save the message to the database
+        message.setTimestamp(LocalDateTime.now());
         chatMessageRepository.save(message);
 
         // Send the message to the group
@@ -42,5 +46,4 @@ public class ChatController {
             message
         );
     }
-
 }
