@@ -10,6 +10,7 @@ import sustech.cs304.entity.User;
 
 public interface CourseApi {
     List<Long> getCourseIdByUserId(String userId);
+    List<Course> getCourseByUserId(String userId);
     Course getCourseById(Long courseId);
     List<Announce> getAnnounceByCourseId(Long courseId);
     Boolean createAnnouncment(Long courseId, String announceName, String announceContent, String userId);

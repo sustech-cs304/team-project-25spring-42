@@ -39,7 +39,7 @@ public class FriendButton extends HBox {
             statusDot.setFill(Color.LIMEGREEN);
         } else if ("Bot".equals(status)) {
             statusDot.setFill(Color.BLUE);
-        } else if ("Group".equals(status)) {
+        } else if ("Course".equals(status)) {
             statusDot.setFill(Color.ORANGE);
         } else {
             statusDot.setFill(Color.GRAY);

@@ -2,7 +2,6 @@ package sustech.cs304.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -15,11 +14,13 @@ import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.controller.components.button.FriendButton;
 import sustech.cs304.service.StompChatClient;
-import sustech.cs304.service.clients.GeminiClient;
 import sustech.cs304.entity.Friend;
 import sustech.cs304.entity.User;
+import sustech.cs304.entity.Course;
 import sustech.cs304.service.FriendApi;
+import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.FriendApiImpl;
+import sustech.cs304.service.CourseApiImpl;
 import sustech.cs304.utils.AlterUtils;
 import sustech.cs304.service.ChatApi;
 import sustech.cs304.service.ChatApiImpl;
@@ -97,6 +98,15 @@ public class ChatController {
             new Friend("Bot", "ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString()),
             new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
         );
+
+        CourseApi courseApi = new CourseApiImpl();
+        List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
+        for (Course course : courses) {
+            String courseName = course.getCourseName();
+            String courseId = String.valueOf(course.getId());
+            String avatarUrl = getClass().getResource("/img/course.png").toString();
+            contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
+        }
 
         FriendApi friendApi = new FriendApiImpl();
         List<User> friendList = friendApi.getFriendList(App.user.getUserId());

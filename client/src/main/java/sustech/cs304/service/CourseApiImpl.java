@@ -54,6 +54,32 @@ public class CourseApiImpl implements CourseApi {
         return courseIds;
     }
 
+    public List<Course> getCourseByUserId(String userId) {
+        List<Course> courseList = null;
+
+        RequestBody body = new FormBody.Builder()
+            .add("userId", userId)
+            .build();
+
+        try (Response response = HttpUtils.postForm("/course", "/getCourseList", body)) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<Course>>() {}.getType();
+                courseList = new Gson().fromJson(responseBody, listType);
+            } else {
+                courseList = new ArrayList<>();
+                Course course = new Course((Long) 111111L, "DSAA", "admin", "2023-10-01", "2023-10-31", true);
+                courseList.add(course);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching courses: " + e.getMessage());
+            Course course = new Course((Long) 111111L, "DSAA", "admin", "2023-10-01", "2023-10-31", true);
+            courseList = List.of(course);
+        }
+
+        return courseList;
+    }
+
     public Course getCourseById(Long courseId) {
         Course course = null;
         Query[] queries = {
