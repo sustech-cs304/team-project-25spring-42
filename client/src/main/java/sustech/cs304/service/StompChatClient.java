@@ -110,4 +110,11 @@ public class StompChatClient extends WebSocketClient {
         );
         send(sendFrame("/app/chat/group", mapper.writeValueAsString(msg)));
     }
+
+    public void disconnect() {
+        if (this.isOpen()) {
+            this.close();
+        }
+        stompConnected = false;
+    }
 }

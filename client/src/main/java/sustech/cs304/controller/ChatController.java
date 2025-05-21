@@ -48,6 +48,7 @@ public class ChatController {
     private Friend currentContact = null;
     private StompChatClient client;
     private final Map<String, Image> avatarCache = new HashMap<>();
+    private final Map<String, User> userCache = new HashMap<>();
 
     @FXML
     private void initialize() {
@@ -155,7 +156,8 @@ public class ChatController {
                         String username, avatar;
                         if (!isUser) {
                             String otherId = message.getSenderId();
-                            User sender = App.userApi.getUserById(otherId);
+                            // User sender = App.userApi.getUserById(otherId);
+                            User sender = getCachedUser(otherId);
                             username = sender.getUsername();
                             avatar = sender.getAvatarPath();
                         } else {
@@ -176,6 +178,20 @@ public class ChatController {
                 handleSendMessage();
                 event.consume();
             }
+        });
+        Platform.runLater(() -> {
+        Stage stage = App.primaryStage;
+            stage.setOnCloseRequest(event -> {
+                if (client != null) {
+                    try {
+                        client.disconnect();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                Platform.exit();
+                System.exit(0);
+            });
         });
     }
 
@@ -305,5 +321,17 @@ public class ChatController {
             avatarCache.put(avatarUrl, image);
             return image;
         }
-}
+    }
+
+    private User getCachedUser(String userId) {
+        if (userCache.containsKey(userId)) {
+            return userCache.get(userId);
+        } else {
+            User user = App.userApi.getUserById(userId);
+            if (user != null) {
+                userCache.put(userId, user);
+            }
+            return user;
+        }
+    }
 }
