@@ -41,6 +41,8 @@ import sustech.cs304.entity.Resource;
 import sustech.cs304.entity.User;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
+import sustech.cs304.service.FriendApi;
+import sustech.cs304.service.FriendApiImpl;
 
 /**
  * AI-generated-content
@@ -409,6 +411,11 @@ public class AlterUtils {
     }
 
     public static void showMemberList(Stage owner, List<User> members) {
+
+        FriendApi friendApi = new FriendApiImpl();
+        List<User> friends = friendApi.getFriendList(App.user.getUserId());
+        List<User> friendRequests = friendApi.getFriendRequestList(App.user.getUserId());
+
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.initOwner(owner);
@@ -429,24 +436,42 @@ public class AlterUtils {
         actionCol.setCellFactory(col -> new TableCell<>() {
             private final Button addButton = new Button();
 
-            {
-                Image image = new Image(getClass().getResourceAsStream("/img/plusFriend.png"), 16, 16, true, true);
-                addButton.setGraphic(new ImageView(image));
-                addButton.setStyle("-fx-border-color: transparent; -fx-background-color: transparent;");
-                addButton.setOnAction(e -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    // sendFriendRequest(user);
-                });
-            }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+
+                if (empty || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
-                } else {
-                    setGraphic(addButton);
+                    return;
                 }
+
+                User user = getTableView().getItems().get(getIndex());
+                addButton.setDisable(false); // reset
+
+                if (user.getUserId().equals(App.user.getUserId())) {
+                    addButton.setText("You");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else if (friends.stream().anyMatch(friend -> friend.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Friend");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else if (friendRequests.stream().anyMatch(request -> request.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Request Sent");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else {
+                    addButton.setText("Add Friend");
+                    addButton.setStyle("-fx-background-color: lightblue; -fx-text-fill: black;");
+                    addButton.setOnAction(e -> {
+                        friendApi.applyFriendship(App.user.getUserId(), user.getUserId());
+                        addButton.setText("Request Sent");
+                        addButton.setDisable(true);
+                        addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    });
+                }
+
+                setGraphic(addButton);
             }
         });
 
@@ -474,6 +499,7 @@ public class AlterUtils {
     }
 
     public static void showNewRequestList(Stage owner, List<User> requests) {
+        FriendApi friendApi = new FriendApiImpl();
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.initOwner(owner);
@@ -499,11 +525,22 @@ public class AlterUtils {
                 rejectButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
                 acceptButton.setOnAction(e -> {
                     User user = getTableView().getItems().get(getIndex());
-                    // acceptFriendRequest(user);
+                    friendApi.acceptFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setText("Accepted");
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+
                 });
                 rejectButton.setOnAction(e -> {
                     User user = getTableView().getItems().get(getIndex());
-                    // rejectFriendRequest(user);
+                    friendApi.rejectFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setText("Rejected");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
                 });
             }
 

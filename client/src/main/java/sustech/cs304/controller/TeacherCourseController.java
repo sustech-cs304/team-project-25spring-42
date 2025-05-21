@@ -1,7 +1,6 @@
 package sustech.cs304.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -15,9 +14,7 @@ import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
 import javafx.collections.ObservableList;
 import sustech.cs304.utils.AlterUtils;
-import javafx.scene.Parent;
 
-import java.io.IOException;
 import java.io.File;
 import java.util.List;
 

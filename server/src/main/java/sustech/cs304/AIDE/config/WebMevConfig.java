@@ -1,4 +1,5 @@
-package sustech.cs304.AIDE;
+package sustech.cs304.AIDE.config;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,10 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebMevConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("file:/home/cse12311018/Documents/Save/");
     }
 }
+
+

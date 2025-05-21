@@ -3,16 +3,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1" spacing="10" alignment="CENTER_LEFT" >
-    <ImageView fx:id="avatarImage" fitWidth="32" fitHeight="32" preserveRatio="true" />
+<fx:root alignment="CENTER_LEFT" spacing="10" type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1">
+    <ImageView fx:id="avatarImage" fitHeight="32" fitWidth="32" />
     <VBox spacing="5">
         <Label fx:id="nameLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-        <HBox spacing="5" alignment="CENTER_LEFT">
-            <Circle fx:id="statusDot" radius="5" fill="#aaaaaa" />
+        <HBox alignment="CENTER_LEFT" spacing="5">
+            <Circle fx:id="statusDot" fill="#aaaaaa" radius="5" />
             <Label fx:id="statusLabel" style="-fx-font-size: 11px; -fx-text-fill: #777;" />
         </HBox>
     </VBox>

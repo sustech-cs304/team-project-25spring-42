@@ -1,22 +1,35 @@
 package sustech.cs304.controller;
 
-import java.util.List;
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.controller.components.button.FriendButton;
+import sustech.cs304.service.StompChatClient;
 import sustech.cs304.entity.Friend;
+import sustech.cs304.entity.User;
+import sustech.cs304.entity.Course;
+import sustech.cs304.service.FriendApi;
+import sustech.cs304.service.CourseApi;
+import sustech.cs304.service.FriendApiImpl;
+import sustech.cs304.service.CourseApiImpl;
 import sustech.cs304.utils.AlterUtils;
+import sustech.cs304.service.ChatApi;
+import sustech.cs304.service.ChatApiImpl;
+import sustech.cs304.entity.ChatMessage;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatController {
 
@@ -33,9 +46,31 @@ public class ChatController {
     private Label chatPartnerLabel;
 
     private Friend currentContact = null;
+    private StompChatClient client;
+    private final Map<String, Image> avatarCache = new HashMap<>();
+    private final Map<String, User> userCache = new HashMap<>();
 
     @FXML
     private void initialize() {
+        CourseApi courseApi = new CourseApiImpl();
+        List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
+        try {
+            client = new StompChatClient(App.user.getUserId(), courseIds);
+            client.setOnReceivedMessage((senderId, message) -> {
+                if (currentContact != null && currentContact.getId().equals(senderId)) {
+                    Platform.runLater(() -> showReceivedMessage(message));
+                }
+            });
+            client.setOnReceivedGroupMessage((senderId, courseId, message) -> {
+                if (currentContact != null && currentContact.getId().equals(courseId) && !senderId.equals(App.user.getUserId())) {
+                    Platform.runLater(() -> showGroupMessage(senderId, message));
+                }
+            });
+            client.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         contactsList.setCellFactory(list -> new ListCell<Friend>() {
             @Override
             protected void updateItem(Friend item, boolean empty) {
@@ -46,99 +81,257 @@ public class ChatController {
                     FriendButton button = new FriendButton();
                     button.setName(item.getName()); 
                     button.setStatus(item.getStatus());
-                    button.setAvatar(item.getAvatar() != null ? new Image(item.getAvatar()) : null);
+
+                    String avatarUrl = item.getAvatar();
+                    if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                        try {
+                            Image avatar = getCachedAvatar(avatarUrl);
+                            button.setAvatar(avatar);
+                            avatar.exceptionProperty().addListener((obs, old, newVal) -> {
+                                if (newVal != null) {
+                                    System.err.println("Failed to Load Avatar: " + newVal.getMessage() + " (URL: " + avatarUrl + ")");
+                                }
+                            });
+                        } catch (Exception e) {
+                            System.err.println("Failed to Load Avatar: " + e.getMessage());
+                        }
+                    }
+
                     setGraphic(button);
                 }
             }
         });
         contactsList.getItems().addAll(
-                new Friend("Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
-                new Friend("Deepseek", "Bot", getClass().getResource("/img/deepseek.png").toString()),
-                new Friend("ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString())
+            new Friend("Bot", "Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
+            new Friend("Bot", "ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString()),
+            new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
         );
-        // TODO: Get the friends list from the server
+
+        List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
+        if (courses != null && !courses.isEmpty()) {
+            for (Course course : courses) {
+                String courseName = course.getCourseName();
+                String courseId = String.valueOf(course.getId());
+                String avatarUrl = getClass().getResource("/img/course.png").toString();
+                contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
+            }
+        }
+
+        FriendApi friendApi = new FriendApiImpl();
+        List<User> friendList = friendApi.getFriendList(App.user.getUserId());
+        if (friendList != null && !friendList.isEmpty()) {
+            for (User user : friendList) {
+                contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
+            }
+        }
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(currentContact)) {
+                ChatApi chatApi = new ChatApiImpl();
                 currentContact = newVal;
                 chatBox.getChildren().clear();
                 chatPartnerLabel.setText(newVal.getName());
+                if (newVal.getId().equals("Bot")) return;
+                if (newVal.getStatus().equals("Friend")) {
+                    List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
+                    if (messages == null) return;
+                    List<Node> messageNodes = new ArrayList<>();
+
+                    for (ChatMessage message : messages) {
+                        boolean isUser = message.getSenderId().equals(App.user.getUserId());
+                        String username = isUser ? App.user.getUsername() : currentContact.getName();
+                        String avatar = isUser ? App.user.getAvatarPath() : currentContact.getAvatar();
+
+                        HBox messageBox = createMessageBox(username, message.getMessage(), avatar, isUser);
+                        messageNodes.add(messageBox);
+                    }
+                    chatBox.getChildren().addAll(messageNodes);
+                } else if (newVal.getStatus().equals("Course")) {
+                    List <ChatMessage> messages = chatApi.getGroupMessages(newVal.getId());
+                    if (messages == null) return;
+                    List<Node> messageNodes = new ArrayList<>();
+
+                    for (ChatMessage message : messages) {
+                        boolean isUser = message.getSenderId().equals(App.user.getUserId());
+                        String username, avatar;
+                        if (!isUser) {
+                            String otherId = message.getSenderId();
+                            // User sender = App.userApi.getUserById(otherId);
+                            User sender = getCachedUser(otherId);
+                            username = sender.getUsername();
+                            avatar = sender.getAvatarPath();
+                        } else {
+                            username = App.user.getUsername();
+                            avatar = App.user.getAvatarPath();
+                        }
+
+                        HBox messageBox = createMessageBox(username, message.getMessage(), avatar, isUser);
+                        messageNodes.add(messageBox);
+                    }
+                    chatBox.getChildren().addAll(messageNodes);
+                }
             }
         });
-        //enter to send message
+
         messageField.setOnKeyPressed(event -> {
             if (event.getCode().toString().equals("ENTER")) {
                 handleSendMessage();
+                event.consume();
             }
+        });
+        Platform.runLater(() -> {
+        Stage stage = App.primaryStage;
+            stage.setOnCloseRequest(event -> {
+                if (client != null) {
+                    try {
+                        client.disconnect();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                Platform.exit();
+                System.exit(0);
+            });
         });
     }
 
     @FXML
     private void handleSendMessage() {
-        String message = messageField.getText();
-        if (message != null && !message.isEmpty() && currentContact != null) {
+        String message = messageField.getText().trim();
+        if (!message.isEmpty() && currentContact != null) {
             addUserMessage(message);
-            // TODO: Send the message to the server
             messageField.clear();
-            if (currentContact.getName() == "Gemini" || currentContact.getName() == "Deepseek" || currentContact.getName() == "ChatGPT") {
-                // Simulate a response from the AI
-                String response = getAIResponse(message, currentContact.getName());
-                showReceivedMessage(response);
+
+            String contactName = currentContact.getName();
+            
+            if (contactName.equals("Gemini")) {
+                final String model = "gemini-2.0-flash";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            } else if (contactName.equals("ChatGPT")) {
+                final String model = "gpt-3.5-turbo";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            } else if (contactName.equals("DeepSeek")) {
+                final String model = "deepseek-chat";
+                new Thread(() -> {
+                    AIChatController aiChatController = new AIChatController();
+                    String response = aiChatController.getResponse(model, message);
+                    Platform.runLater(() -> showReceivedMessage(response));
+                }).start();
+                return;
+            }
+            
+            try {
+                if (currentContact.getStatus().equals("Friend")) {
+                    client.sendPrivateMessage(currentContact.getId(), message);
+                } else if (currentContact.getStatus().equals("Course")) {
+                    client.sendGroupMessage(currentContact.getId(), message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
     private void addUserMessage(String message) {
-        Label label = createBubble(message, "-fx-background-color: lightblue; -fx-alignment: center-right;");
-        label.setStyle("-fx-background-color: lightblue; -fx-padding: 10; -fx-background-radius: 10;");
-        HBox container = new HBox(label);
-        container.setAlignment(Pos.CENTER_RIGHT);
-        chatBox.getChildren().add(container);
+        HBox messageBox = createMessageBox(App.user.getUsername(), message, App.user.getAvatarPath(), true);
+        chatBox.getChildren().add(messageBox);
     }
 
     private void showReceivedMessage(String messageText) {
-        Label messageLabel = new Label(messageText);
-        messageLabel.setStyle("-fx-background-color: #e0e0e0; -fx-padding: 10; -fx-background-radius: 10;");
-        messageLabel.setWrapText(true);
-
-        HBox messageContainer = new HBox(messageLabel);
-        messageContainer.setAlignment(Pos.CENTER_LEFT);
-        messageContainer.setPadding(new Insets(5, 10, 5, 10));
-
-        chatBox.getChildren().add(messageContainer);
+        String senderName = currentContact.getName();
+        String avatarUrl = currentContact.getAvatar();
+        HBox messageBox = createMessageBox(senderName, messageText, avatarUrl, false);
+        chatBox.getChildren().add(messageBox);
     }
 
-    private void addSystemMessage(String message) {
-        Label label = new Label(message);
-        label.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
-        chatBox.getChildren().add(label);
+    private void showGroupMessage(String senderId, String messageText) {
+        User sender = App.userApi.getUserById(senderId);
+        String senderName = sender.getUsername();
+        String avatarUrl = sender.getAvatarPath();
+        HBox messageBox = createMessageBox(senderName, messageText, avatarUrl, false);
+        chatBox.getChildren().add(messageBox);
     }
 
     private Label createBubble(String text, String style) {
         Label label = new Label(text);
+        label.setStyle(style + " -fx-padding: 10; -fx-background-radius: 10;");
         label.setWrapText(true);
         label.setMaxWidth(300);
-        label.setStyle(style);
         return label;
     }
 
-    public String getAIResponse(String message, String model) {
-        // Simulate AI response
-        AIChatController aiChatController = new AIChatController();
-        if (model.equals("Gemini")) {
-            model = "gemini-2.0-flash";
-        } else if (model.equals("Deepseek")) {
-            model = "deepseek-chat";
-        } else if (model.equals("ChatGPT")) {
-            model = "gpt-3.5-turbo";
+    private HBox createMessageBox(String username, String message, String avatarUrl, boolean isUser) {
+        double avatarSize = 30;
+        ImageView avatarView = createCircularAvatar(avatarUrl, avatarSize);
+        Label nameLabel = new Label(username);
+        nameLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
+
+        Label messageLabel = createBubble(message, isUser ? "-fx-background-color: lightblue;" : "-fx-background-color: #e0e0e0;");
+
+        VBox messageContent = new VBox(nameLabel, messageLabel);
+        messageContent.setSpacing(2);
+
+        HBox messageBox = new HBox();
+        messageBox.setSpacing(10);
+        messageBox.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
+        if (isUser) {
+            messageBox.getChildren().addAll(messageContent, avatarView);
+        } else {
+            messageBox.getChildren().addAll(avatarView, messageContent);
         }
-        String response = aiChatController.getResponse(model, message);
-        return response;
+
+        return messageBox;
     }
 
     @FXML
     private void showNewRequestList() {
-        AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), List.of(App.user));
+        FriendApi friendApi = new FriendApiImpl();
+        List<User> friendRequestList = friendApi.getFriendRequestList(App.user.getUserId());
+        AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), friendRequestList);
+    }
 
+    private ImageView createCircularAvatar(String imageUrl, double size) {
+        Image image = getCachedAvatar(imageUrl);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+
+        Circle clip = new Circle(size / 2, size / 2, size / 2);
+        imageView.setClip(clip);
+
+        return imageView;
+    }
+
+    private Image getCachedAvatar(String avatarUrl) {
+        if (avatarCache.containsKey(avatarUrl)) {
+            return avatarCache.get(avatarUrl);
+        } else {
+            Image image = new Image(avatarUrl, true);
+            avatarCache.put(avatarUrl, image);
+            return image;
+        }
+    }
+
+    private User getCachedUser(String userId) {
+        if (userCache.containsKey(userId)) {
+            return userCache.get(userId);
+        } else {
+            User user = App.userApi.getUserById(userId);
+            if (user != null) {
+                userCache.put(userId, user);
+            }
+            return user;
+        }
     }
 }

@@ -269,6 +269,22 @@ public class CourseController {
         System.out.println("Course ID list retrieved for user: " + userId);
         return ResponseEntity.ok(courseIdList);
     }
+
+    @PostMapping(value = "/getCourseList", produces = "application/json")
+    public ResponseEntity<List<ClientCourse>> getCourseList(@RequestParam String userId) {
+        List<Long> courseIdList = enrollmentRepository.findCourseIdByUserId(userId);
+        List<ClientCourse> clientCourseList = new ArrayList<>();
+        for (Long courseId : courseIdList) {
+            Optional<Course> courseOptional = courseRepository.findById(courseId);
+            if (courseOptional.isPresent()) {
+                Course course = courseOptional.get();
+                ClientCourse clientCourse = new ClientCourse(course.getId(), course.getCourseName(), course.getAdminId(), course.getOpenTime(), course.getCloseTime(), course.getOpening());
+                clientCourseList.add(clientCourse);
+            }
+        }
+        return ResponseEntity.ok(clientCourseList);
+    } 
+
 }
 class ClientCourse {
     private Long id;
