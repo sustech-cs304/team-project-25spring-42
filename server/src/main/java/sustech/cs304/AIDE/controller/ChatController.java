@@ -27,9 +27,8 @@ public class ChatController {
         chatMessageRepository.save(message);
 
         // Send the message to the specific user
-        messagingTemplate.convertAndSendToUser(
-            message.getReceiverId(),
-            "/queue/private",
+        messagingTemplate.convertAndSend(
+            "/topic/private/" + message.getReceiverId(),
             message
         );
     }

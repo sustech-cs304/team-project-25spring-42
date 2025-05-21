@@ -33,11 +33,12 @@ public class StompChatClient extends WebSocketClient {
 
     @Override
     public void onMessage(String msg) {
+        System.out.println("Received message: " + msg);
         if (msg.startsWith("CONNECTED")) {
             stompConnected = true;
             System.out.println("STOMP connected");
 
-            send(subscribeFrame("/user/" + userId + "/queue/messages"));
+            send(subscribeFrame("/topic/private/" + userId));;
             send(subscribeFrame("/topic/group/123")); // 群聊示例
         } else if (msg.startsWith("MESSAGE")) {
             String body = msg.substring(msg.indexOf("\n\n") + 2, msg.lastIndexOf("\u0000"));
