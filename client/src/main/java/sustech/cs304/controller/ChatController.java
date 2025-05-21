@@ -17,6 +17,9 @@ import sustech.cs304.entity.User;
 import sustech.cs304.service.FriendApi;
 import sustech.cs304.service.FriendApiImpl;
 import sustech.cs304.utils.AlterUtils;
+import sustech.cs304.service.ChatApi;
+import sustech.cs304.service.ChatApiImpl;
+import sustech.cs304.entity.ChatMessage;
 
 import java.util.List;
 
@@ -80,9 +83,20 @@ public class ChatController {
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(currentContact)) {
+                ChatApi chatApi = new ChatApiImpl();
+                List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
                 currentContact = newVal;
                 chatBox.getChildren().clear();
                 chatPartnerLabel.setText(newVal.getName());
+                if (messages != null) {
+                    for (ChatMessage message : messages) {
+                        if (message.getSenderId().equals(App.user.getUserId())) {
+                            addUserMessage(message.getMessage());
+                        } else {
+                            showReceivedMessage(message.getMessage());
+                        }
+                    }
+                }
             }
         });
 

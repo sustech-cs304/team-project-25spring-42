@@ -2,9 +2,11 @@ package sustech.cs304.AIDE.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sustech.cs304.AIDE.model.ChatMessage;
@@ -21,8 +23,8 @@ public class ChatMessageController {
 
     @GetMapping(value = "/getDialogMessages")
     @Transactional
-    public List<ChatMessage> getDialogMessages(String userId1, String userId2) {
-        List<ChatMessage> messages = chatMessageRepository.findDialogMessages(userId1, userId2);
-        return messages;
+    public ResponseEntity<List<ChatMessage>> getDialogMessages(@RequestParam String userId, @RequestParam String friendId) {
+        List<ChatMessage> messages = chatMessageRepository.findDialogMessages(userId, friendId);
+        return ResponseEntity.ok(messages);
     }
 }
