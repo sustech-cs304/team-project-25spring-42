@@ -42,9 +42,7 @@ public class ChatController {
         try {
             client = new StompChatClient(App.user.getUserId());
             client.setOnReceivedMessage((senderId, message) -> {
-                System.out.println(senderId);
-                System.out.println(currentContact.getName());
-                if (currentContact != null && currentContact.getName().equals(senderId)) {
+                if (currentContact != null && currentContact.getId().equals(senderId)) {
                     Platform.runLater(() -> showReceivedMessage(message));
                 }
             });

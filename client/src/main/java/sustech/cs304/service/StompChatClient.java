@@ -17,7 +17,7 @@ public class StompChatClient extends WebSocketClient {
     private BiConsumer<String, String> onReceivedMessage;
 
     public StompChatClient(String userId) throws Exception {
-        super(new URI("ws://139.180.143.70:8080/ws/websocket")); // 你服务器地址
+        super(new URI("ws://139.180.143.70:8080/ws/websocket"));
         this.userId = userId;
     }
 
@@ -33,13 +33,12 @@ public class StompChatClient extends WebSocketClient {
 
     @Override
     public void onMessage(String msg) {
-        System.out.println("Received message: " + msg);
         if (msg.startsWith("CONNECTED")) {
             stompConnected = true;
             System.out.println("STOMP connected");
 
             send(subscribeFrame("/topic/private/" + userId));;
-            send(subscribeFrame("/topic/group/123")); // 群聊示例
+            send(subscribeFrame("/topic/group/123"));
         } else if (msg.startsWith("MESSAGE")) {
             String body = msg.substring(msg.indexOf("\n\n") + 2, msg.lastIndexOf("\u0000"));
             try {
