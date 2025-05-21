@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,17 +18,31 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sustech.cs304.App;
 import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
+import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.User;
+import sustech.cs304.service.CourseApi;
+import sustech.cs304.service.CourseApiImpl;
+import sustech.cs304.service.FriendApi;
+import sustech.cs304.service.FriendApiImpl;
 
 /**
  * AI-generated-content
@@ -342,5 +357,334 @@ public class AlterUtils {
         dialogStage.showAndWait();
 
         return submitted[0] ? result : null;
-}
+    }
+
+    public static Map<String, String> courseInputForm(Stage owner) {
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("New Course");
+
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+
+        Label nameLabel = new Label("Course Name:");
+        TextField nameField = new TextField();
+        Label descriptionLabel = new Label("Course Description:");
+        TextArea descriptionField = new TextArea();
+        descriptionField.setWrapText(true);
+
+        vbox.getChildren().addAll(nameLabel, nameField, descriptionLabel, descriptionField);
+
+        Button okButton = new Button("Submit");
+        Button cancelButton = new Button("Cancel");
+        HBox buttonBox = new HBox(10, okButton, cancelButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        vbox.getChildren().add(buttonBox);
+
+        Scene dialogScene = new Scene(vbox, 400, 300);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+        dialogStage.setScene(dialogScene);
+
+        final Map<String, String> result = new HashMap<>();
+        final boolean[] submitted = {false};
+
+        okButton.setOnAction(e -> {
+            result.put("courseName", nameField.getText());
+            result.put("courseDescription", descriptionField.getText());
+            submitted[0] = true;
+            dialogStage.close();
+        });
+
+        cancelButton.setOnAction(e -> dialogStage.close());
+
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+
+        return submitted[0] ? result : null;
+    }
+
+    public static void showMemberList(Stage owner, List<User> members) {
+
+        FriendApi friendApi = new FriendApiImpl();
+        List<User> friends = friendApi.getFriendList(App.user.getUserId());
+        List<User> friendRequests = friendApi.getFriendRequestList(App.user.getUserId());
+
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("Member List");
+
+        TableView<User> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<User, String> usernameCol = new TableColumn<>("Username");
+        usernameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+
+        TableColumn<User, String> userIdCol = new TableColumn<>("User ID");
+        userIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getUserId())));
+
+        TableColumn<User, Void> actionCol = new TableColumn<>("Action");
+        actionCol.setCellFactory(col -> new TableCell<>() {
+            private final Button addButton = new Button();
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+
+                User user = getTableView().getItems().get(getIndex());
+                addButton.setDisable(false); // reset
+
+                if (user.getUserId().equals(App.user.getUserId())) {
+                    addButton.setText("You");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else if (friends.stream().anyMatch(friend -> friend.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Friend");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else if (friendRequests.stream().anyMatch(request -> request.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Request Sent");
+                    addButton.setDisable(true);
+                    addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                } else {
+                    addButton.setText("Add Friend");
+                    addButton.setStyle("-fx-background-color: lightblue; -fx-text-fill: black;");
+                    addButton.setOnAction(e -> {
+                        friendApi.applyFriendship(App.user.getUserId(), user.getUserId());
+                        addButton.setText("Request Sent");
+                        addButton.setDisable(true);
+                        addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    });
+                }
+
+                setGraphic(addButton);
+            }
+        });
+
+        tableView.getColumns().addAll(usernameCol, userIdCol, actionCol);
+        tableView.getItems().addAll(members);
+
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10, okButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+
+        VBox vbox = new VBox(10, tableView, buttonBox);
+        vbox.setPadding(new Insets(20));
+
+        Scene dialogScene = new Scene(vbox, 500, 350);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+
+        dialogStage.setScene(dialogScene);
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+    }
+
+    public static void showNewRequestList(Stage owner, List<User> requests) {
+        FriendApi friendApi = new FriendApiImpl();
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("New Friend Requests");
+
+        TableView<User> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<User, String> usernameCol = new TableColumn<>("Username");
+        usernameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+
+        TableColumn<User, String> userIdCol = new TableColumn<>("User ID");
+        userIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getUserId())));
+
+        TableColumn<User, Void> actionCol = new TableColumn<>("Action");
+        actionCol.setCellFactory(col -> new TableCell<>() {
+            private final Button acceptButton = new Button("Accept");
+            private final Button rejectButton = new Button("Reject");
+            {
+                acceptButton.setStyle("-fx-background-color: lightgreen; -fx-text-fill: black;");
+                rejectButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                acceptButton.setOnAction(e -> {
+                    User user = getTableView().getItems().get(getIndex());
+                    friendApi.acceptFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setText("Accepted");
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+
+                });
+                rejectButton.setOnAction(e -> {
+                    User user = getTableView().getItems().get(getIndex());
+                    friendApi.rejectFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setText("Rejected");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox hbox = new HBox(10, acceptButton, rejectButton);
+                    hbox.setAlignment(Pos.CENTER);
+                    setGraphic(hbox);
+                }
+            }
+        });
+
+        tableView.getColumns().addAll(usernameCol, userIdCol, actionCol);
+        tableView.getItems().addAll(requests);
+
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10, okButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+
+        VBox vbox = new VBox(10, tableView, buttonBox);
+        vbox.setPadding(new Insets(20));
+
+        Scene dialogScene = new Scene(vbox, 500, 350);
+        dialogStage.setScene(dialogScene);
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+    }
+
+    public static List<String> showInvitationInputForm(Stage owner) {
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("New Invitation");
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        Label nameLabel = new Label("Invitation Id list:");
+        TextArea idField = new TextArea();
+        idField.setWrapText(true);
+        idField.setPromptText("Enter user IDs line by line");
+        idField.setPrefHeight(100);
+        vbox.getChildren().addAll(nameLabel, idField);
+        Button okButton = new Button("Submit");
+        Button cancelButton = new Button("Cancel");
+        HBox buttonBox = new HBox(10, okButton, cancelButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        vbox.getChildren().add(buttonBox);
+        Scene dialogScene = new Scene(vbox, 400, 300);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+        dialogStage.setScene(dialogScene);
+        final List<String>[] result = new List[1];
+        final boolean[] submitted = {false};
+        okButton.setOnAction(e -> {
+            String text = idField.getText();
+            String[] ids = text.split("\\s+");
+            result[0] = List.of(ids);
+            submitted[0] = true;
+            dialogStage.close();
+        });
+        cancelButton.setOnAction(e -> dialogStage.close());
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+        if (submitted[0]) {
+            return result[0];
+        } else {
+            return null;
+        }
+    }
+
+    public static void showInvitationList(Stage owner, List<Course> courses){
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("Invitation List");
+        TableView<Course> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn<Course, String> courseNameCol = new TableColumn<>("Course Name");
+        courseNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCourseName()));
+        TableColumn<Course, String> courseIdCol = new TableColumn<>("Course ID");
+        courseIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getId())));
+        TableColumn<Course, Void> actionCol = new TableColumn<>("Action");
+        actionCol.setCellFactory(col -> new TableCell<>() {
+            private final Button acceptButton = new Button("Accept");
+            private final Button rejectButton = new Button("Reject");
+            {
+                acceptButton.setStyle("-fx-background-color: lightgreen; -fx-text-fill: black;");
+                rejectButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                acceptButton.setOnAction(e -> {
+                    Course course = getTableView().getItems().get(getIndex());
+                    CourseApi courseApi = new CourseApiImpl();
+                    String userId = App.user.getUserId();
+                    courseApi.acceptCourseInvitation(course.getId(), userId);
+                });
+                rejectButton.setOnAction(e -> {
+                    Course course = getTableView().getItems().get(getIndex());
+                    CourseApi courseApi = new CourseApiImpl();
+                    String userId = App.user.getUserId();
+                    courseApi.rejectCourseInvitation(course.getId(), userId);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox hbox = new HBox(10, acceptButton, rejectButton);
+                    hbox.setAlignment(Pos.CENTER);
+                    setGraphic(hbox);
+                }
+            }
+
+        });
+        tableView.getColumns().addAll(courseNameCol, courseIdCol, actionCol);
+        tableView.getItems().addAll(courses);
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10, okButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+        VBox vbox = new VBox(10, tableView, buttonBox);
+        vbox.setPadding(new Insets(20));
+        Scene dialogScene = new Scene(vbox, 500, 350);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+        dialogStage.setScene(dialogScene);
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+    }
+
 }

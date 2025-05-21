@@ -1,12 +1,19 @@
 package sustech.cs304.controller;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.stage.Stage;
+import sustech.cs304.App;
+import sustech.cs304.service.CourseApiImpl;
+import sustech.cs304.utils.AlterUtils;
 import sustech.cs304.utils.FileUtils;
+import sustech.cs304.entity.Course;
 
 public class MenuBarController {
 
@@ -14,7 +21,7 @@ public class MenuBarController {
     private MenuBar menuBar;
 
     @FXML
-    private Menu fileMenu, colorMenu, terminalMenu, runMenu, helpMenu;
+    private Menu fileMenu, colorMenu, terminalMenu, courseMenu, runMenu, helpMenu;
 
     private Menu[] IDEMenus;
     private Menu[] classMenus;
@@ -28,7 +35,7 @@ public class MenuBarController {
     private void initialize() {
         IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
         chatMenus = new Menu[]{colorMenu, helpMenu};
-        classMenus = new Menu[]{colorMenu, helpMenu};
+        classMenus = new Menu[]{colorMenu, courseMenu, helpMenu};
         userHomeMenus = new Menu[]{colorMenu, helpMenu};
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             menuBar.setUseSystemMenuBar(true);
@@ -188,4 +195,24 @@ public class MenuBarController {
             }
         }
     }
+
+    public void createCourse() {
+        Map<String, String> courseInfo = AlterUtils.courseInputForm((Stage) this.menuBar.getScene().getWindow());
+        CourseApiImpl courseApi = new CourseApiImpl();
+        if (courseInfo != null) {
+            String courseName = courseInfo.get("courseName");
+            String userId = App.user.getUserId();
+            courseApi.createCourse(courseName, userId);
+        }
+        ideController.getClassController().initializeClassChoiceScroll();
+    }
+
+    public void invitationList() {
+        CourseApiImpl courseApi = new CourseApiImpl();
+        String userId = App.user.getUserId();
+        List<Course> courseList = courseApi.getCourseInvitationByUserId(userId);
+        AlterUtils.showInvitationList((Stage) this.menuBar.getScene().getWindow(), courseList);
+        ideController.getClassController().initializeClassChoiceScroll();
+    }
+
 }
