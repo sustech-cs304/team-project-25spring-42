@@ -436,44 +436,42 @@ public class AlterUtils {
         actionCol.setCellFactory(col -> new TableCell<>() {
             private final Button addButton = new Button();
 
-            {
-                User user = getTableView().getItems().get(getIndex());
-                boolean isFriend = friends.stream().anyMatch(friend -> friend.getUserId().equals(user.getUserId()));
-                boolean isRequestSent = friendRequests.stream().anyMatch(request -> request.getUserId().equals(user.getUserId()));
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
 
-                // Set the button text and style based on the user's profile picture
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                    return;
+                }
+
+                User user = getTableView().getItems().get(getIndex());
+                addButton.setDisable(false); // reset
+
                 if (user.getUserId().equals(App.user.getUserId())) {
-                    setText("You");
+                    addButton.setText("You");
                     addButton.setDisable(true);
                     addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
-                } else if (isFriend) {
-                    setText("Friend");
+                } else if (friends.stream().anyMatch(friend -> friend.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Friend");
                     addButton.setDisable(true);
                     addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
-                } else if (isRequestSent) {
-                    setText("Request Sent");
+                } else if (friendRequests.stream().anyMatch(request -> request.getUserId().equals(user.getUserId()))) {
+                    addButton.setText("Request Sent");
                     addButton.setDisable(true);
                     addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
                 } else {
-                    setText("Add Friend");
+                    addButton.setText("Add Friend");
                     addButton.setStyle("-fx-background-color: lightblue; -fx-text-fill: black;");
                     addButton.setOnAction(e -> {
                         friendApi.applyFriendship(App.user.getUserId(), user.getUserId());
-                        setText("Request Sent");
+                        addButton.setText("Request Sent");
                         addButton.setDisable(true);
                         addButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
                     });
                 }
-            }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(addButton);
-                }
+                setGraphic(addButton);
             }
         });
 
@@ -501,6 +499,7 @@ public class AlterUtils {
     }
 
     public static void showNewRequestList(Stage owner, List<User> requests) {
+        FriendApi friendApi = new FriendApiImpl();
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         dialogStage.initOwner(owner);
@@ -526,11 +525,22 @@ public class AlterUtils {
                 rejectButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
                 acceptButton.setOnAction(e -> {
                     User user = getTableView().getItems().get(getIndex());
-                    // acceptFriendRequest(user);
+                    friendApi.acceptFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setText("Accepted");
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+
                 });
                 rejectButton.setOnAction(e -> {
                     User user = getTableView().getItems().get(getIndex());
-                    // rejectFriendRequest(user);
+                    friendApi.rejectFriendship(user.getUserId(), App.user.getUserId());
+                    acceptButton.setDisable(true);
+                    acceptButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+                    rejectButton.setText("Rejected");
+                    rejectButton.setDisable(true);
+                    rejectButton.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
                 });
             }
 

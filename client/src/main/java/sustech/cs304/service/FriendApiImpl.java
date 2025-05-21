@@ -19,7 +19,7 @@ public class FriendApiImpl implements FriendApi {
     @Override
     public void applyFriendship(String applicantId, String targetId) {
         Query[] queries = {
-            new Query("applicationId", applicantId),
+            new Query("applicantId", applicantId),
             new Query("targetId", targetId),
         };
         try {
@@ -37,7 +37,7 @@ public class FriendApiImpl implements FriendApi {
     @Override
     public void acceptFriendship(String applicantId, String targetId) {
         Query[] queries = {
-            new Query("applicationId", applicantId),
+            new Query("applicantId", applicantId),
             new Query("targetId", targetId),
         };
         try {
@@ -55,7 +55,7 @@ public class FriendApiImpl implements FriendApi {
     @Override
     public void rejectFriendship(String applicantId, String targetId) {
         Query[] queries = {
-            new Query("applicationId", applicantId),
+            new Query("applicantId", applicantId),
             new Query("targetId", targetId),
         };
         try {

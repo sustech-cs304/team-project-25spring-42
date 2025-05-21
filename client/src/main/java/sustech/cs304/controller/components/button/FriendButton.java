@@ -35,10 +35,12 @@ public class FriendButton extends HBox {
 
     public void setStatus(String status) {
         statusLabel.setText(status);
-        if ("Online".equals(status)) {
+        if ("Friend".equals(status)) {
             statusDot.setFill(Color.LIMEGREEN);
         } else if ("Bot".equals(status)) {
             statusDot.setFill(Color.BLUE);
+        } else if ("Group".equals(status)) {
+            statusDot.setFill(Color.ORANGE);
         } else {
             statusDot.setFill(Color.GRAY);
         }
