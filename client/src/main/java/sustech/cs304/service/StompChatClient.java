@@ -2,27 +2,39 @@ package sustech.cs304.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.apache.commons.lang3.function.TriConsumer;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+
+import sustech.cs304.service.*;
 
 public class StompChatClient extends WebSocketClient {
 
     private final String userId;
+    private final List<Long> courseIds;
     private final ObjectMapper mapper = new ObjectMapper();
     private boolean stompConnected = false;
     private BiConsumer<String, String> onReceivedMessage;
+    private TriConsumer<String, String, String> onReceivedGroupMessage;
 
-    public StompChatClient(String userId) throws Exception {
+    public StompChatClient(String userId, List<Long> courseIds) throws Exception {
         super(new URI("ws://139.180.143.70:8080/ws/websocket"));
         this.userId = userId;
+        this.courseIds = courseIds;
     }
 
     public void setOnReceivedMessage(BiConsumer<String, String> handler) {
         this.onReceivedMessage = handler;
+    }
+
+    public void setOnReceivedGroupMessage(TriConsumer<String, String, String> handler) {
+        this.onReceivedGroupMessage = handler;
     }
 
     @Override
@@ -37,16 +49,23 @@ public class StompChatClient extends WebSocketClient {
             stompConnected = true;
             System.out.println("STOMP connected");
 
+            for (Long courseId : courseIds) {
+                String courseIdStr = String.valueOf(courseId);
+                send(subscribeFrame("/topic/group/" + courseIdStr));
+            }
+
             send(subscribeFrame("/topic/private/" + userId));;
-            send(subscribeFrame("/topic/group/123"));
         } else if (msg.startsWith("MESSAGE")) {
             String body = msg.substring(msg.indexOf("\n\n") + 2, msg.lastIndexOf("\u0000"));
             try {
                 JsonNode node = mapper.readTree(body);
                 String senderId = node.get("senderId").asText();
+                String receiverId = node.get("receiverId").asText();
                 String message = node.get("message").asText();
-                if (onReceivedMessage != null) {
+                if (onReceivedMessage != null && receiverId.equals(userId)) {
                     onReceivedMessage.accept(senderId, message);
+                } else if (onReceivedGroupMessage != null && !receiverId.equals(userId)) {
+                    onReceivedGroupMessage.accept(senderId, receiverId, message);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

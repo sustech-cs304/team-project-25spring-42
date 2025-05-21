@@ -51,11 +51,18 @@ public class ChatController {
 
     @FXML
     private void initialize() {
+        CourseApi courseApi = new CourseApiImpl();
+        List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
         try {
-            client = new StompChatClient(App.user.getUserId());
+            client = new StompChatClient(App.user.getUserId(), courseIds);
             client.setOnReceivedMessage((senderId, message) -> {
                 if (currentContact != null && currentContact.getId().equals(senderId)) {
                     Platform.runLater(() -> showReceivedMessage(message));
+                }
+            });
+            client.setOnReceivedGroupMessage((senderId, courseId, message) -> {
+                if (currentContact != null && currentContact.getId().equals(courseId) && !senderId.equals(App.user.getUserId())) {
+                    Platform.runLater(() -> showGroupMessage(senderId, message));
                 }
             });
             client.connect();
@@ -99,7 +106,6 @@ public class ChatController {
             new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
         );
 
-        CourseApi courseApi = new CourseApiImpl();
         List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
         if (courses != null && !courses.isEmpty()) {
             for (Course course : courses) {
@@ -125,14 +131,37 @@ public class ChatController {
                 chatBox.getChildren().clear();
                 chatPartnerLabel.setText(newVal.getName());
                 if (newVal.getId().equals("Bot")) return;
-                List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
-                if (messages != null) {
-                     List<Node> messageNodes = new ArrayList<>();
+                if (newVal.getStatus().equals("Friend")) {
+                    List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
+                    if (messages == null) return;
+                    List<Node> messageNodes = new ArrayList<>();
 
                     for (ChatMessage message : messages) {
                         boolean isUser = message.getSenderId().equals(App.user.getUserId());
                         String username = isUser ? App.user.getUsername() : currentContact.getName();
                         String avatar = isUser ? App.user.getAvatarPath() : currentContact.getAvatar();
+
+                        HBox messageBox = createMessageBox(username, message.getMessage(), avatar, isUser);
+                        messageNodes.add(messageBox);
+                    }
+                    chatBox.getChildren().addAll(messageNodes);
+                } else if (newVal.getStatus().equals("Course")) {
+                    List <ChatMessage> messages = chatApi.getGroupMessages(newVal.getId());
+                    if (messages == null) return;
+                    List<Node> messageNodes = new ArrayList<>();
+
+                    for (ChatMessage message : messages) {
+                        boolean isUser = message.getSenderId().equals(App.user.getUserId());
+                        String username, avatar;
+                        if (!isUser) {
+                            String otherId = message.getSenderId();
+                            User sender = App.userApi.getUserById(otherId);
+                            username = sender.getUsername();
+                            avatar = sender.getAvatarPath();
+                        } else {
+                            username = App.user.getUsername();
+                            avatar = App.user.getAvatarPath();
+                        }
 
                         HBox messageBox = createMessageBox(username, message.getMessage(), avatar, isUser);
                         messageNodes.add(messageBox);
@@ -186,7 +215,11 @@ public class ChatController {
             }
             
             try {
-                client.sendPrivateMessage(currentContact.getId(), message);
+                if (currentContact.getStatus().equals("Friend")) {
+                    client.sendPrivateMessage(currentContact.getId(), message);
+                } else if (currentContact.getStatus().equals("Course")) {
+                    client.sendGroupMessage(currentContact.getId(), message);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -201,6 +234,14 @@ public class ChatController {
     private void showReceivedMessage(String messageText) {
         String senderName = currentContact.getName();
         String avatarUrl = currentContact.getAvatar();
+        HBox messageBox = createMessageBox(senderName, messageText, avatarUrl, false);
+        chatBox.getChildren().add(messageBox);
+    }
+
+    private void showGroupMessage(String senderId, String messageText) {
+        User sender = App.userApi.getUserById(senderId);
+        String senderName = sender.getUsername();
+        String avatarUrl = sender.getAvatarPath();
         HBox messageBox = createMessageBox(senderName, messageText, avatarUrl, false);
         chatBox.getChildren().add(messageBox);
     }

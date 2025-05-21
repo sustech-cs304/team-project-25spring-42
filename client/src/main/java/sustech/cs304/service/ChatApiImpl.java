@@ -49,4 +49,35 @@ public class ChatApiImpl implements ChatApi {
         }
         return messages;
     }
+
+    @Override
+    public List<ChatMessage> getGroupMessages(String groupId) {
+        List<ChatMessage> messages = null;
+
+        Query[] queries = {
+            new Query("groupId", groupId)
+        };
+        try {
+            Response response = HttpUtils.get("/messages", "/getGroupMessages", queries);
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<ChatMessage>>() {}.getType();
+                Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                        @Override
+                        public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                                throws JsonParseException {
+                            return LocalDateTime.parse(json.getAsString());
+                        }
+                    })
+                    .create();
+                messages = gson.fromJson(responseBody, listType);
+            } else {
+                System.out.println("Failed to fetch group messages: " + response.message());
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching group messages: " + e.getMessage());
+        }
+        return messages;
+    }
 }

@@ -27,4 +27,11 @@ public class ChatMessageController {
         List<ChatMessage> messages = chatMessageRepository.findDialogMessages(userId, friendId);
         return ResponseEntity.ok(messages);
     }
+
+    @GetMapping(value = "/getGroupMessages")
+    @Transactional
+    public ResponseEntity<List<ChatMessage>> getGroupMessages(@RequestParam String groupId) {
+        List<ChatMessage> messages = chatMessageRepository.findGroupMessages(groupId);
+        return ResponseEntity.ok(messages);
+    }
 }
