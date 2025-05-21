@@ -68,8 +68,6 @@ public class CourseApiImpl implements CourseApi {
                 courseList = new Gson().fromJson(responseBody, listType);
             } else {
                 courseList = new ArrayList<>();
-                Course course = new Course((Long) 111111L, "DSAA", "admin", "2023-10-01", "2023-10-31", true);
-                courseList.add(course);
             }
         } catch (Exception e) {
             System.err.println("Error fetching courses: " + e.getMessage());

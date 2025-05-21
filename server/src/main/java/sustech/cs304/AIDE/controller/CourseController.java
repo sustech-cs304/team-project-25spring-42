@@ -270,21 +270,21 @@ public class CourseController {
         return ResponseEntity.ok(courseIdList);
     }
 
-    @GetMapping(value = "/getCourseList", produces = "application/json")
-    @Transactional
+    @PostMapping(value = "/getCourseList", produces = "application/json")
     public ResponseEntity<List<ClientCourse>> getCourseList(@RequestParam String userId) {
         List<Long> courseIdList = enrollmentRepository.findCourseIdByUserId(userId);
-        List<ClientCourse> clientCourses = new ArrayList<>();
+        List<ClientCourse> clientCourseList = new ArrayList<>();
         for (Long courseId : courseIdList) {
             Optional<Course> courseOptional = courseRepository.findById(courseId);
             if (courseOptional.isPresent()) {
                 Course course = courseOptional.get();
                 ClientCourse clientCourse = new ClientCourse(course.getId(), course.getCourseName(), course.getAdminId(), course.getOpenTime(), course.getCloseTime(), course.getOpening());
-                clientCourses.add(clientCourse);
+                clientCourseList.add(clientCourse);
             }
         }
-        return ResponseEntity.ok(clientCourses);
-    }
+        return ResponseEntity.ok(clientCourseList);
+    } 
+
 }
 class ClientCourse {
     private Long id;

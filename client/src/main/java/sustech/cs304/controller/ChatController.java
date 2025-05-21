@@ -101,17 +101,21 @@ public class ChatController {
 
         CourseApi courseApi = new CourseApiImpl();
         List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
-        for (Course course : courses) {
-            String courseName = course.getCourseName();
-            String courseId = String.valueOf(course.getId());
-            String avatarUrl = getClass().getResource("/img/course.png").toString();
-            contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
+        if (courses != null && !courses.isEmpty()) {
+            for (Course course : courses) {
+                String courseName = course.getCourseName();
+                String courseId = String.valueOf(course.getId());
+                String avatarUrl = getClass().getResource("/img/course.png").toString();
+                contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
+            }
         }
 
         FriendApi friendApi = new FriendApiImpl();
         List<User> friendList = friendApi.getFriendList(App.user.getUserId());
-        for (User user : friendList) {
-            contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
+        if (friendList != null && !friendList.isEmpty()) {
+            for (User user : friendList) {
+                contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
+            }
         }
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
