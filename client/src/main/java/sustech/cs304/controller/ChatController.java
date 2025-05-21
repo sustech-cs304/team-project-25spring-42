@@ -2,11 +2,15 @@ package sustech.cs304.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.controller.components.button.FriendButton;
@@ -22,6 +26,9 @@ import sustech.cs304.service.ChatApiImpl;
 import sustech.cs304.entity.ChatMessage;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatController {
 
@@ -39,6 +46,7 @@ public class ChatController {
 
     private Friend currentContact = null;
     private StompChatClient client;
+    private final Map<String, Image> avatarCache = new HashMap<>();
 
     @FXML
     private void initialize() {
@@ -64,7 +72,22 @@ public class ChatController {
                     FriendButton button = new FriendButton();
                     button.setName(item.getName()); 
                     button.setStatus(item.getStatus());
-                    button.setAvatar(item.getAvatar() != null ? new Image(item.getAvatar()) : null);
+
+                    String avatarUrl = item.getAvatar();
+                    if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                        try {
+                            Image avatar = getCachedAvatar(avatarUrl);
+                            button.setAvatar(avatar);
+                            avatar.exceptionProperty().addListener((obs, old, newVal) -> {
+                                if (newVal != null) {
+                                    System.err.println("Failed to Load Avatar: " + newVal.getMessage() + " (URL: " + avatarUrl + ")");
+                                }
+                            });
+                        } catch (Exception e) {
+                            System.err.println("Failed to Load Avatar: " + e.getMessage());
+                        }
+                    }
+
                     setGraphic(button);
                 }
             }
@@ -78,24 +101,29 @@ public class ChatController {
         FriendApi friendApi = new FriendApiImpl();
         List<User> friendList = friendApi.getFriendList(App.user.getUserId());
         for (User user : friendList) {
-            contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", getClass().getResource("/img/user-black.png").toString()));
+            contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
         }
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(currentContact)) {
                 ChatApi chatApi = new ChatApiImpl();
-                List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
                 currentContact = newVal;
                 chatBox.getChildren().clear();
                 chatPartnerLabel.setText(newVal.getName());
+                if (newVal.getId().equals("Bot")) return;
+                List<ChatMessage> messages = chatApi.getChatMessages(App.user.getUserId(), newVal.getId());
                 if (messages != null) {
+                     List<Node> messageNodes = new ArrayList<>();
+
                     for (ChatMessage message : messages) {
-                        if (message.getSenderId().equals(App.user.getUserId())) {
-                            addUserMessage(message.getMessage());
-                        } else {
-                            showReceivedMessage(message.getMessage());
-                        }
+                        boolean isUser = message.getSenderId().equals(App.user.getUserId());
+                        String username = isUser ? App.user.getUsername() : currentContact.getName();
+                        String avatar = isUser ? App.user.getAvatarPath() : currentContact.getAvatar();
+
+                        HBox messageBox = createMessageBox(username, message.getMessage(), avatar, isUser);
+                        messageNodes.add(messageBox);
                     }
+                    chatBox.getChildren().addAll(messageNodes);
                 }
             }
         });
@@ -152,17 +180,15 @@ public class ChatController {
     }
 
     private void addUserMessage(String message) {
-        Label label = createBubble(message, "-fx-background-color: lightblue;");
-        HBox container = new HBox(label);
-        container.setAlignment(Pos.CENTER_RIGHT);
-        chatBox.getChildren().add(container);
+        HBox messageBox = createMessageBox(App.user.getUsername(), message, App.user.getAvatarPath(), true);
+        chatBox.getChildren().add(messageBox);
     }
 
     private void showReceivedMessage(String messageText) {
-        Label label = createBubble(messageText, "-fx-background-color: #e0e0e0;");
-        HBox container = new HBox(label);
-        container.setAlignment(Pos.CENTER_LEFT);
-        chatBox.getChildren().add(container);
+        String senderName = currentContact.getName();
+        String avatarUrl = currentContact.getAvatar();
+        HBox messageBox = createMessageBox(senderName, messageText, avatarUrl, false);
+        chatBox.getChildren().add(messageBox);
     }
 
     private Label createBubble(String text, String style) {
@@ -173,10 +199,56 @@ public class ChatController {
         return label;
     }
 
+    private HBox createMessageBox(String username, String message, String avatarUrl, boolean isUser) {
+        double avatarSize = 30;
+        ImageView avatarView = createCircularAvatar(avatarUrl, avatarSize);
+        Label nameLabel = new Label(username);
+        nameLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
+
+        Label messageLabel = createBubble(message, isUser ? "-fx-background-color: lightblue;" : "-fx-background-color: #e0e0e0;");
+
+        VBox messageContent = new VBox(nameLabel, messageLabel);
+        messageContent.setSpacing(2);
+
+        HBox messageBox = new HBox();
+        messageBox.setSpacing(10);
+        messageBox.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
+        if (isUser) {
+            messageBox.getChildren().addAll(messageContent, avatarView);
+        } else {
+            messageBox.getChildren().addAll(avatarView, messageContent);
+        }
+
+        return messageBox;
+    }
+
     @FXML
     private void showNewRequestList() {
         FriendApi friendApi = new FriendApiImpl();
         List<User> friendRequestList = friendApi.getFriendRequestList(App.user.getUserId());
         AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), friendRequestList);
     }
+
+    private ImageView createCircularAvatar(String imageUrl, double size) {
+        Image image = getCachedAvatar(imageUrl);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+
+        Circle clip = new Circle(size / 2, size / 2, size / 2);
+        imageView.setClip(clip);
+
+        return imageView;
+    }
+
+    private Image getCachedAvatar(String avatarUrl) {
+        if (avatarCache.containsKey(avatarUrl)) {
+            return avatarCache.get(avatarUrl);
+        } else {
+            Image image = new Image(avatarUrl, true);
+            avatarCache.put(avatarUrl, image);
+            return image;
+        }
+}
 }
