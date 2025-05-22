@@ -24,7 +24,7 @@ public class IDEController {
     private AnchorPane backgroundPane, modePane, editorPane, profilePane;
 
     List<Node> ideContent;
-    private Parent classContent, userHomeContent, chatContent;
+    private Parent classContent, userHomeContent, chatContent, settingContent;
 
     @FXML
     private FileTreeController fileTreeController;
@@ -85,6 +85,7 @@ public class IDEController {
             classController = loader.getController();
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
             chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chat.fxml")));
+            settingContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/setting.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -173,6 +174,17 @@ public class IDEController {
         AnchorPane.setBottomAnchor(userHomeContent, 0.0);
         AnchorPane.setLeftAnchor(userHomeContent, 0.0);
         AnchorPane.setRightAnchor(userHomeContent, 0.0);
+    }
+
+    @FXML
+    private void switchToSetting() {
+        menuBarController.changeMode("setting");
+        modePane.getChildren().clear();
+        modePane.getChildren().addAll(settingContent);
+        AnchorPane.setTopAnchor(settingContent, 0.0);
+        AnchorPane.setBottomAnchor(settingContent, 0.0);
+        AnchorPane.setLeftAnchor(settingContent, 0.0);
+        AnchorPane.setRightAnchor(settingContent, 0.0);
     }
 
     public void changeImageColor(String theme) {

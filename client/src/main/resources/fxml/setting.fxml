@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="sustech.cs304.controller.SettingsController"
+      spacing="20">
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+
+    <!-- Java Settings -->
+    <Label text="Java Settings" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints minWidth="80"/>
+        </columnConstraints>
+
+        <Label text="Java Home:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="javaHomeField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Button text="Browse" onAction="#browseJavaHome" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- Python Settings -->
+    <Label text="Python Settings" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints minWidth="80"/>
+        </columnConstraints>
+
+        <Label text="Python Path:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="pythonPathField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Button text="Browse" onAction="#browsePythonPath" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- ChatGPT Settings -->
+    <Label text="ChatGPT Settings" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="URL:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="chatGptUrlField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="API Key:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="chatGptKeyField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- DeepSeek Settings -->
+    <Label text="DeepSeek Settings" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="URL:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="deepSeekUrlField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="API Key:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="deepSeekKeyField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- Gemini Settings -->
+    <Label text="Gemini Settings" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="URL:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="geminiUrlField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="API Key:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="geminiKeyField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Separator/>
+
+    <!-- Save Button -->
+    <HBox alignment="CENTER">
+        <Button text="Save Settings" onAction="#handleSave" />
+    </HBox>
+</VBox>
