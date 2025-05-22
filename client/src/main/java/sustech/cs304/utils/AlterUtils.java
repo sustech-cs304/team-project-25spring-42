@@ -707,6 +707,7 @@ public class AlterUtils {
                     String address = submission.getAddress();
                     FileChooser fileChooser = new FileChooser();
                     fileChooser.setTitle("Save File");
+                    fileChooser.setInitialFileName(address.substring(address.lastIndexOf("/") + 1));
                     File file = fileChooser.showSaveDialog(dialogStage);
                     if (file != null) {
                         courseApi.downloadResource(address, file.getAbsolutePath());
