@@ -517,7 +517,7 @@ public class CourseApiImpl implements CourseApi {
         RequestBody body = new FormBody.Builder()
             .add("assignmentId", assignmentId.toString())
             .build();
-        try (Response response = HttpUtils.postForm("/submission", "/getSubmissionByAssignmentId", body)) {
+        try (Response response = HttpUtils.postForm("/assignment", "/getSubmissionList", body)) {
             if (response.isSuccessful() && response.body() != null) {
                 String responseBody = response.body().string();
                 Type listType = new TypeToken<List<Submission>>() {}.getType();

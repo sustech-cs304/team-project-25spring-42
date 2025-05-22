@@ -724,7 +724,10 @@ public class AlterUtils {
             }
         });
         tableView.getColumns().addAll(userIdCol, operationCol);
-        tableView.getItems().addAll(submissions);
+        if (submissions == null || submissions.isEmpty()) {
+        } else {
+            tableView.getItems().addAll(submissions);
+        }
         Button okButton = new Button("OK");
         okButton.setOnAction(e -> dialogStage.close());
         HBox buttonBox = new HBox(10, okButton);
