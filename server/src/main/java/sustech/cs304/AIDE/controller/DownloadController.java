@@ -1,4 +1,4 @@
-package sustech.cs304.AIDE.model;
+package sustech.cs304.AIDE.controller;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

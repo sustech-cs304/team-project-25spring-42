@@ -104,11 +104,6 @@
                                 <PropertyValueFactory property="deadline" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="100.0" text="Status">
-                            <cellValueFactory>
-                                <PropertyValueFactory property="status" />
-                            </cellValueFactory>
-                        </TableColumn>
                         <TableColumn prefWidth="150" text="Operation">
                             <cellValueFactory>
                                 <PropertyValueFactory property="action" />

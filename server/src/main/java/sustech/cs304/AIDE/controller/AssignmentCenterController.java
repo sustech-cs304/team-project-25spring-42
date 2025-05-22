@@ -364,6 +364,15 @@ public class AssignmentCenterController {
         }
         return ResponseEntity.ok(true);
     }
+
+    @PostMapping(value = "/getSubmissionList", produces = "application/json")
+    public ResponseEntity<List<Submission>> getSubmissionList(@RequestParam String assignmentId) {
+        List<Submission> submissionList = submissionRepository.findByAssignmentId(Long.parseLong(assignmentId));
+        if (submissionList.isEmpty()) {
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(submissionList);
+    }
 }
 class clientPersonalAssignment {
     private Long id;

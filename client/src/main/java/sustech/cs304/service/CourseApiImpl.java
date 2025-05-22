@@ -22,6 +22,7 @@ import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Query;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.Submission;
 import sustech.cs304.entity.User;
 import sustech.cs304.entity.UserServerSide;
 import sustech.cs304.utils.HttpUtils;
@@ -510,4 +511,45 @@ public class CourseApiImpl implements CourseApi {
         }
         return courseList;
     }
+
+    public List<Submission> getSubmissionByAssignmentId(Long assignmentId) {
+        List<Submission> submissionList = null;
+        RequestBody body = new FormBody.Builder()
+            .add("assignmentId", assignmentId.toString())
+            .build();
+        try (Response response = HttpUtils.postForm("/submission", "/getSubmissionByAssignmentId", body)) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                Type listType = new TypeToken<List<Submission>>() {}.getType();
+                submissionList = new Gson().fromJson(responseBody, listType);
+            } else {
+                System.out.println("No submissions found for assignment ID: " + assignmentId);
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching submissions: " + e.getMessage());
+        }
+        return submissionList;
+    }
+
+    public void downloadSubmission(String address, String savePath) {
+        RequestBody body = new FormBody.Builder()
+            .add("filePath", address)
+            .build();
+
+        try (Response response = HttpUtils.postForm2("/download", "/downloadBinaryByPath", body)) {
+            if (response.isSuccessful() && response.body() != null) {
+                Path path = Paths.get(savePath);
+                Path addressPath = Paths.get(address);
+                String fileName = addressPath.getFileName().toString();
+                path = path.resolveSibling(fileName);
+                Files.copy(response.body().byteStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                System.out.println("Failed to download submission");
+            }
+        } catch (Exception e) {
+            System.out.println("Error downloading submission: " + e.getMessage());
+        }
+    }
+
 }
