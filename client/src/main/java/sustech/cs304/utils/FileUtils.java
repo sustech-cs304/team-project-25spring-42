@@ -3,6 +3,7 @@ package sustech.cs304.utils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class FileUtils {
         String fileName = file.getName();
         String extension = "";
         int lastDotIndex = fileName.lastIndexOf('.');
-        if (lastDotIndex > 0) { // 确保文件名中包含 "."
+        if (lastDotIndex > 0) {
             extension = fileName.substring(lastDotIndex + 1);
         }
         return extension;
@@ -52,5 +53,28 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Path getAppDataPath() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String userHome = System.getProperty("user.home");
+
+        Path appDataPath;
+
+        if (os.contains("win")) {
+            appDataPath = Paths.get(userHome, "AppData", "Roaming", "AIDE");
+        } else if (os.contains("mac")) {
+            appDataPath = Paths.get(userHome, "Library", "Application Support", "AIDE");
+        } else {
+            appDataPath = Paths.get(userHome, ".AIDE");
+        }
+        if (!Files.exists(appDataPath)) {
+            try {
+                Files.createDirectories(appDataPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return appDataPath;
     }
 }

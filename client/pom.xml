@@ -4,7 +4,7 @@
     <groupId>sustech.cs304</groupId>
     <artifactId>AIDE</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.0</version>
+    <version>1.0.0</version>
     <name>AIDE</name>
     <url>http://maven.apache.org</url>
 
@@ -14,6 +14,7 @@
         <javafx.version>23.0.1</javafx.version>
         <jeditermfx.version>1.1.0</jeditermfx.version>
         <pty4j.version>0.12.31</pty4j.version>
+        <main.class>sustech.cs304.App</main.class>
     </properties>
 
     <dependencyManagement>
@@ -64,12 +65,17 @@
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version> 
         </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>eu.mihosoft.monacofx</groupId> -->
+        <!--     <artifactId>monacofx</artifactId> -->
+        <!--     <version>1.0.0</version> -->
+        <!--     <scope>system</scope> -->
+        <!--     <systemPath>${project.basedir}/lib/Monacofx.jar</systemPath> -->
+        <!-- </dependency> -->
         <dependency>
             <groupId>eu.mihosoft.monacofx</groupId>
             <artifactId>monacofx</artifactId>
             <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Monacofx.jar</systemPath>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java -->
         <dependency>
@@ -158,7 +164,9 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.5</version>
                 <configuration>
-                    <mainClass>sustech.cs304.App</mainClass>
+                    <mainClass>${main.class}</mainClass>
+                    <launcher>app</launcher>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
 
@@ -177,11 +185,72 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
                 <configuration>
                     <release>${java.version}</release>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>shaded</shadedClassifierName>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>${main.class}</mainClass>
+                            </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+              </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.6</version>
+                <configuration>
+                    <input>${project.build.directory}</input>
+                    <name>${project.artifactId}</name>
+                    <mainJar>${project.build.finalName}-shaded.jar</mainJar>
+                    <mainClass>${main.class}</mainClass>
+                    <type>APP_IMAGE</type>
+                    <destination>dist</destination>
+                    <icon>src/main/resources/img/logo.icns</icon>
+                    <javaOptions>
+                        <javaOption>-Xmx512m</javaOption>
+                    </javaOptions>
+                    <modulePaths>
+                        <modulePath>lib/javafx-sdk-${javafx.version}/lib</modulePath>
+                    </modulePaths>
+                    <addModules>
+                        <addModule>javafx.controls</addModule>
+                        <addModule>javafx.fxml</addModule>
+                        <addModule>javafx.web</addModule>
+                        <addModule>javafx.swing</addModule>
+                        <addModule>javafx.graphics</addModule>
+                        <addModule>java.logging</addModule>
+                    </addModules>
+                    <appVersion>${project.version}</appVersion>
+                    <vendor>SUSTech CS304</vendor>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>package-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

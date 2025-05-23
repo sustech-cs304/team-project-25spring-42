@@ -2,6 +2,7 @@ package sustech.cs304.controller;
 
 import okhttp3.*;
 import sustech.cs304.service.AsyncAuthChecker;
+import sustech.cs304.utils.FileUtils;
 
 import java.awt.*;
 import java.io.IOException;
@@ -52,8 +53,8 @@ public class LoginController {
 
     @FXML
     public void lastLogin() throws IOException {
-        String projectRoot = System.getProperty("user.dir");
-        String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+        String projectRoot = FileUtils.getAppDataPath().toString();
+        String filePath = projectRoot + File.separator + "savedUserId.txt";
         File file = new File(filePath);
         if (!file.exists()) {
             return;

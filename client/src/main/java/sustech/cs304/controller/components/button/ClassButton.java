@@ -23,7 +23,7 @@ public class ClassButton extends Button {
     private boolean isActive;
 
     public ClassButton() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ClassButton.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/classbutton.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
