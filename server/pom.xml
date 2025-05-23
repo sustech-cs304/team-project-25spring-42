@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>sustech.cs304</groupId>
 	<artifactId>AIDE</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>AIDE</name>
 	<description>AIDE</description>
 	<url/>
