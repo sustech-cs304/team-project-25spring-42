@@ -1,6 +1,10 @@
 package sustech.cs304.utils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class FileUtils {
 
@@ -27,5 +31,26 @@ public class FileUtils {
 
     public static boolean ifDotFile(File file){
         return file.getName().startsWith(".");
+    }
+
+    public static void modifyEnvFile(String key, String value) {
+        try {
+            String filePath = "./" + File.separator + ".env";
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            boolean keyExists = false;
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).startsWith(key)) {
+                    lines.set(i, key + "=" + value);
+                    keyExists = true;
+                    break;
+                }
+            }
+            if (!keyExists) {
+                lines.add(key + "=" + value);
+            }
+            Files.write(Paths.get(filePath), lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

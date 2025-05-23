@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -27,6 +28,7 @@ public class MenuBarController {
     private Menu[] classMenus;
     private Menu[] userHomeMenus;
     private Menu[] chatMenus;
+    private Menu[] settingMenus;
     private String css;
 
     private IDEController ideController;
@@ -37,6 +39,7 @@ public class MenuBarController {
         chatMenus = new Menu[]{colorMenu, helpMenu};
         classMenus = new Menu[]{colorMenu, courseMenu, helpMenu};
         userHomeMenus = new Menu[]{colorMenu, helpMenu};
+        settingMenus = new Menu[]{colorMenu, helpMenu};
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             menuBar.setUseSystemMenuBar(true);
         }
@@ -88,10 +91,17 @@ public class MenuBarController {
 
             try{
                 if (extension.equals("java")) {
-                    String command = "java" + " " + filePath;
+                    String javaHome = Dotenv.load().get("JAVA_HOME");
+                    if (javaHome == null) javaHome = System.getenv("java.home");
+                    String command = javaHome + "/bin/java" + " " + filePath;
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("py")) {
-                    String command = "python" + " " + filePath;
+                    String pythonPath = Dotenv.load().get("PYTHONPATH");
+                    System.out.println(pythonPath);
+                    if (pythonPath == null) pythonPath = System.getenv("PYTHONPATH");
+                    String command = "PYTHONPATH=" + pythonPath;
+                    ideController.getJeditermController().executeCommand(command);
+                    command = "python" + " " + filePath;
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("c")) {
                     String command = "gcc" + " " + filePath + " -o " + file.getAbsolutePath().replace(".c", "");
@@ -150,6 +160,9 @@ public class MenuBarController {
                 for (Menu menu : this.userHomeMenus) {
                     menu.setVisible(false);
                 }
+                for (Menu menu : this.settingMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.IDEMenus) {
                     menu.setVisible(true);
                 }
@@ -161,6 +174,9 @@ public class MenuBarController {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.settingMenus) {
                     menu.setVisible(false);
                 }
                 for (Menu menu : this.classMenus) {
@@ -176,6 +192,9 @@ public class MenuBarController {
                 for (Menu menu : this.classMenus) {
                     menu.setVisible(false);
                 }
+                for (Menu menu : this.settingMenus) {
+                    menu.setVisible(false);
+                }
                 for (Menu menu : this.userHomeMenus) {
                     menu.setVisible(true);
                 }
@@ -189,7 +208,26 @@ public class MenuBarController {
                 for (Menu menu : this.userHomeMenus) {
                     menu.setVisible(false);
                 }
+                for (Menu menu : this.settingMenus) {
+                    menu.setVisible(false);
+                }
                  for (Menu menu : this.chatMenus) {
+                    menu.setVisible(true);
+                }
+            } else if (mode.equals("setting")) {
+                for (Menu menu : IDEMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.classMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.userHomeMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.chatMenus) {
+                    menu.setVisible(false);
+                }
+                for (Menu menu : this.settingMenus) {
                     menu.setVisible(true);
                 }
             }
@@ -214,5 +252,4 @@ public class MenuBarController {
         AlterUtils.showInvitationList((Stage) this.menuBar.getScene().getWindow(), courseList);
         ideController.getClassController().initializeClassChoiceScroll();
     }
-
 }

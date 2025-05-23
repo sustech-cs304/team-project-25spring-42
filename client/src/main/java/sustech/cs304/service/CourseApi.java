@@ -6,6 +6,7 @@ import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.Submission;
 import sustech.cs304.entity.User;
 
 public interface CourseApi {
@@ -30,4 +31,7 @@ public interface CourseApi {
     void acceptCourseInvitation(Long courseId, String userId);
     void rejectCourseInvitation(Long courseId, String userId);
     List<Course> getCourseInvitationByUserId(String userId);
+
+    List<Submission> getSubmissionByAssignmentId(Long assignmentId);
+
 }

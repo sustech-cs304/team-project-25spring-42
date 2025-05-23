@@ -23,10 +23,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -38,6 +34,7 @@ import sustech.cs304.entity.Announce;
 import sustech.cs304.entity.Assignment;
 import sustech.cs304.entity.Course;
 import sustech.cs304.entity.Resource;
+import sustech.cs304.entity.Submission;
 import sustech.cs304.entity.User;
 import sustech.cs304.service.CourseApi;
 import sustech.cs304.service.CourseApiImpl;
@@ -670,6 +667,68 @@ public class AlterUtils {
         });
         tableView.getColumns().addAll(courseNameCol, courseIdCol, actionCol);
         tableView.getItems().addAll(courses);
+        Button okButton = new Button("OK");
+        okButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10, okButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(10));
+        VBox vbox = new VBox(10, tableView, buttonBox);
+        vbox.setPadding(new Insets(20));
+        Scene dialogScene = new Scene(vbox, 500, 350);
+        Scene ownerScene = owner.getScene();
+        if (ownerScene != null && !ownerScene.getStylesheets().isEmpty()) {
+            dialogScene.getStylesheets().addAll(ownerScene.getStylesheets());
+        }
+        dialogStage.setScene(dialogScene);
+        dialogStage.centerOnScreen();
+        dialogStage.showAndWait();
+    }
+
+    public static void showSubmission(Stage owner, Long assignmentId) {
+        CourseApi courseApi = new CourseApiImpl();
+        List<Submission> submissions = courseApi.getSubmissionByAssignmentId(assignmentId);
+        Stage dialogStage = new Stage();
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.initOwner(owner);
+        dialogStage.setResizable(false);
+        dialogStage.initStyle(StageStyle.UTILITY);
+        dialogStage.setTitle("Submission List");
+        TableView<Submission> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn<Submission, String> userIdCol = new TableColumn<>("User ID");
+        userIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getUserId())));
+        TableColumn<Submission, String> operationCol = new TableColumn<>("Download");
+        operationCol.setCellFactory(col -> new TableCell<>() {
+            private final Button downloadButton = new Button("Download");
+            {
+                downloadButton.getStyleClass().add("operation-button");
+                downloadButton.setOnAction(e -> {
+                    Submission submission = getTableView().getItems().get(getIndex());
+                    String address = submission.getAddress();
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Save File");
+                    fileChooser.setInitialFileName(address.substring(address.lastIndexOf("/") + 1));
+                    File file = fileChooser.showSaveDialog(dialogStage);
+                    if (file != null) {
+                        courseApi.downloadResource(address, file.getAbsolutePath());
+                    }
+                });
+            }
+
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(downloadButton);
+                }
+            }
+        });
+        tableView.getColumns().addAll(userIdCol, operationCol);
+        if (submissions == null || submissions.isEmpty()) {
+        } else {
+            tableView.getItems().addAll(submissions);
+        }
         Button okButton = new Button("OK");
         okButton.setOnAction(e -> dialogStage.close());
         HBox buttonBox = new HBox(10, okButton);

@@ -138,23 +138,16 @@ public class TeacherCourseController {
             assignmentItems.add(new AssignmentItem(assignment));
         }
         assignmentTable.setItems(assignmentItems);
-        TableColumn<AssignmentItem, String> actionColumn = (TableColumn<AssignmentItem, String>) assignmentTable.getColumns().get(4);
+        TableColumn<AssignmentItem, String> actionColumn = (TableColumn<AssignmentItem, String>) assignmentTable.getColumns().get(3);
         actionColumn.setCellFactory(col -> new TableCell<AssignmentItem, String>() {
-            private final Button submitButton = new Button("Submit");
+            private final Button submitButton = new Button("View Submission");
             {
                 submitButton.getStyleClass().add("operation-button");
                 submitButton.setOnAction(event -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Select File to Submit");
-                    Stage stage = (Stage) submitButton.getScene().getWindow();
-
-                    File selectedFile = fileChooser.showOpenDialog(stage);
-                    if (selectedFile != null) {
-                        String filePath = selectedFile.getAbsolutePath();
-                        AssignmentItem item = getTableView().getItems().get(getIndex());
-                        courseApi.submitAssignment(item.getAssignment().getId(), App.user.getUserId(), filePath);
-                        loadData();
-                    }
+                    AssignmentItem item = getTableView().getItems().get(getIndex());
+                    AlterUtils.showSubmission(
+                        (Stage) submitButton.getScene().getWindow(),
+                        item.getAssignment().getId());
                 });
             }
 

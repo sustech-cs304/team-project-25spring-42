@@ -22,6 +22,9 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     @Query("SELECT s.address FROM Submission s WHERE s.id = :id")
     String findAddressById(@Param("id") Long id);
 
+    @Query("SELECT s FROM Submission s WHERE s.assignmentId = :assignmentId")
+    List<Submission> findByAssignmentId(@Param("assignmentId") Long assignmentId);
+
     @Modifying
     @Transactional
     @Query("UPDATE Submission s SET s.address = :address WHERE s.id = :id")
