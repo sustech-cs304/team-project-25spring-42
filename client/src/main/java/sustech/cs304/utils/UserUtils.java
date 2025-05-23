@@ -31,8 +31,8 @@ public class UserUtils {
     }
 
     private static String getSavedUserId() {
-        String projectRoot = System.getProperty("user.dir");
-        String filePath = projectRoot + "/src/main/resources/txt/savedUserId.txt";
+        String projectRoot = FileUtils.getAppDataPath().toString();
+        String filePath = projectRoot + File.separator + "savedUserId.txt";
         File file = new File(filePath);
         if (!file.exists()) {
             return null;

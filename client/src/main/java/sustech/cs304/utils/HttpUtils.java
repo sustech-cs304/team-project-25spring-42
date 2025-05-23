@@ -72,7 +72,7 @@ public class HttpUtils {
 
 
     public static String getBaseUrl() {
-        return "http://139.180.143.70:8080";
+        return ServerConfig.SERVER_URL;
     }
 
     public static String getUserApiUrl() {
