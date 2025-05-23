@@ -191,56 +191,55 @@
                 </configuration>
             </plugin>
             <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-shade-plugin</artifactId>
-      <version>3.4.1</version>
-      <executions>
-        <execution>
-          <phase>package</phase>
-          <goals>
-            <goal>shade</goal>
-          </goals>
-          <configuration>
-        <shadedArtifactAttached>true</shadedArtifactAttached>
-        <shadedClassifierName>shaded</shadedClassifierName>
-            <transformers>
-              <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                <mainClass>sustech.cs304.App</mainClass> <!-- 修改为你的主类路径 -->
-              </transformer>
-            </transformers>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
-       
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>shaded</shadedClassifierName>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>${main.class}</mainClass>
+                            </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+              </executions>
+            </plugin>
             <plugin>
                 <groupId>org.panteleyev</groupId>
                 <artifactId>jpackage-maven-plugin</artifactId>
                 <version>1.6.6</version>
                 <configuration>
-                            <input>${project.build.directory}</input>
-                            <name>${project.artifactId}</name>
-                            <mainJar>${project.build.finalName}-shaded.jar</mainJar>
-                            <mainClass>${main.class}</mainClass>
-                            <type>APP_IMAGE</type>
-                            <destination>dist</destination>
-                            <icon>src/main/resources/img/logo.icns</icon>
-                            <javaOptions>
-                                <javaOption>-Xmx512m</javaOption>
-                            </javaOptions>
-                            <modulePaths>
-                                <modulePath>lib/javafx-sdk-${javafx.version}/lib</modulePath>
-                            </modulePaths>
-                            <addModules>
-                                <addModule>javafx.controls</addModule>
-                                <addModule>javafx.fxml</addModule>
-                                <addModule>javafx.web</addModule>
-                                <addModule>javafx.swing</addModule>
-                                <addModule>javafx.graphics</addModule>
-                                <addModule>java.logging</addModule>
-                            </addModules>
-                            <appVersion>${project.version}</appVersion>
-                            <vendor>SUSTech CS304</vendor>
+                    <input>${project.build.directory}</input>
+                    <name>${project.artifactId}</name>
+                    <mainJar>${project.build.finalName}-shaded.jar</mainJar>
+                    <mainClass>${main.class}</mainClass>
+                    <type>APP_IMAGE</type>
+                    <destination>dist</destination>
+                    <icon>src/main/resources/img/logo.icns</icon>
+                    <javaOptions>
+                        <javaOption>-Xmx512m</javaOption>
+                    </javaOptions>
+                    <modulePaths>
+                        <modulePath>lib/javafx-sdk-${javafx.version}/lib</modulePath>
+                    </modulePaths>
+                    <addModules>
+                        <addModule>javafx.controls</addModule>
+                        <addModule>javafx.fxml</addModule>
+                        <addModule>javafx.web</addModule>
+                        <addModule>javafx.swing</addModule>
+                        <addModule>javafx.graphics</addModule>
+                        <addModule>java.logging</addModule>
+                    </addModules>
+                    <appVersion>${project.version}</appVersion>
+                    <vendor>SUSTech CS304</vendor>
                 </configuration>
                 <executions>
                     <execution>
