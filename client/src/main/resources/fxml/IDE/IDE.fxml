@@ -63,7 +63,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="modeButton">
+                  <Button maxHeight="60.0" maxWidth="60.0" minHeight="60.0" minWidth="60.0" mnemonicParsing="false" onAction="#switchToSetting" prefHeight="60.0" prefWidth="60.0" styleClass="modeButton">
                      <graphic>
                         <ImageView fx:id="settingImage" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
