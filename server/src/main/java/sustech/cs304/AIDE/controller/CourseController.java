@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Controller for managing courses.
+ */
 @RestController
 @RequestMapping("/course")
 public class CourseController {
@@ -35,6 +38,18 @@ public class CourseController {
     private final CourseInvitationRepository courseInvitationRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Constructor for CourseController.
+     *
+     * @param courseRepository           The repository for courses.
+     * @param enrollmentRepository       The repository for enrollments.
+     * @param assignmentRepository       The repository for assignments.
+     * @param resourceRepository         The repository for resources.
+     * @param announceRepository         The repository for announcements.
+     * @param submissionRepository       The repository for submissions.
+     * @param courseInvitationRepository The repository for course invitations.
+     * @param userRepository             The repository for users.
+     */
     public CourseController(
         CourseRepository courseRepository, 
         EnrollmentRepository enrollmentRepository, 
@@ -55,6 +70,13 @@ public class CourseController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Deletes a course by its ID.
+     *
+     * @param courseId The ID of the course to be deleted.
+     * @param userId   The ID of the user requesting the deletion.
+     * @return A response indicating whether the deletion was successful.
+     */
     @GetMapping(value = "/deleteCourse", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> deleteCourse(@RequestParam String courseId, @RequestParam String userId) {
@@ -81,6 +103,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves a course by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The course details if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getCourseById", produces = "application/json")
     @Transactional
     public ResponseEntity<ClientCourse> getCourseById(@RequestParam String courseId) {
@@ -96,6 +124,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves the course name by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The course name if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getCourseName", produces = "application/json")
     @Transactional
     public ResponseEntity<UserResponse> getCourseName(@RequestParam String courseId) {
@@ -109,6 +143,12 @@ public class CourseController {
         }
     }
     
+    /**
+     * Retrieves the admin ID of a course by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The admin ID if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getAdminId", produces = "application/json")
     @Transactional
     public ResponseEntity<String> getAdminId(@RequestParam String courseId) {
@@ -122,6 +162,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves the open time of a course by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The open time if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getOpenTime", produces = "application/json")
     @Transactional
     public ResponseEntity<String> getOpenTime(@RequestParam String courseId) {
@@ -135,6 +181,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves the close time of a course by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The close time if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getCloseTime", produces = "application/json")
     @Transactional
     public ResponseEntity<UserResponse> getCloseTime(@RequestParam String courseId) {
@@ -148,6 +200,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves the opening status of a course by its ID.
+     *
+     * @param courseId The ID of the course to be retrieved.
+     * @return The opening status if found, otherwise a not found response.
+     */
     @GetMapping(value = "/getOpening", produces = "application/json")
     @Transactional
     public ResponseEntity<UserResponse> getOpening(@RequestParam String courseId) {
@@ -161,6 +219,13 @@ public class CourseController {
         }
     }
 
+    /**
+     * Creates a new course.
+     *
+     * @param courseName The name of the course to be created.
+     * @param adminId    The ID of the admin creating the course.
+     * @return A response indicating whether the creation was successful.
+     */
     @GetMapping(value = "/createCourse", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> createCourse(@RequestParam String courseName, @RequestParam String adminId) {
@@ -172,6 +237,14 @@ public class CourseController {
         return ResponseEntity.ok(new SetResponse(true));
     }
 
+    /**
+     * Sets the course name.
+     *
+     * @param courseId   The ID of the course to be updated.
+     * @param courseName The new name of the course.
+     * @param userId     The ID of the user requesting the update.
+     * @return A response indicating whether the update was successful.
+     */
     @GetMapping(value = "/setCourseName", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> setCourseName(@RequestParam String courseId, @RequestParam String courseName, @RequestParam String userId) {
@@ -191,6 +264,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Reopens a course.
+     * @param courseId The ID of the course to be reopened.
+     * @param userId   The ID of the user requesting the reopening.
+     * @return A response indicating whether the reopening was successful.
+     */
     @GetMapping(value = "/reOpenCourse", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> reOpenCourse(@RequestParam String courseId, @RequestParam String userId) {
@@ -210,6 +289,13 @@ public class CourseController {
         }
     }
 
+    /**
+     * Closes a course.
+     *
+     * @param courseId The ID of the course to be closed.
+     * @param userId   The ID of the user requesting the closure.
+     * @return A response indicating whether the closure was successful.
+     */
     @GetMapping(value = "/closeCourse", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> closeCourse(@RequestParam String courseId, @RequestParam String userId) {
@@ -229,6 +315,14 @@ public class CourseController {
         }
     }
     
+    /**
+     * Sets the admin ID of a course.
+     *
+     * @param courseId   The ID of the course to be updated.
+     * @param newAdminId The new admin ID.
+     * @param userId     The ID of the user requesting the update.
+     * @return A response indicating whether the update was successful.
+     */
     @GetMapping(value = "/setAdminId", produces = "application/json")
     @Transactional
     public ResponseEntity<SetResponse> setAdminId(@RequestParam String courseId, @RequestParam String newAdminId, @RequestParam String userId) {
@@ -248,6 +342,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Retrieves a list of users enrolled in a course by its ID.
+     *
+     * @param courseId The ID of the course.
+     * @return A list of users enrolled in the course.
+     */
     @GetMapping(value = "/getUserByCourseId", produces = "application/json")
     @Transactional
     public ResponseEntity<List<User>> getUserByCourseId(@RequestParam String courseId) {
@@ -262,7 +362,12 @@ public class CourseController {
         return ResponseEntity.ok(userList);
     }
 
-
+    /**
+     * Retrieves a list of course IDs for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @return A list of course IDs.
+     */
     @PostMapping(value = "/getCourseIdList", produces = "application/json")
     public ResponseEntity<List<Long>> getCourseIdList(@RequestParam String userId) {
         List<Long> courseIdList = enrollmentRepository.findCourseIdByUserId(userId);
@@ -270,6 +375,12 @@ public class CourseController {
         return ResponseEntity.ok(courseIdList);
     }
 
+    /**
+     * Retrieves a list of courses for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @return A list of courses.
+     */
     @PostMapping(value = "/getCourseList", produces = "application/json")
     public ResponseEntity<List<ClientCourse>> getCourseList(@RequestParam String userId) {
         List<Long> courseIdList = enrollmentRepository.findCourseIdByUserId(userId);
@@ -293,6 +404,17 @@ class ClientCourse {
     private String openTime;
     private String closeTime;
     private boolean opening;
+
+    /**
+     * Constructor for ClientCourse.
+     *
+     * @param id        The ID of the course.
+     * @param courseName The name of the course.
+     * @param adminId   The ID of the admin.
+     * @param openTime  The open time of the course.
+     * @param closeTime The close time of the course.
+     * @param opening   The opening status of the course.
+     */
     public ClientCourse(Long id, String courseName, String adminId, LocalDateTime openTime, LocalDateTime closeTime, boolean opening) {
         this.id = id;
         this.courseName = courseName;
@@ -301,21 +423,45 @@ class ClientCourse {
         this.closeTime = closeTime != null ? closeTime.toString() : null;
         this.opening = opening;
     }
+
+    /**
+     * Get the id of the course.
+     */
     public Long getId() {
         return id;
     }
+
+    /**
+     * Get the course name.
+     */
     public String getCourseName() {
         return courseName;
     }
+
+    /**
+     * Get the admin ID.
+     */
     public String getAdminId() {
         return adminId;
     }
+
+    /**
+     * Get the open time of the course.
+     */
     public String getOpenTime() {
         return openTime;
     }
+
+    /**
+     * Get the close time of the course.
+     */
     public String getCloseTime() {
         return closeTime;
     }
+
+    /**
+     * Get the opening status of the course.
+     */
     public boolean isOpening() {
         return opening;
     }
@@ -323,18 +469,38 @@ class ClientCourse {
 
 class UserResponse {
     private String content;
+
+    /**
+     * Constructor for UserResponse.
+     *
+     * @param content The content of the response.
+     */
     UserResponse(String content) {
         this.content = content;
     }
+
+    /**
+     * Get the content of the response.
+     */
     public String getContent() {
         return content;
     }
 }
 class SetResponse {
     private boolean result;
+
+    /**
+     * Constructor for SetResponse.
+     *
+     * @param result The result of the operation.
+     */
     SetResponse(boolean result) {
         this.result = result;
     }
+
+    /**
+     * Get the result of the operation.
+     */
     public boolean getResult() {
         return result;
     }

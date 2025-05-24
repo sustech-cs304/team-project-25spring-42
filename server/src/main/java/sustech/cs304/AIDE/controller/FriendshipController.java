@@ -15,12 +15,21 @@ import sustech.cs304.AIDE.model.User;
 import sustech.cs304.AIDE.repository.FriendshipRepository;
 import sustech.cs304.AIDE.repository.UserRepository;
 
+/**
+ * Controller for managing friendships.
+ */
 @RestController
 @RequestMapping("/friendship")
 public class FriendshipController {
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Constructor for FriendshipController.
+     *
+     * @param friendshipRepository the repository for friendships
+     * @param userRepository the repository for users
+     */
     public FriendshipController(
         FriendshipRepository friendshipRepository,
         UserRepository userRepository
@@ -29,6 +38,13 @@ public class FriendshipController {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Applies for a friendship between two users.
+     *
+     * @param applicantId the ID of the applicant
+     * @param targetId the ID of the target user
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/apply")
     @Transactional
     public ResponseEntity<String> applyFriendship(@RequestParam String applicantId, @RequestParam String targetId) {
@@ -37,6 +53,13 @@ public class FriendshipController {
         return ResponseEntity.ok("Friendship request sent from " + applicantId + " to " + targetId);
     }
 
+    /**
+     * Accepts a friendship request between two users.
+     *
+     * @param applicantId the ID of the applicant
+     * @param targetId the ID of the target user
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/accept")
     @Transactional
     public ResponseEntity<String> acceptFriendship(@RequestParam String applicantId, @RequestParam String targetId) {
@@ -50,6 +73,13 @@ public class FriendshipController {
         }
     } 
 
+    /**
+     * Rejects a friendship request between two users.
+     *
+     * @param applicantId the ID of the applicant
+     * @param targetId the ID of the target user
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/reject")
     @Transactional
     public ResponseEntity<String> rejectFriendship(@RequestParam String applicantId, @RequestParam String targetId) {
@@ -62,6 +92,13 @@ public class FriendshipController {
         }
     }
 
+    /**
+     * Deletes a friendship between two users.
+     *
+     * @param userId1 the ID of the first user
+     * @param userId2 the ID of the second user
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/delete")
     @Transactional
     public ResponseEntity<String> deleteFriendship(@RequestParam String userId1, @RequestParam String userId2) {
@@ -79,6 +116,12 @@ public class FriendshipController {
         }
     }
 
+    /**
+     * Retrieves a list of friends for a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a response entity containing the list of friends
+     */
     @GetMapping("/getFriendList")
     @Transactional
     public ResponseEntity<List<User>> getFriendList(@RequestParam String userId) {
@@ -96,6 +139,12 @@ public class FriendshipController {
         return ResponseEntity.ok(friends);
     }
 
+    /**
+     * Retrieves a list of pending friendship requests for a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a response entity containing the list of pending friendship requests
+     */
     @GetMapping("/getFriendRequestList")
     @Transactional
     public ResponseEntity<List<User>> getFriendRequestList(@RequestParam String userId) {
