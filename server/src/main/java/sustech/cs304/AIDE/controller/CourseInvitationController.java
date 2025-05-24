@@ -19,6 +19,11 @@ import sustech.cs304.AIDE.repository.CourseRepository;
 import sustech.cs304.AIDE.repository.EnrollmentRepository;
 import sustech.cs304.AIDE.repository.UserRepository;
 
+/**
+ * Controller for managing course invitations.
+ *
+ * This class handles the creation, acceptance, rejection, and retrieval of course invitations.
+ */
 @RestController
 @RequestMapping("/course-invitation")
 public class CourseInvitationController {
@@ -27,6 +32,14 @@ public class CourseInvitationController {
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
 
+    /**
+     * Constructor for CourseInvitationController.
+     *
+     * @param courseInvitationRepository the repository for course invitations
+     * @param userRepository the repository for users
+     * @param enrollmentRepository the repository for enrollments
+     * @param courseRepository the repository for courses
+     */
     public CourseInvitationController(
         CourseInvitationRepository courseInvitationRepository,
         UserRepository userRepository,
@@ -39,6 +52,13 @@ public class CourseInvitationController {
         this.courseRepository = courseRepository;
     }
 
+    /**
+     * Creates invitations for a course to a list of users.
+     *
+     * @param courseId the ID of the course
+     * @param userIds a comma-separated string of user IDs
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/createInvitation")
     @Transactional
     public ResponseEntity<String> createInvitation(@RequestParam Long courseId, @RequestParam String userIds) {
@@ -61,6 +81,13 @@ public class CourseInvitationController {
         return ResponseEntity.ok("Invitations created successfully");
     }
 
+    /**
+     * Retrieves a list of course invitations for a specific user.
+     *
+     * @param courseId the ID of the course
+     * @param userId the ID of the user
+     * @return a response entity containing the list of course invitations
+     */
     @GetMapping("/acceptInvitation")
     @Transactional
     public ResponseEntity<String> acceptInvitation(@RequestParam Long courseId, @RequestParam String userId) {
@@ -76,6 +103,13 @@ public class CourseInvitationController {
         return ResponseEntity.ok("Invitation accepted successfully");
     }
 
+    /**
+     * Rejects a course invitation for a specific user.
+     *
+     * @param courseId the ID of the course
+     * @param userId the ID of the user
+     * @return a response entity indicating success or failure
+     */
     @GetMapping("/rejectInvitation")
     @Transactional
     public ResponseEntity<String> rejectInvitation(@RequestParam Long courseId, @RequestParam String userId) {
@@ -89,6 +123,12 @@ public class CourseInvitationController {
         return ResponseEntity.ok("Invitation rejected successfully");
     }
 
+    /**
+     * Retrieves a list of courses for which a user has been invited.
+     *
+     * @param userId the ID of the user
+     * @return a response entity containing the list of courses
+     */
     @GetMapping("/getInvitationCourses")
     @Transactional
     public ResponseEntity<List<Course>> getInvitationCourses(@RequestParam String userId) {

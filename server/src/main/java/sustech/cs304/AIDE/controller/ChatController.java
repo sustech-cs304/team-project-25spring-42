@@ -11,6 +11,11 @@ import org.springframework.stereotype.Controller;
 import sustech.cs304.AIDE.model.ChatMessage;
 import sustech.cs304.AIDE.repository.ChatMessageRepository;
 
+/**
+ * Controller for handling chat messages.
+ * 
+ * This class is responsible for sending private and group chat messages to users.
+ */
 @Controller
 public class ChatController {
 
@@ -20,6 +25,11 @@ public class ChatController {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
+    /**
+     * Handles sending a private chat message.
+     *
+     * @param message The chat message to be sent.
+     */
     @MessageMapping("/chat/private")
     public void sendPrivateMessage(@Payload ChatMessage message) {
         // Save the message to the database
@@ -33,6 +43,11 @@ public class ChatController {
         );
     }
 
+    /**
+     * Handles sending a group chat message.
+     *
+     * @param message The chat message to be sent.
+     */
     @MessageMapping("/chat/group")
     public void sendGroupMessage(@Payload ChatMessage message) {
         // Save the message to the database

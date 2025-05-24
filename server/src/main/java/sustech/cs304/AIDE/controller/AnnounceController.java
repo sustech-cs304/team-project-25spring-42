@@ -12,18 +12,38 @@ import sustech.cs304.AIDE.model.Course;
 import sustech.cs304.AIDE.repository.AnnounceRepository;
 import sustech.cs304.AIDE.repository.CourseRepository;
 
+/**
+ * Controller for handling announcements related to courses.
+ * 
+ * This class provides endpoints for creating, retrieving, updating, and deleting announcements.
+ */
 @RestController
 @RequestMapping("/announce")
 public class AnnounceController {
 
     private final AnnounceRepository announceRepository;
     private final CourseRepository courseRepository;
-
+    
+    /**
+     * Constructor for AnnounceController.
+     *
+     * @param announceRepository the AnnounceRepository instance
+     * @param courseRepository   the CourseRepository instance
+     */
     public AnnounceController(AnnounceRepository announceRepository, CourseRepository courseRepository) {
         this.announceRepository = announceRepository;
         this.courseRepository = courseRepository;
     }
 
+    /**
+     * Creates a new announcement.
+     *
+     * @param courseId        the ID of the course
+     * @param announceName    the name of the announcement
+     * @param announceContent the content of the announcement
+     * @param userId          the ID of the user creating the announcement
+     * @return a ResponseEntity indicating success or failure
+     */
     @PostMapping(value = "/createAnnounce", produces = "application/json")
     @Transactional
     public ResponseEntity<Boolean> createAnnounce(@RequestParam String courseId, @RequestParam String announceName, @RequestParam String announceContent, @RequestParam String userId) {
@@ -40,6 +60,12 @@ public class AnnounceController {
         return ResponseEntity.ok(true);
     }
 
+    /**
+     * Retrieves a list of announcements for a given course.
+     *
+     * @param courseId the ID of the course
+     * @return a ResponseEntity containing a list of ClientAnnounce objects
+     */
     @PostMapping(value = "/getAnnounceIdList", produces = "application/json")
     public ResponseEntity<longList> getAnnounceIdList(@RequestParam String courseId) {
         List<AnnounceProjection> announceList = announceRepository.findProjectByCourseId(courseId);
@@ -52,6 +78,12 @@ public class AnnounceController {
         return ResponseEntity.ok(new longList(announceIdList));
     }
 
+    /**
+     * Retrieves a list of visible announcements for a given course.
+     *
+     * @param courseId the ID of the course
+     * @return a ResponseEntity containing a list of ClientAnnounce objects
+     */
     @PostMapping(value = "/getVisibleAnnounceList", produces = "application/json")
     public ResponseEntity<List<ClientAnnounce>> getVisibleAnnounceList(@RequestParam String courseId) {
         List<Announce> announceList = announceRepository.findByCourseIdAndVisible(courseId, true);
@@ -72,7 +104,12 @@ public class AnnounceController {
         return ResponseEntity.ok(clientAnnounceList);
     }
 
-
+    /**
+     * Retrieves a list of visible announcement IDs for a given course.
+     *
+     * @param courseId the ID of the course
+     * @return a ResponseEntity containing a list of visible announcement IDs
+     */
     @PostMapping(value = "/getVisibleAnnounceIdList", produces = "application/json")
     public ResponseEntity<longList> getVisibleAnnounceIdList(@RequestParam String courseId) {
         List<AnnounceProjection> announceList = announceRepository.findProjectByCourseIdAndVisible(courseId, true);
@@ -84,7 +121,13 @@ public class AnnounceController {
                 .toList();
         return ResponseEntity.ok(new longList(announceIdList));
     }
-
+    
+    /**
+     * Retrieves a specific announcement by its ID.
+     *
+     * @param id the ID of the announcement
+     * @return a ResponseEntity containing the ClientAnnounce object
+     */
     @PostMapping(value = "/getAnnounce", produces = "application/json")
     @Transactional
     public ResponseEntity<ClientAnnounce> getAnnounce(@RequestParam Long id) {
@@ -105,6 +148,13 @@ public class AnnounceController {
         }
     }
 
+    /**
+     * Deletes an announcement by its ID.
+     *
+     * @param id the ID of the announcement
+     * @param userId the ID of the user requesting the deletion
+     * @return a ResponseEntity indicating success or failure
+     */
     @PostMapping(value = "/closeAnnounce", produces = "application/json")
     public ResponseEntity<Boolean> closeAnnounce(@RequestParam Long id, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
@@ -120,6 +170,13 @@ public class AnnounceController {
         return ResponseEntity.ok(true);
     }
 
+    /**
+     * Reopens an announcement by its ID.
+     *
+     * @param id the ID of the announcement
+     * @param userId the ID of the user requesting the reopening
+     * @return a ResponseEntity indicating success or failure
+     */
     @PostMapping(value = "/reOpenAnnounce", produces = "application/json")
     public ResponseEntity<Boolean> reOpenAnnounce(@RequestParam Long id, @RequestParam String userId) {
         Optional<Announce> announceOptional = announceRepository.findById(id);
@@ -135,6 +192,14 @@ public class AnnounceController {
         return ResponseEntity.ok(true);
     }
 
+    /**
+     * Updates the name of an announcement by its ID.
+     *
+     * @param id the ID of the announcement
+     * @param announceName the new name for the announcement
+     * @param userId the ID of the user requesting the update
+     * @return a ResponseEntity indicating success or failure
+     */
     @PostMapping(value = "/setAnnounceName", produces = "application/json")
     @Transactional
     public ResponseEntity<Boolean> setAnnounceName(@RequestParam Long id, @RequestParam String announceName, @RequestParam String userId) {
@@ -151,6 +216,14 @@ public class AnnounceController {
         return ResponseEntity.ok(true);
     }
 
+    /**
+     * Updates the content of an announcement by its ID.
+     *
+     * @param id the ID of the announcement
+     * @param announceContent the new content for the announcement
+     * @param userId the ID of the user requesting the update
+     * @return a ResponseEntity indicating success or failure
+     */
     @PostMapping(value = "/setAnnounceContent", produces = "application/json")
     @Transactional
     public ResponseEntity<Boolean> setAnnounceContent(@RequestParam Long id, @RequestParam String announceContent, @RequestParam String userId) {
@@ -183,6 +256,16 @@ class ClientAnnounce {
     private String upLoadTime;
     private String announceContent;
     private boolean visible;
+    /**
+     * Constructor for ClientAnnounce.
+     *
+     * @param id              the ID of the announcement
+     * @param courseId        the ID of the course
+     * @param announceName    the name of the announcement
+     * @param upLoadTime      the upload time of the announcement
+     * @param announceContent the content of the announcement
+     * @param visible         whether the announcement is visible
+     */
     public ClientAnnounce(Long id, String courseId, String announceName, String upLoadTime, String announceContent, boolean visible) {
         this.id = id;
         this.courseId = courseId;
@@ -191,30 +274,58 @@ class ClientAnnounce {
         this.announceContent = announceContent;
         this.visible = visible;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public Long getId() {
         return id;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public String getCourseId() {
         return courseId;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public String getAnnounceName() {
         return announceName;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public String getUpLoadTime() {
         return upLoadTime;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public String getAnnounceContent() {
         return announceContent;
     }
+    /**
+     * Getters for the ClientAnnounce class.
+     */
     public boolean isVisible() {
         return visible;
     }
 }
 class longList {
     private List<Long> longList;
+    /**
+     * Constructor for longList.
+     *
+     * @param longList the list of Long values
+     */
     public longList(List<Long> longList) {
         this.longList = longList;
     }
+    /**
+     * Getter for the longList.
+     *
+     * @return the list of Long values
+     */
     public List<Long> getLongList() {
         return longList;
     }
