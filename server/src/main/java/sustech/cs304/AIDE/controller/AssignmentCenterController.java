@@ -22,6 +22,11 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * Controller for managing assignments in the assignment center.
+ * 
+ * This controller handles requests related to creating, uploading, and managing assignments.
+ */
 @RestController
 @RequestMapping("/assignment")
 public class AssignmentCenterController {
@@ -30,13 +35,31 @@ public class AssignmentCenterController {
     private final CourseRepository courseRepository;
     private final ResourceRepository resourceRepository;
     private final SubmissionRepository submissionRepository;
-
+    
+    /**
+     * Constructor for AssignmentCenterController.
+     *
+     * @param assignmentRepository the assignment repository
+     * @param courseRepository the course repository
+     * @param resourceRepository the resource repository
+     * @param submissionRepository the submission repository
+     */
     public AssignmentCenterController(AssignmentRepository assignmentRepository, CourseRepository courseRepository, ResourceRepository resourceRepository, SubmissionRepository submissionRepository) {
         this.assignmentRepository = assignmentRepository;
         this.courseRepository = courseRepository;
         this.resourceRepository = resourceRepository;
         this.submissionRepository = submissionRepository;
     }
+
+    /**
+     * Creates a new assignment.
+     *  
+     * @param courseId the ID of the course
+     * @param assignmentName the name of the assignment
+     * @param deadline the deadline for the assignment
+     * @param userId the ID of the user creating the assignment
+     * @return the ID of the created assignment
+     */
     @PostMapping(value = "/createAssignment", produces = "application/json")
     public ResponseEntity<Long> createAssignment(@RequestParam String courseId, @RequestParam String assignmentName, @RequestParam String deadline, @RequestParam String userId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
@@ -54,6 +77,14 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(assignmentId);
     }
 
+    /**
+     * Uploads an attachment for an assignment.
+     * 
+     * @param assignmentId the ID of the assignment
+     * @param file the file to be uploaded
+     * @param userId the ID of the user uploading the file
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/uploadAttachment", produces = "application/json")
     public ResponseEntity<SetResponse> uploadAttachment(@RequestParam String assignmentId, @RequestParam("file") MultipartFile file, @RequestParam String userId) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -83,6 +114,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(new SetResponse(true));
     }
 
+    /**
+     * Retrieves the resource address by resource ID.
+     * 
+     * @param resourceId the ID of the resource
+     * @return the address of the resource
+     */
     @PostMapping(value = "/getResourceAddress", produces = "application/json")
     public ResponseEntity<String> getResourceAddress(@RequestParam String resourceId) {
         String address = resourceRepository.findAddressById(Long.parseLong(resourceId));
@@ -94,6 +131,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(address);
     }
 
+    /**
+     * Retrieves the attachment ID by assignment ID.
+     * 
+     * @param assignmentId the ID of the assignment
+     * @return a list of attachment IDs
+     */
     @PostMapping(value = "/getAttachmentId", produces = "application/json")
     public ResponseEntity<List<Long>> getAttachmentId(@RequestParam String assignmentId) {
         List<Long> attachmentIdList = resourceRepository.findIdByAssignmentId(assignmentId);
@@ -105,6 +148,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(attachmentIdList);
     }
 
+    /**
+     * Retrieves the attachment resource by ID.
+     * 
+     * @param resourceId the ID of the resource
+     * @return the attachment resource
+     */
     @PostMapping(value = "/getAttachmentResourceById", produces = "application/json")
     public ResponseEntity<ClientResource> getAttachmentResourceById(@RequestParam String resourceId) {
         Optional<Resource> resourceOptional = resourceRepository.findById(Long.parseLong(resourceId));
@@ -124,6 +173,14 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(clientResource);
     }
 
+    /**
+     * Changes the name of an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param newName the new name for the assignment
+     * @param userId the ID of the user making the change
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/changeAssignmentName", produces = "application/json")
     public ResponseEntity<SetResponse> changeAssignmentName(@RequestParam String assignmentId, @RequestParam String newName, @RequestParam String userId) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -141,6 +198,14 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(new SetResponse(true));
     }
     
+    /**
+     * Changes the deadline of an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param newDeadline the new deadline for the assignment
+     * @param userId the ID of the user making the change
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/changeDeadline", produces = "application/json")
     public ResponseEntity<SetResponse> changeDeadline(@RequestParam String assignmentId, @RequestParam String newDeadline, @RequestParam String userId) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -158,6 +223,13 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(new SetResponse(true));
     }
 
+    /**
+     * Closes an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param userId the ID of the user making the change
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/closeAssignment", produces = "application/json")
     public ResponseEntity<SetResponse> closeAssignment(@RequestParam String assignmentId, @RequestParam String userId) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -175,6 +247,13 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(new SetResponse(true));
     }
     
+    /**
+     * Reopens an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param userId the ID of the user making the change
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/reOpenAssignment", produces = "application/json")
     public ResponseEntity<SetResponse> reOpenAssignment(@RequestParam String assignmentId, @RequestParam String userId) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -192,6 +271,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(new SetResponse(true));
     }
 
+    /**
+     * Get the list of assignment IDs for a course.
+     * 
+     * @param courseId the ID of the course
+     * @return a list of assignment IDs
+     */
     @PostMapping(value = "/getAssignmentIdList", produces = "application/json")
      public ResponseEntity<List<Long>> getAssignmentIdList(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
@@ -204,6 +289,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(assignmentIdList);
     }
 
+    /**
+     * Get the list of visible assignment IDs for a course.
+     * 
+     * @param courseId the ID of the course
+     * @return a list of visible assignment IDs
+     */
     @PostMapping(value = "/getVisibleAssignmentIdList", produces = "application/json")
      public ResponseEntity<List<Long>> getVisibleAssignmentIdList(@RequestParam String courseId) {
         Optional<Course> courseOptional = courseRepository.findById(Long.parseLong(courseId));
@@ -215,6 +306,13 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(assignmentRepository.findVisibleAssignmentIdByCourseId(courseId));
     }
 
+    /**
+     * Get the assignment by ID and user ID.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param userId the ID of the user
+     * @return the assignment details
+     */
     @PostMapping(value = "/getAssignment", produces = "application/json")
     public ResponseEntity<clientPersonalAssignment> getAssignment(@RequestParam String assignmentId, @RequestParam String userId) {
         System.out.println("assignmentId: " + assignmentId);
@@ -233,6 +331,13 @@ public class AssignmentCenterController {
         }
     }
 
+    /**
+     * Get all assignments for a course and user.
+     *
+     * @param courseId the ID of the course
+     * @param userId the ID of the user
+     * @return a list of assignments
+     */
     @PostMapping(value = "/getAllAssignment", produces = "application/json")
     public ResponseEntity<List<clientPersonalAssignmentTwo>> getAllAssignment(@RequestParam String courseId, @RequestParam String userId) {
         String adminId = courseRepository.findAdminIdById(Long.parseLong(courseId));
@@ -337,6 +442,14 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(assignmentList);
     }
 
+    /**
+     * Submits an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @param userId the ID of the user submitting the assignment
+     * @param file the file to be submitted
+     * @return a response indicating success or failure
+     */
     @PostMapping(value = "/submitAssignment", produces = "application/json")
     public ResponseEntity<Boolean> submitAssignment(@RequestParam String assignmentId, @RequestParam String userId, @RequestParam("file") MultipartFile file) {
         Optional<Assignment> assignmentOptional = assignmentRepository.findById(Long.parseLong(assignmentId));
@@ -365,6 +478,12 @@ public class AssignmentCenterController {
         return ResponseEntity.ok(true);
     }
 
+    /**
+     * Retrieves the list of submissions for an assignment.
+     *
+     * @param assignmentId the ID of the assignment
+     * @return a list of submissions
+     */
     @PostMapping(value = "/getSubmissionList", produces = "application/json")
     public ResponseEntity<List<Submission>> getSubmissionList(@RequestParam Long assignmentId) {
         List<Submission> submissionList = submissionRepository.findByAssignmentId(assignmentId);
@@ -382,6 +501,17 @@ class clientPersonalAssignment {
     private boolean visible;
     private boolean whetherSubmitted;
     private String address;
+
+    /**
+     * Constructor for clientPersonalAssignment.
+     *
+     * @param id the ID of the assignment
+     * @param assignmentName the name of the assignment
+     * @param deadline the deadline for the assignment
+     * @param courseId the ID of the course
+     * @param visible whether the assignment is visible
+     * @param address the address of the assignment
+     */
     clientPersonalAssignment(Long id, String assignmentName, String deadline, String courseId, boolean visible, String address) {
         this.id = id;
         this.assignmentName = assignmentName;
@@ -391,6 +521,16 @@ class clientPersonalAssignment {
         this.whetherSubmitted = true;
         this.address = address;
     }
+
+    /**
+     * Constructor for clientPersonalAssignment without address.
+     *
+     * @param id the ID of the assignment
+     * @param assignmentName the name of the assignment
+     * @param deadline the deadline for the assignment
+     * @param courseId the ID of the course
+     * @param visible whether the assignment is visible
+     */
     clientPersonalAssignment(Long id, String assignmentName, String deadline, String courseId, boolean visible) {
         this.id = id;
         this.assignmentName = assignmentName;
@@ -400,24 +540,52 @@ class clientPersonalAssignment {
         this.whetherSubmitted = false;
         this.address = null;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public Long getId() {
         return id;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public String getAssignmentName() {
         return assignmentName;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public String getDeadline() {
         return deadline;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public String getCourseId() {
         return courseId;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public boolean getVisible() {
         return visible;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public boolean getWhetherSubmitted() {
         return whetherSubmitted;
     }
+
+    /**
+     * Getters for the class attributes.
+     */
     public String getAddress() {
         return address;
     }
@@ -432,6 +600,19 @@ class clientPersonalAssignmentTwo {
     private String attachmentName;
     private String attachmentaddress;
     private String address;
+
+    /**
+     * Constructor for clientPersonalAssignmentTwo.
+     *
+     * @param id the ID of the assignment
+     * @param assignmentName the name of the assignment
+     * @param deadline the deadline for the assignment
+     * @param courseId the ID of the course
+     * @param visible whether the assignment is visible
+     * @param address the address of the assignment
+     * @param attachmentName the name of the attachment
+     * @param attachmentaddress the address of the attachment
+     */
     clientPersonalAssignmentTwo(Long id, String assignmentName, String deadline, String courseId, boolean visible, String address, String attachmentName, String attachmentaddress) {
         this.id = id;
         this.assignmentName = assignmentName;
@@ -447,30 +628,66 @@ class clientPersonalAssignmentTwo {
         this.attachmentName = attachmentName;
         this.attachmentaddress = attachmentaddress;
     }
+    
+    /**
+     * Get the ID of the assignment.
+     */
     public Long getId() {
         return id;
     }
+    
+    /**
+     * Get the name of the assignment.
+     */
     public String getAssignmentName() {
         return assignmentName;
     }
+
+    /**
+     * Get the deadline of the assignment.
+     */
     public String getDeadline() {
         return deadline;
     }
+
+    /**
+     * Get the course ID of the assignment.
+     */
     public String getCourseId() {
         return courseId;
     }
+
+    /**
+     * Get the visibility of the assignment.
+     */
     public boolean getVisible() {
         return visible;
     }
+
+    /**
+     * Get whether the assignment has been submitted.
+     */
     public boolean getWhetherSubmitted() {
         return whetherSubmitted;
     }
+
+    /**
+     * Get the address of the assignment.
+     */
     public String getAddress() {
         return address;
     }
+
+    /**
+     * Get the name of the attachment.
+     */
     public String getAttachmentName() {
         return attachmentName;
     }
+
+    /**
+     * Get the address of the attachment.
+     */
     public String getAttachmentaddress() {
         return attachmentaddress;
     }

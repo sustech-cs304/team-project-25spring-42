@@ -14,6 +14,10 @@ import org.springframework.http.HttpMethod;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controller for handling authentication-related requests.
+ * This class provides endpoints for logging in with GitHub, X (formerly Twitter), and Google.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -43,11 +47,19 @@ public class AuthController {
 
 
     private final UserRepository userRepository;
-
+    
+    /**
+     * Constructor for AuthController.
+     * @param userRepository The UserRepository instance for database operations.
+     */
     public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Initiates the GitHub login process.
+     * @return The URL for GitHub OAuth authorization.
+     */
     @GetMapping("/github")
     public String githubLogin() {
         System.out.println("tag");
@@ -59,11 +71,19 @@ public class AuthController {
         return url;
     }
 
+    /**
+     * Initiates the X login process.
+     * @return The URL for X OAuth authorization.
+     */
     @GetMapping("/x")
     public String xLohin() {
         return "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=" + clientIdX + "&redirect_uri=http://139.180.143.70:8080/auth/callback/x&scope=tweet.readuser.read";
     }
 
+    /**
+     * Initiates the Google login process.
+     * @return The URL for Google OAuth authorization.
+     */
     @GetMapping("/google")
     public String googleLogin(){
         String url =  "https://accounts.google.com/o/oauth2/v2/auth?scope=openid%20email%20profile&response_type=code&redirect_uri=http://JingqiSUN.christmas:8080/auth/callback/google&client_id="+clientIdGoogle+"&state="+ currentSequence;
@@ -74,6 +94,12 @@ public class AuthController {
         return url;
     }
 
+    /**
+     * Handles the GitHub OAuth callback.
+     * @param code The authorization code received from GitHub.
+     * @param state The state parameter for CSRF protection.
+     * @return The authenticated user.
+     */
     @GetMapping("/callback/github")
     @Transactional
     public User githubCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
@@ -126,6 +152,11 @@ public class AuthController {
         return user;
     }   
     
+    /**
+     * Handles the X OAuth callback.
+     * @param code The authorization code received from X.
+     * @return The authenticated user.
+     */
     @GetMapping("/callback/x")
     public User xCallback(@RequestParam("code") String code) {
         RestTemplate restTemplate = new RestTemplate();
@@ -160,6 +191,13 @@ public class AuthController {
         userRepository.save(user);
         return user;
     }
+
+    /**
+     * Handles the Google OAuth callback.
+     * @param code The authorization code received from Google.
+     * @param state The state parameter for CSRF protection.
+     * @return The authenticated user.
+     */
     @GetMapping("/callback/google")
     @Transactional
     public User googleCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
@@ -221,6 +259,12 @@ public class AuthController {
         }
         return user;
     }
+
+    /**
+     * Handles the callback for login status.
+     * @param x The sequence number for login status.
+     * @return The login status and ID.
+     */
     @GetMapping("/callback/loginStatus/{x}")
     public String handleCallback(@PathVariable("x") String x) {
         System.out.println("person called");
