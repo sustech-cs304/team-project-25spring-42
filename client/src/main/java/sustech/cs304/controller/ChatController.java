@@ -52,24 +52,6 @@ public class ChatController {
 
     @FXML
     private void initialize() {
-        CourseApi courseApi = new CourseApiImpl();
-        List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
-        try {
-            client = new StompChatClient(App.user.getUserId(), courseIds);
-            client.setOnReceivedMessage((senderId, message) -> {
-                if (currentContact != null && currentContact.getId().equals(senderId)) {
-                    Platform.runLater(() -> showReceivedMessage(message));
-                }
-            });
-            client.setOnReceivedGroupMessage((senderId, courseId, message) -> {
-                if (currentContact != null && currentContact.getId().equals(courseId) && !senderId.equals(App.user.getUserId())) {
-                    Platform.runLater(() -> showGroupMessage(senderId, message));
-                }
-            });
-            client.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         contactsList.setCellFactory(list -> new ListCell<Friend>() {
             @Override
@@ -101,29 +83,6 @@ public class ChatController {
                 }
             }
         });
-        contactsList.getItems().addAll(
-            new Friend("Bot", "Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
-            new Friend("Bot", "ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString()),
-            new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
-        );
-
-        List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
-        if (courses != null && !courses.isEmpty()) {
-            for (Course course : courses) {
-                String courseName = course.getCourseName();
-                String courseId = String.valueOf(course.getId());
-                String avatarUrl = getClass().getResource("/img/course.png").toString();
-                contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
-            }
-        }
-
-        FriendApi friendApi = new FriendApiImpl();
-        List<User> friendList = friendApi.getFriendList(App.user.getUserId());
-        if (friendList != null && !friendList.isEmpty()) {
-            for (User user : friendList) {
-                contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
-            }
-        }
 
         contactsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.equals(currentContact)) {
@@ -193,6 +152,59 @@ public class ChatController {
                 System.exit(0);
             });
         });
+
+        refreshContacts();
+    }
+
+    public void refreshContacts() {
+
+        contactsList.getItems().clear();
+
+        FriendApi friendApi = new FriendApiImpl();
+        CourseApi courseApi = new CourseApiImpl();
+
+        contactsList.getItems().addAll(
+            new Friend("Bot", "Gemini", "Bot", getClass().getResource("/img/gemini.png").toString()),
+            new Friend("Bot", "ChatGPT", "Bot", getClass().getResource("/img/chatgpt.png").toString()),
+            new Friend("Bot", "DeepSeek", "Bot", getClass().getResource("/img/deepseek.png").toString())
+        );
+        List<Course> courses = courseApi.getCourseByUserId(App.user.getUserId());
+        if (courses != null && !courses.isEmpty()) {
+            for (Course course : courses) {
+                String courseName = course.getCourseName();
+                String courseId = String.valueOf(course.getId());
+                String avatarUrl = getClass().getResource("/img/course.png").toString();
+                contactsList.getItems().add(new Friend(courseId, courseName, "Course", avatarUrl));
+            }
+        }
+
+        List<User> friendList = friendApi.getFriendList(App.user.getUserId());
+        if (friendList != null && !friendList.isEmpty()) {
+            for (User user : friendList) {
+                contactsList.getItems().add(new Friend(user.getUserId(), user.getUsername(), "Friend", user.getAvatarPath()));
+            }
+        }
+
+        if (client != null) {
+            client.disconnect();
+        }
+        List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
+        try {
+            client = new StompChatClient(App.user.getUserId(), courseIds);
+            client.setOnReceivedMessage((senderId, message) -> {
+                if (currentContact != null && currentContact.getId().equals(senderId)) {
+                    Platform.runLater(() -> showReceivedMessage(message));
+                }
+            });
+            client.setOnReceivedGroupMessage((senderId, courseId, message) -> {
+                if (currentContact != null && currentContact.getId().equals(courseId) && !senderId.equals(App.user.getUserId())) {
+                    Platform.runLater(() -> showGroupMessage(senderId, message));
+                }
+            });
+            client.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
