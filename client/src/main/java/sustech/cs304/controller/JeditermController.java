@@ -24,6 +24,9 @@ import javafx.scene.layout.AnchorPane;
 import kotlin.text.Charsets;
 import sustech.cs304.controller.components.pty.PtyProcessTtyConnector;
 
+/**
+ * Terminal controller, responsible for managing the integrated terminal in the IDE.
+ */
 public class JeditermController {
     @FXML 
     private AnchorPane terminalPane;
@@ -37,6 +40,9 @@ public class JeditermController {
     private JediTermFxWidget widget;
     private PtyProcess process;
 
+    /**
+     * Initializes the terminal widget and sets up event listeners.
+     */
     @FXML
     public void initialize() {
         widget =  createTerminalWidget("vs");
@@ -51,20 +57,36 @@ public class JeditermController {
         terminalPane.getChildren().add(widget.getPane());
     }
 
+    /**
+     * Checks if the terminal is being dragged.
+     * @param event The mouse event
+     */
     @FXML
     private void checkIfDragging(MouseEvent event) {
         ideController.checkIfDragging(event);
     } 
 
+    /**
+     * Handles dragging the terminal window.
+     * @param event The mouse event
+     */
     @FXML
     private void dragTerminal(MouseEvent event) {
         ideController.dragTerminal(event);
     }
 
+    /**
+     * Sets the IDE controller reference.
+     * @param ideController The IDE controller
+     */
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
 
+    /**
+     * Changes the terminal theme and updates the widget.
+     * @param theme The theme name
+     */
     public void changeTheme(String theme) {
         process.destroy();
         try {
@@ -106,6 +128,9 @@ public class JeditermController {
         }
     }
 
+    /**
+     * Closes the terminal and releases resources.
+     */
     public void close() {
         if (widget != null) {
             widget.close();
@@ -116,10 +141,18 @@ public class JeditermController {
         ideController.closeTerminal();
     }
 
+    /**
+     * Opens the terminal window.
+     */
     public void open() {
         ideController.openTerminal();
     }
 
+    /**
+     * Executes a command in the terminal.
+     * @param command The command string
+     * @throws Exception if execution fails
+     */
     public void executeCommand(String command) throws Exception {
         widget.getTtyConnector().write(command + "\n");
     }

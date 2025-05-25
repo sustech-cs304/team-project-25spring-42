@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Chat controller, responsible for managing contacts, displaying and sending messages, and receiving messages.
+ */
 public class ChatController {
 
     @FXML
@@ -50,6 +53,9 @@ public class ChatController {
     private final Map<String, Image> avatarCache = new HashMap<>();
     private final Map<String, User> userCache = new HashMap<>();
 
+    /**
+     * Initializes the chat interface, sets up contact list, message box, and event listeners.
+     */
     @FXML
     private void initialize() {
 
@@ -156,6 +162,9 @@ public class ChatController {
         refreshContacts();
     }
 
+    /**
+     * Refreshes the contact list, including bots, course groups, and friends.
+     */
     public void refreshContacts() {
 
         contactsList.getItems().clear();
@@ -207,6 +216,9 @@ public class ChatController {
         }
     }
 
+    /**
+     * Sends a message to the currently selected contact. Triggered when Enter key is pressed.
+     */
     @FXML
     private void handleSendMessage() {
         String message = messageField.getText().trim();

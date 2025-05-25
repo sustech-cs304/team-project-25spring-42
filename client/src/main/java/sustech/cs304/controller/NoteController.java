@@ -18,6 +18,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Note controller, responsible for displaying and editing markdown notes in a separate window.
+ */
 public class NoteController {
 
     private static NoteController instance;
@@ -88,6 +91,10 @@ public class NoteController {
         });
     }
 
+    /**
+     * Updates the markdown preview area when the text changes.
+     * @param markdownText The markdown text to render
+     */
     private void updateMarkdown(String markdownText) {
         // String html = renderer.render(parser.parse(markdownText));
         // markdownView.getEngine().loadContent(html);
@@ -111,6 +118,10 @@ public class NoteController {
         markdownView.getEngine().loadContent(htmlWrapped);
     }
 
+    /**
+     * Toggles the note window. If not open, opens it; otherwise hides or brings to front.
+     * @param owner The owner stage
+     */
     public static void toggle(Stage owner) {
         if (instance == null) {
             instance = new NoteController(owner);
@@ -123,26 +134,45 @@ public class NoteController {
         }
     }
 
+    /**
+     * Checks if the note window is open.
+     * @return true if open, false otherwise
+     */
     public static boolean isOpen() {
         return instance != null && instance.stage.isShowing();
     }
 
+    /**
+     * Closes the note window if open.
+     */
     public static void close() {
         if (instance != null) {
             instance.stage.close();
         }
     }
 
+    /**
+     * Gets the current text in the note area.
+     * @return The note text
+     */
     public static String getText() {
         return (instance != null) ? instance.noteArea.getText() : "";
     }
 
+    /**
+     * Sets the text in the note area.
+     * @param text The text to set
+     */
     public static void setText(String text) {
         if (instance != null) {
             instance.noteArea.setText(text);
         }
     }
 
+    /**
+     * Saves the note content to a markdown file.
+     * @param owner The owner stage for the file dialog
+     */
     public static void saveToFile(Stage owner) {
         if (instance == null || instance.noteArea == null) {
             return;
@@ -163,5 +193,5 @@ public class NoteController {
                 e.printStackTrace();
             }
         }
-}
+    }
 }

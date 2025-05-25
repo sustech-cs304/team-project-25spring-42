@@ -17,6 +17,9 @@ import javafx.scene.Parent;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Class controller, responsible for displaying and switching course lists, and theme switching.
+ */
 public class ClassController {
 
 
@@ -33,6 +36,9 @@ public class ClassController {
     private CourseApi courseApi;
     private List<Course> courseList;
 
+    /**
+     * Initializes the class page and loads the course list.
+     */
     @FXML
     private void initialize() {
         courseApi = new CourseApiImpl();
@@ -50,6 +56,9 @@ public class ClassController {
         initializeClassChoiceScroll();
     }
 
+    /**
+     * Initializes the course selection area and loads all courses for the user.
+     */
     public void initializeClassChoiceScroll() {
         this.contentBox.getChildren().clear();
         List<Long> courseIds = courseApi.getCourseIdByUserId(App.user.getUserId());
@@ -63,6 +72,14 @@ public class ClassController {
         }
     }
 
+    /**
+     * Adds a course button to the course list.
+     * @param course Course name
+     * @param teacher Teacher name
+     * @param active Whether the course is active
+     * @param imagePath Image path
+     * @param courseId Course ID
+     */
     private void addCourseButton(String course, String teacher,
                                  boolean active, String imagePath, Long courseId) {
         ClassButton btn = new ClassButton();
@@ -85,6 +102,10 @@ public class ClassController {
         this.contentBox.getChildren().add(btn);
     }
 
+    /**
+     * Switches the theme.
+     * @param theme Theme name
+     */
     public void changeTheme(String theme) {
         Scene scene = backgroundPane.getScene();
         if (scene != null) {
@@ -94,6 +115,12 @@ public class ClassController {
         scene.getStylesheets().add(css);
     }
 
+    /**
+     * Shows the course home page, loading different pages based on user role.
+     * @param courseId Course ID
+     * @param courseName Course name
+     * @param teacherName Teacher name
+     */
     private void showCourseHomePage(Long courseId, String courseName, String teacherName) {
         try {
             FXMLLoader loader;
