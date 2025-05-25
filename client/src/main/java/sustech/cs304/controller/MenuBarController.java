@@ -16,6 +16,9 @@ import sustech.cs304.utils.AlterUtils;
 import sustech.cs304.utils.FileUtils;
 import sustech.cs304.entity.Course;
 
+/**
+ * Menu bar controller, responsible for handling menu actions and theme switching in the IDE.
+ */
 public class MenuBarController {
 
     @FXML
@@ -33,6 +36,9 @@ public class MenuBarController {
 
     private IDEController ideController;
 
+    /**
+     * Initializes the menu bar and sets up menu groups for different modes.
+     */
     @FXML
     private void initialize() {
         IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
@@ -45,41 +51,65 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Opens a folder using the file tree controller.
+     */
     @FXML
     public void openFolder() {
         ideController.getFileTreeController().handleSelectFolder();
     }
 
+    /**
+     * Saves the current page in the editor.
+     */
     @FXML
     public void savePage() {
         ideController.getEditorController().savePage();
     }
 
+    /**
+     * Saves all open pages in the editor.
+     */
     @FXML
     public void saveAll() {
         ideController.getEditorController().saveAll();
     }
 
+    /**
+     * Opens the integrated terminal.
+     */
     @FXML
     private void openTerminal() {
         ideController.getJeditermController().open();
     }
 
+    /**
+     * Switches the theme to Visual Studio (light).
+     */
     @FXML
     private void setColorVs() {
         changeTheme("vs");
     }
 
+    /**
+     * Switches the theme to Visual Studio Dark.
+     */
     @FXML
     private void setColorVsDark() {
         changeTheme("vs-dark");
     }
 
+    /**
+     * Switches the theme to High Contrast Black.
+     */
     @FXML
     private void setColorHcBlack() {
         changeTheme("hc-black");
     }
 
+    /**
+     * Runs the current file in the terminal based on its type.
+     */
     @FXML
     private void run() {
         File file = ideController.getEditorController().getCurrentFile();
@@ -130,6 +160,10 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Changes the theme for the IDE and updates all relevant components.
+     * @param theme The theme name
+     */
     private void changeTheme(String theme) {
         ideController.getJeditermController().changeTheme(theme);
         ideController.getEditorController().setBackground(theme);
@@ -143,10 +177,18 @@ public class MenuBarController {
         }
     }
 
+    /**
+     * Sets the IDE controller reference.
+     * @param ideController The IDE controller
+     */
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
 
+    /**
+     * Changes the visible menu group based on the current mode.
+     * @param mode The mode name (editor, class, userHome, etc.)
+     */
     public void changeMode(String mode) {
         Scene scene = menuBar.getScene();
         if (scene != null) {
