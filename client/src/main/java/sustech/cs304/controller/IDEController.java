@@ -45,6 +45,9 @@ public class IDEController {
     private ClassController classController;
 
     @FXML
+    private ChatController chatController;
+
+    @FXML
     private Label welcomeLabel;
 
     @FXML
@@ -84,7 +87,9 @@ public class IDEController {
             classContent = loader.load();
             classController = loader.getController();
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
-            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chat.fxml")));
+            loader = new FXMLLoader(getClass().getResource("/fxml/chat.fxml"));
+            chatContent = loader.load();
+            chatController = loader.getController();
             settingContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/setting.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
@@ -152,6 +157,8 @@ public class IDEController {
         AnchorPane.setBottomAnchor(chatContent, 0.0);
         AnchorPane.setLeftAnchor(chatContent, 0.0);
         AnchorPane.setRightAnchor(chatContent, 0.0);
+        
+        chatController.refreshContacts();
     }
 
     @FXML
