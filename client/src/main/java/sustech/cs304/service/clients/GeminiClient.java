@@ -16,12 +16,13 @@ import java.util.Collections;
 
 import sustech.cs304.entity.RequestBodyy;
 import sustech.cs304.entity.RequestBodyy.Message;
+import sustech.cs304.utils.FileUtils;
 import sustech.cs304.utils.JsonUtils;
 
 public class GeminiClient {
 
-    private static final String API_KEY = Dotenv.load().get("GEMINI_API_KEY");
-    private static final String API_URL = Dotenv.load().get("GEMINI_API_URL");
+    private static final String API_KEY = FileUtils.getEnvValue("GEMINI_API_KEY");
+    private static final String API_URL = FileUtils.getEnvValue("GEMINI_API_URL");
 
     private final OkHttpClient client = new OkHttpClient();
 

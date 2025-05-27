@@ -20,6 +20,9 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 
+/**
+ * Controller for the teacher's course page, responsible for managing announcements, resources, and assignments for teachers.
+ */
 public class TeacherCourseController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
@@ -32,17 +35,28 @@ public class TeacherCourseController {
     private CourseApi courseApi;
     private Long courseId;
 
+    /**
+     * Initializes the teacher course controller and its services.
+     */
     @FXML
     private void initialize() {
         courseApi = new CourseApiImpl();
     }
 
+    /**
+     * Loads all data for the course, including announcements, resources, and assignments.
+     */
     public void loadData() {
         initializeAnnouncements();
         initializeResources();
         initializeAssignment();
     }
 
+    /**
+     * Sets the course and teacher title labels.
+     * @param courseName The course name
+     * @param teacherName The teacher name
+     */
     public void setTitle(String courseName, String teacherName) {
         this.courseTitle.setText(courseName);
         this.teacherName.setText(teacherName);
@@ -199,6 +213,9 @@ public class TeacherCourseController {
         });
     }
 
+    /**
+     * Publishes a new announcement for the course.
+     */
     @FXML
     private void publishAnnouncement() {
         Announce announce = AlterUtils.showAnnounceInputForm(App.primaryStage, String.valueOf(courseId));
@@ -208,6 +225,9 @@ public class TeacherCourseController {
         }
     }
 
+    /**
+     * Publishes a new resource for the course.
+     */
     @FXML
     private void publishResource() {
         Resource resource = AlterUtils.showResourceInputForm(App.primaryStage);
@@ -217,6 +237,9 @@ public class TeacherCourseController {
         }
     }
 
+    /**
+     * Publishes a new assignment for the course.
+     */
     @FXML
     private void publishAssignment() {
         Assignment assignment = AlterUtils.showAssignmentInputForm(App.primaryStage);
@@ -226,6 +249,9 @@ public class TeacherCourseController {
         }
     }
 
+    /**
+     * Deletes the course after confirmation.
+     */
     @FXML
     private void deleteCourse() {
         boolean confirm = AlterUtils.showConfirmationAlert(
@@ -239,12 +265,18 @@ public class TeacherCourseController {
         }
     }
 
+    /**
+     * Shows the member list for the course.
+     */
     @FXML
     private void showMemberList() {
         List<User> members = courseApi.getUserByCourseId(courseId);
         AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), members);
     }
 
+    /**
+     * Invites new members to the course.
+     */
     @FXML
     private void inviteNewMember() {
         List<String> invitationList = AlterUtils.showInvitationInputForm((Stage) this.courseIdLabel.getScene().getWindow());
@@ -254,10 +286,17 @@ public class TeacherCourseController {
         }
     }
 
+    /**
+     * Sets the course ID for this controller.
+     * @param courseId The course ID
+     */
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
+    /**
+     * Data wrapper for a resource row in the table.
+     */
     public static class ResourceItem {
         private final Resource resource;
         private final String action;
@@ -275,6 +314,9 @@ public class TeacherCourseController {
         public String getSize() { return resource.getSize(); }
     }
 
+    /**
+     * Data wrapper for an assignment row in the table.
+     */
     public static class AssignmentItem {
         private final Assignment assignment;
         private final String action;
@@ -294,6 +336,9 @@ public class TeacherCourseController {
         public String getStatus() { return assignment.getWhetherSubmitted() ? "Submitted" : "Not Submitted"; }
     }
 
+    /**
+     * Data wrapper for an announcement row in the table.
+     */
     public static class AnnouncementItem {
         private final Announce announce;
         private final String action;

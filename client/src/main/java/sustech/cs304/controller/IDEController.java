@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Main IDE controller, responsible for switching and initializing main interface modules.
+ */
 public class IDEController {
     @FXML
     private AnchorPane backgroundPane, modePane, editorPane, profilePane;
@@ -45,6 +48,9 @@ public class IDEController {
     private ClassController classController;
 
     @FXML
+    private ChatController chatController;
+
+    @FXML
     private Label welcomeLabel;
 
     @FXML
@@ -60,6 +66,9 @@ public class IDEController {
     private AnchorPane terminalBackPane;
     private TabPane editorTabPane;
 
+    /**
+     * Initializes the main IDE interface and loads all submodules.
+     */
     @FXML
     private void initialize() {
         App.user = UserUtils.loadUser();
@@ -84,7 +93,9 @@ public class IDEController {
             classContent = loader.load();
             classController = loader.getController();
             userHomeContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/profile.fxml")));
-            chatContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/chat.fxml")));
+            loader = new FXMLLoader(getClass().getResource("/fxml/chat.fxml"));
+            chatContent = loader.load();
+            chatController = loader.getController();
             settingContent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/setting.fxml")));
         } catch(IOException e) {
             e.printStackTrace();
@@ -97,6 +108,9 @@ public class IDEController {
         switchToEditor();
     }
 
+    /**
+     * Opens a folder and triggers file tree selection.
+     */
     @FXML
     private void openFolder() {
         if (menuBarController != null) {
@@ -135,7 +149,9 @@ public class IDEController {
         return classController;
     }
 
-
+    /**
+     * Switches to the editor interface.
+     */
     @FXML
     private void switchToEditor() {
         menuBarController.changeMode("editor");
@@ -143,6 +159,9 @@ public class IDEController {
         modePane.getChildren().addAll(ideContent);
     }
 
+    /**
+     * Switches to the chat interface.
+     */
     @FXML
     private void switchToChat() {
         menuBarController.changeMode("chat");
@@ -152,8 +171,13 @@ public class IDEController {
         AnchorPane.setBottomAnchor(chatContent, 0.0);
         AnchorPane.setLeftAnchor(chatContent, 0.0);
         AnchorPane.setRightAnchor(chatContent, 0.0);
+        
+        chatController.refreshContacts();
     }
 
+    /**
+     * Switches to the class interface.
+     */
     @FXML
     private void switchToClass() {
         menuBarController.changeMode("class");
@@ -165,6 +189,9 @@ public class IDEController {
         AnchorPane.setRightAnchor(classContent, 0.0);
     }
 
+    /**
+     * Switches to the user home interface.
+     */
     @FXML
     private void switchToUserhome() {
         menuBarController.changeMode("userHome");
@@ -176,6 +203,9 @@ public class IDEController {
         AnchorPane.setRightAnchor(userHomeContent, 0.0);
     }
 
+    /**
+     * Switches to the settings interface.
+     */
     @FXML
     private void switchToSetting() {
         menuBarController.changeMode("setting");

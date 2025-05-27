@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:15
+    container_name: aide-postgres
+    environment:
+      POSTGRES_DB: aide
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: d3D-XgGpdnZco,dP
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: aide-backend
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aide
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: d3D-XgGpdnZco,dP
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

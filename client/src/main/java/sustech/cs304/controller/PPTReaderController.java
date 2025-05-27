@@ -39,6 +39,10 @@ public class PPTReaderController {
     private int currentPage = 0;
     private double zoomFactor = 1.0;
 
+    /**
+     * Initializes the PPT reader, sets up image view and keyboard events.
+     * @throws IOException if initialization fails
+     */
     public void initialize() throws IOException {
         pptImageView = new ImageView();
         pptReaderPane.getChildren().add(pptImageView);
@@ -144,6 +148,10 @@ public class PPTReaderController {
         }
     }
     
+    /**
+     * Sets the PPT file to display.
+     * @param file The PPT file
+     */
     public void setFile(File file) {
         try (FileInputStream fis = new FileInputStream(file)) {
             ppt = new XMLSlideShow(fis);
@@ -156,6 +164,9 @@ public class PPTReaderController {
         }
     }
 
+    /**
+     * Updates the position of the image view in the scroll pane.
+     */
     private void updateImageViewPosition() {
         double offsetX = (pptScrollPane.getViewportBounds().getWidth() - pptImageView.getFitWidth()) / 2;
         double offsetY = (pptScrollPane.getViewportBounds().getHeight() - pptImageView.getFitHeight()) / 2;
@@ -164,6 +175,11 @@ public class PPTReaderController {
         pptImageView.setLayoutY(Math.max(offsetY, 0));
     }
 
+    /**
+     * Renders the specified slide of the PPT.
+     * @param index The slide index (0-based)
+     * @throws IOException if rendering fails
+     */
     private void renderPage(int index) throws IOException {
         Dimension pgsize = ppt.getPageSize();
         int width = (int) (pgsize.getWidth() * zoomFactor);

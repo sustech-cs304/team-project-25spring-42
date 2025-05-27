@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import sustech.cs304.service.*;
+import sustech.cs304.utils.ServerConfig;
 
 public class StompChatClient extends WebSocketClient {
 
@@ -24,7 +24,7 @@ public class StompChatClient extends WebSocketClient {
     private TriConsumer<String, String, String> onReceivedGroupMessage;
 
     public StompChatClient(String userId, List<Long> courseIds) throws Exception {
-        super(new URI("ws://139.180.143.70:8080/ws/websocket"));
+        super(new URI(ServerConfig.SERVER_URL_WS));
         this.userId = userId;
         this.courseIds = courseIds;
     }

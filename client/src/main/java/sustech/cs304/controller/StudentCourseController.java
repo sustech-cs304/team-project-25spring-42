@@ -20,6 +20,9 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 
+/**
+ * Controller for the student's course page, responsible for displaying announcements, resources, and assignments for students.
+ */
 public class StudentCourseController {
     @FXML private Label courseTitle;
     @FXML private Label teacherName;
@@ -32,17 +35,28 @@ public class StudentCourseController {
     private CourseApi courseApi;
     private Long courseId;
 
+    /**
+     * Initializes the student course controller and its services.
+     */
     @FXML
     private void initialize() {
         courseApi = new CourseApiImpl();
     }
 
+    /**
+     * Loads all data for the course, including announcements, resources, and assignments.
+     */
     public void loadData() {
         initializeAnnouncements();
         initializeResources();
         initializeAssignment();
     }
 
+    /**
+     * Sets the course and teacher title labels.
+     * @param courseName The course name
+     * @param teacherName The teacher name
+     */
     public void setTitle(String courseName, String teacherName) {
         this.courseTitle.setText(courseName);
         this.teacherName.setText(teacherName);
@@ -207,17 +221,26 @@ public class StudentCourseController {
         });
     }
 
-    
+    /**
+     * Shows the member list for the course.
+     */
     @FXML
     private void showMemberList() {
         List<User> members = courseApi.getUserByCourseId(courseId);
         AlterUtils.showMemberList((Stage) this.courseIdLabel.getScene().getWindow(), members);
     }
 
+    /**
+     * Sets the course ID for this controller.
+     * @param courseId The course ID
+     */
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
+    /**
+     * Data wrapper for a resource row in the table.
+     */
     public static class ResourceItem {
         private final Resource resource;
         private final String action;
@@ -235,6 +258,9 @@ public class StudentCourseController {
         public String getSize() { return resource.getSize(); }
     }
 
+    /**
+     * Data wrapper for an assignment row in the table.
+     */
     public static class AssignmentItem {
         private final Assignment assignment;
         private final String action;
@@ -254,6 +280,9 @@ public class StudentCourseController {
         public String getStatus() { return assignment.getWhetherSubmitted() ? "Submitted" : "Not Submitted"; }
     }
 
+    /**
+     * Data wrapper for an announcement row in the table.
+     */
     public static class AnnouncementItem {
         private final Announce announce;
         private final String action;

@@ -8,6 +8,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import sustech.cs304.entity.RequestBodyy;
 import sustech.cs304.entity.RequestBodyy.Message;
+import sustech.cs304.utils.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,8 +20,8 @@ import java.util.Collections;
 
 public class OpenaiClient {
 
-    private static final String API_KEY = Dotenv.load().get("OPENAI_API_KEY");
-    private static final String API_URL = Dotenv.load().get("OPENAI_API_URL");
+    private static final String API_KEY = FileUtils.getEnvValue("OPENAI_API_KEY");
+    private static final String API_URL = FileUtils.getEnvValue("OPENAI_API_URL");
 
     private final OkHttpClient client = new OkHttpClient();
 

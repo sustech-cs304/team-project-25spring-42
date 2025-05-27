@@ -30,6 +30,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * PDF reader controller, responsible for displaying PDF files, navigation, and code block extraction.
+ */
 public class PDFReaderController {
 
     @FXML
@@ -58,6 +61,9 @@ public class PDFReaderController {
         "javaScript", new String[]{"function", "var", "let", "const", ";", "{", "}"}
     );
 
+    /**
+     * Initializes the PDF reader, sets up image view and keyboard events.
+     */
     public void initialize() {
         pdfImageView = new ImageView();
         pdfReaderPane.getChildren().add(pdfImageView);
@@ -108,6 +114,10 @@ public class PDFReaderController {
         });
     }
 
+    /**
+     * Sets the PDF file to display.
+     * @param file The PDF file
+     */
     public void setFile(File file) {
         try {
             document = Loader.loadPDF(file);
@@ -119,6 +129,11 @@ public class PDFReaderController {
         }
     }
 
+    /**
+     * Renders the specified page of the PDF.
+     * @param pageIndex The page index (0-based)
+     * @throws IOException if rendering fails
+     */
     private void renderPage(int pageIndex) throws IOException {
         BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, (float) (zoomFactor * 72));
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
@@ -134,6 +149,11 @@ public class PDFReaderController {
         extractAndDrawCodeBlocks(pageIndex);
     }
 
+    /**
+     * Extracts code blocks from the current page and draws overlays.
+     * @param pageIndex The page index
+     * @throws IOException if extraction fails
+     */
     private void extractAndDrawCodeBlocks(int pageIndex) throws IOException {
         pdfReaderPane.getChildren().removeIf(n -> n instanceof Rectangle || n instanceof Button);
         codeBlocks.clear();
@@ -459,6 +479,10 @@ public class PDFReaderController {
         }
     }
 
+    /**
+     * Sets the IDE controller reference.
+     * @param ideController The IDE controller
+     */
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
