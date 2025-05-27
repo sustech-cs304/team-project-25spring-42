@@ -154,7 +154,6 @@ public class IDEController {
      */
     @FXML
     private void switchToEditor() {
-        menuBarController.changeMode("editor");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(ideContent);
     }
@@ -164,7 +163,6 @@ public class IDEController {
      */
     @FXML
     private void switchToChat() {
-        menuBarController.changeMode("chat");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(chatContent);
         AnchorPane.setTopAnchor(chatContent, 0.0);
@@ -180,7 +178,6 @@ public class IDEController {
      */
     @FXML
     private void switchToClass() {
-        menuBarController.changeMode("class");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(classContent);
         AnchorPane.setTopAnchor(classContent, 0.0);
@@ -194,7 +191,6 @@ public class IDEController {
      */
     @FXML
     private void switchToUserhome() {
-        menuBarController.changeMode("userHome");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(userHomeContent);
         AnchorPane.setTopAnchor(userHomeContent, 0.0);
@@ -208,7 +204,6 @@ public class IDEController {
      */
     @FXML
     private void switchToSetting() {
-        menuBarController.changeMode("setting");
         modePane.getChildren().clear();
         modePane.getChildren().addAll(settingContent);
         AnchorPane.setTopAnchor(settingContent, 0.0);

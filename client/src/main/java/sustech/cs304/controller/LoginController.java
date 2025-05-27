@@ -121,6 +121,14 @@ public class LoginController {
         scene.setRoot(loader.load());
         stage.sizeToScene();
         stage.centerOnScreen();
+        // Set window size constraints
+        stage.setMinWidth(1024);
+        stage.setMinHeight(768);
+        stage.setMaxWidth(1920);
+        stage.setMaxHeight(1080);
+        stage.setWidth(1280);
+        stage.setHeight(800);
+        stage.centerOnScreen();
     }
 }
 
