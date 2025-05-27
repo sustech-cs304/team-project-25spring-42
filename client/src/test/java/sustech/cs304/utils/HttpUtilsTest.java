@@ -2,26 +2,29 @@ package sustech.cs304.utils;
 
 import org.junit.jupiter.api.*;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class HttpUtilsTest {
 
+    private String originalServerUrl;
     @Test
     void testGetBaseUrl() {
-        String baseUrl = HttpUtils.getBaseUrl();
-        assertNotNull(baseUrl);
+        assertEquals(ServerConfig.SERVER_URL, HttpUtils.getBaseUrl());
     }
 
     @Test
     void testGetUserApiUrl() {
         String userApiUrl = HttpUtils.getUserApiUrl();
         assertNotNull(userApiUrl);
+        assertEquals(ServerConfig.SERVER_URL + "/self", HttpUtils.getUserApiUrl());
     }
 
     @Test
     void testGetProjectApiUrl() {
         String projectApiUrl = HttpUtils.getProjectApiUrl();
         assertNotNull(projectApiUrl);
+        assertEquals(ServerConfig.SERVER_URL + "/project", HttpUtils.getProjectApiUrl());
     }
 
     @Test
@@ -29,5 +32,4 @@ class HttpUtilsTest {
         String fileApiUrl = HttpUtils.getFileApiUrl();
         assertNotNull(fileApiUrl);
     }
-
 }
