@@ -21,6 +21,14 @@ public class RequestBodyy {
         this.messages = messages;
     }
 
+    public String getModel() {
+        return model;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
     /**
      * Represents an individual message with a role and content.
      */
@@ -37,6 +45,14 @@ public class RequestBodyy {
         public Message(String role, String content) {
             this.role = role;
             this.content = content;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public String getContent() {
+            return content;
         }
     }
 }
