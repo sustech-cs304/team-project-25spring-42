@@ -25,6 +25,11 @@ public class RequestBodyy {
         return model;
     }
 
+    /**
+     * Returns the list of messages in this request body.
+     *
+     * @return the list of messages
+     */
     public List<Message> getMessages() {
         return messages;
     }
@@ -47,10 +52,20 @@ public class RequestBodyy {
             this.content = content;
         }
 
+        /**
+         * Returns the role of the message sender.
+         *
+         * @return the role of the message sender
+         */
         public String getRole() {
             return role;
         }
 
+        /**
+         * Returns the content of the message.
+         *
+         * @return the content of the message
+         */
         public String getContent() {
             return content;
         }

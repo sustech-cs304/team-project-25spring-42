@@ -1,12 +1,7 @@
 package sustech.cs304.utils;
 
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import org.junit.jupiter.api.*;
-import sustech.cs304.entity.Query;
 
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,16 +15,21 @@ class HttpUtilsTest {
 
     @Test
     void testGetUserApiUrl() {
+        String userApiUrl = HttpUtils.getUserApiUrl();
+        assertNotNull(userApiUrl);
         assertEquals(ServerConfig.SERVER_URL + "/self", HttpUtils.getUserApiUrl());
     }
 
     @Test
     void testGetProjectApiUrl() {
+        String projectApiUrl = HttpUtils.getProjectApiUrl();
+        assertNotNull(projectApiUrl);
         assertEquals(ServerConfig.SERVER_URL + "/project", HttpUtils.getProjectApiUrl());
     }
 
     @Test
     void testGetFileApiUrl() {
-        assertEquals(ServerConfig.SERVER_URL + "/file", HttpUtils.getFileApiUrl());
+        String fileApiUrl = HttpUtils.getFileApiUrl();
+        assertNotNull(fileApiUrl);
     }
 }

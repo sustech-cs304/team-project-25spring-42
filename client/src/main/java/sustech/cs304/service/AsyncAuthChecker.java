@@ -10,12 +10,23 @@ import java.util.concurrent.TimeUnit;
 import java.io.File;
 import java.io.FileWriter;
 
+/**
+ * AsyncAuthChecker is a class that checks the authentication status of a user asynchronously.
+ * It sends a request to the server to check if the user is logged in and handles the response accordingly.
+ * If the user is logged in, it saves the user ID to a file.
+ */
 public class AsyncAuthChecker {
     private final OkHttpClient client;
     private final String url = ServerConfig.SERVER_URL + "/auth/callback/loginStatus";
     private volatile boolean result = false;
     private final int state;
-    
+
+    /**
+     * Constructor for AsyncAuthChecker.
+     * Initializes the OkHttpClient with a connection and read timeout.
+     *
+     * @param state The state to be used in the authentication check.
+     */
     public AsyncAuthChecker(int state) {
         this.client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -24,6 +35,14 @@ public class AsyncAuthChecker {
         this.state = state;
     }
 
+    /**
+     * Checks the authentication status of the user.
+     * It sends a request to the server and waits for a response.
+     * If the user is logged in, it saves the user ID to a file.
+     *
+     * @return true if the user is logged in, false otherwise.
+     * @throws InterruptedException if the thread is interrupted while waiting.
+     */
     public boolean checkAuth() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         long startTime = System.currentTimeMillis();

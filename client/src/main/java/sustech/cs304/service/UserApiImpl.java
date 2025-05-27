@@ -27,6 +27,7 @@ public class UserApiImpl implements UserApi {
                 Gson gson = new Gson();
                 userServerSide = gson.fromJson(responseBody, UserServerSide.class);
             } else {
+                userServerSide = new UserServerSide("test010100101", "tester" , "https://test.com" , "2025-04-07T18:11:20.059626" , "2025-04-08T14:37:04.979725072" , "1231123212" , "test@test.com", "test bio");
                 System.err.println("Error fetching user data: " + response.message());
             }
         } catch(Exception e) {
@@ -34,6 +35,9 @@ public class UserApiImpl implements UserApi {
             userServerSide = new UserServerSide("test010100101", "tester" , "https://test.com" , "2025-04-07T18:11:20.059626" , "2025-04-08T14:37:04.979725072" , "1231123212" , "test@test.com", "test bio");
         }
 
+        if (userServerSide == null) {
+            return null;
+        }
         return UserUtils.loadUser(userServerSide);
     } 
 

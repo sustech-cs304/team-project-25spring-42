@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,7 +17,6 @@ import javafx.util.Duration;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
@@ -61,6 +59,20 @@ public class PDFReaderController {
         "javaScript", new String[]{"function", "var", "let", "const", ";", "{", "}"}
     );
 
+    public PDFReaderController() {}
+    
+    public PDFReaderController(AnchorPane rootAnchorPane, ScrollPane pdfScrollPane, AnchorPane pdfReaderPane, IDEController ideController, PDDocument document, PDFRenderer renderer, int currentPage, double zoomFactor, ImageView pdfImageView) {
+        this.rootAnchorPane = rootAnchorPane;
+        this.pdfScrollPane = pdfScrollPane;
+        this.pdfReaderPane = pdfReaderPane;
+        this.ideController = ideController;
+        this.document = document;
+        this.renderer = renderer;
+        this.currentPage = currentPage;    
+        this.zoomFactor = zoomFactor;
+        this.pdfImageView = pdfImageView;
+    }
+
     /**
      * Initializes the PDF reader, sets up image view and keyboard events.
      */
@@ -76,7 +88,7 @@ public class PDFReaderController {
         setKeyboardEvents();
     }
 
-    private void setKeyboardEvents() {
+    public void setKeyboardEvents() {
         pdfScrollPane.setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case LEFT:
@@ -134,7 +146,7 @@ public class PDFReaderController {
      * @param pageIndex The page index (0-based)
      * @throws IOException if rendering fails
      */
-    private void renderPage(int pageIndex) throws IOException {
+    public void renderPage(int pageIndex) throws IOException {
         BufferedImage bufferedImage = renderer.renderImageWithDPI(pageIndex, (float) (zoomFactor * 72));
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
 
@@ -154,7 +166,7 @@ public class PDFReaderController {
      * @param pageIndex The page index
      * @throws IOException if extraction fails
      */
-    private void extractAndDrawCodeBlocks(int pageIndex) throws IOException {
+    public void extractAndDrawCodeBlocks(int pageIndex) throws IOException {
         pdfReaderPane.getChildren().removeIf(n -> n instanceof Rectangle || n instanceof Button);
         codeBlocks.clear();
 
@@ -419,7 +431,7 @@ public class PDFReaderController {
         pdfImageView.setLayoutY(Math.max(offsetY, 0));
     }
 
-    private CodeBlock mergeLines(List<TextLine> lines) {
+    public CodeBlock mergeLines(List<TextLine> lines) {
         double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE;
         double minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
         StringBuilder sb = new StringBuilder();
@@ -435,7 +447,7 @@ public class PDFReaderController {
         return new CodeBlock(minX, minY, maxX - minX, maxY - minY, sb.toString().trim());
     }
 
-    private String detectLanguage(String code) {
+    public String detectLanguage(String code) {
         String lowerCode = code.toLowerCase();
         Map<String, Integer> scores = new HashMap<>();
         for (var entry : LANGUAGE_KEYWORDS.entrySet()) {
@@ -453,7 +465,7 @@ public class PDFReaderController {
             .orElse("Unknown");
     }
 
-    private static class TextLine {
+    public static class TextLine {
         double x, y, width, height;
         String content;
 

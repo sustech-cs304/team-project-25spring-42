@@ -1,10 +1,9 @@
 package sustech.cs304.utils;
 
+
 /**
- * Contains configuration constants for the server endpoints.
- * <p>
- * Provides base URLs for HTTP and WebSocket connections used throughout the application.
- * </p>
+ * This class contains the server configuration details.
+ * It includes the base URL for the server and the WebSocket URL.
  */
 public class ServerConfig {
     public static final String SERVER_URL = "http://139.180.143.70:8080";

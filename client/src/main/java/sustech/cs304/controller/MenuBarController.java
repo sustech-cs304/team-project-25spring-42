@@ -36,6 +36,24 @@ public class MenuBarController {
 
     private IDEController ideController;
 
+    public MenuBarController() {}
+
+    // Mock
+    public MenuBarController(MenuBar menuBar, Menu fileMenu, Menu colorMenu, Menu terminalMenu, Menu courseMenu, Menu runMenu, Menu helpMenu, Menu[] IDEMenus, Menu[] classMenus, Menu[] userHomeMenus, Menu[] chatMenus, Menu[] settingMenus) {
+        this.menuBar = menuBar;
+        this.fileMenu = fileMenu;
+        this.colorMenu = colorMenu;
+        this.terminalMenu = terminalMenu;
+        this.courseMenu = courseMenu;
+        this.runMenu = runMenu;
+        this.helpMenu = helpMenu;
+        this.IDEMenus = IDEMenus;
+        this.classMenus = classMenus;
+        this.userHomeMenus = userHomeMenus;
+        this.chatMenus = chatMenus;
+        this.settingMenus = settingMenus;
+    }
+
     /**
      * Initializes the menu bar and sets up menu groups for different modes.
      */
