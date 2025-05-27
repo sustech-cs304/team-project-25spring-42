@@ -53,11 +53,29 @@ public class ChatController {
     private final Map<String, Image> avatarCache = new HashMap<>();
     private final Map<String, User> userCache = new HashMap<>();
 
+    public ChatController() {}
+
+    /**
+     * Constructor for ChatController, initializes the chat interface components.
+     *
+     * @param chatBox The VBox that contains the chat messages.
+     * @param messageField The TextArea for inputting messages.
+     * @param contactsList The ListView displaying the list of contacts.
+     * @param chatPartnerLabel The Label showing the name of the current chat partner.
+     */
+    public ChatController(VBox chatBox, TextArea messageField, ListView<Friend> contactsList, Label chatPartnerLabel, Friend currentContact) {
+        this.chatBox = chatBox;
+        this.messageField = messageField;
+        this.contactsList = contactsList;
+        this.chatPartnerLabel = chatPartnerLabel;
+        this.currentContact = currentContact;
+    }
+
     /**
      * Initializes the chat interface, sets up contact list, message box, and event listeners.
      */
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         contactsList.setCellFactory(list -> new ListCell<Friend>() {
             @Override
@@ -220,7 +238,7 @@ public class ChatController {
      * Sends a message to the currently selected contact. Triggered when Enter key is pressed.
      */
     @FXML
-    private void handleSendMessage() {
+    public void handleSendMessage() {
         String message = messageField.getText().trim();
         if (!message.isEmpty() && currentContact != null) {
             addUserMessage(message);
@@ -294,7 +312,7 @@ public class ChatController {
         return label;
     }
 
-    private HBox createMessageBox(String username, String message, String avatarUrl, boolean isUser) {
+    public HBox createMessageBox(String username, String message, String avatarUrl, boolean isUser) {
         double avatarSize = 30;
         ImageView avatarView = createCircularAvatar(avatarUrl, avatarSize);
         Label nameLabel = new Label(username);
@@ -325,7 +343,7 @@ public class ChatController {
         AlterUtils.showNewRequestList((Stage) this.messageField.getScene().getWindow(), friendRequestList);
     }
 
-    private ImageView createCircularAvatar(String imageUrl, double size) {
+    public ImageView createCircularAvatar(String imageUrl, double size) {
         Image image = getCachedAvatar(imageUrl);
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(size);
@@ -337,7 +355,7 @@ public class ChatController {
         return imageView;
     }
 
-    private Image getCachedAvatar(String avatarUrl) {
+    public Image getCachedAvatar(String avatarUrl) {
         if (avatarCache.containsKey(avatarUrl)) {
             return avatarCache.get(avatarUrl);
         } else {
@@ -347,7 +365,7 @@ public class ChatController {
         }
     }
 
-    private User getCachedUser(String userId) {
+    public User getCachedUser(String userId) {
         if (userCache.containsKey(userId)) {
             return userCache.get(userId);
         } else {

@@ -12,10 +12,14 @@ import sustech.cs304.controller.NoteController;
 import sustech.cs304.entity.User;
 import sustech.cs304.service.UserApi;
 import sustech.cs304.service.UserApiImpl;
-import sustech.cs304.utils.AlterUtils;
 
 import java.net.URL;
 
+/**
+ * The main application class for the AIDE application.
+ * It initializes the application, sets up the primary stage,
+ * and loads the initial FXML view.
+ */
 public class App extends Application {
     public static User user;
     public static UserApi userApi = new UserApiImpl();
@@ -25,6 +29,9 @@ public class App extends Application {
         Application.launch(args);
     }
 
+    /**
+     * Initializes the application and sets the default user.
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
