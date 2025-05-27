@@ -185,3 +185,20 @@ Vbox {
     -fx-background-color: transparent;
     -fx-underline: true;
 }
+
+.menu-bar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #222;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+    -fx-padding: 0 12 0 12;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.menu-bar-btn:hover, .menu-bar-btn:focused {
+    -fx-background-color: #e6e6e6;
+    -fx-text-fill: #007acc;
+    -fx-cursor: hand;
+}

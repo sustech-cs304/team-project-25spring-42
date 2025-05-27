@@ -7,8 +7,10 @@ import java.util.Map;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import sustech.cs304.App;
 import sustech.cs304.service.CourseApiImpl;
@@ -22,17 +24,9 @@ import sustech.cs304.entity.Course;
 public class MenuBarController {
 
     @FXML
-    private MenuBar menuBar;
-
+    private HBox customMenuBar;
     @FXML
-    private Menu fileMenu, colorMenu, terminalMenu, courseMenu, runMenu, helpMenu;
-
-    private Menu[] IDEMenus;
-    private Menu[] classMenus;
-    private Menu[] userHomeMenus;
-    private Menu[] chatMenus;
-    private Menu[] settingMenus;
-    private String css;
+    private Button fileMenuButton, colorMenuButton, courseMenuButton, terminalMenuButton, runMenuButton, helpMenuButton;
 
     private IDEController ideController;
 
@@ -41,14 +35,56 @@ public class MenuBarController {
      */
     @FXML
     private void initialize() {
-        IDEMenus = new Menu[]{fileMenu, colorMenu, terminalMenu, runMenu, helpMenu};
-        chatMenus = new Menu[]{colorMenu, helpMenu};
-        classMenus = new Menu[]{colorMenu, courseMenu, helpMenu};
-        userHomeMenus = new Menu[]{colorMenu, helpMenu};
-        settingMenus = new Menu[]{colorMenu, helpMenu};
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            menuBar.setUseSystemMenuBar(true);
-        }
+        // 文件菜单
+        ContextMenu fileMenu = new ContextMenu();
+        MenuItem openItem = new MenuItem("Open Folder");
+        openItem.setOnAction(e -> openFolder());
+        MenuItem saveThisItem = new MenuItem("Save this file");
+        saveThisItem.setOnAction(e -> savePage());
+        MenuItem saveAllItem = new MenuItem("Save all");
+        saveAllItem.setOnAction(e -> saveAll());
+        fileMenu.getItems().addAll(openItem, saveThisItem, saveAllItem);
+        fileMenuButton.setOnMouseClicked(e -> fileMenu.show(fileMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // 主题菜单
+        ContextMenu colorMenu = new ContextMenu();
+        MenuItem vsItem = new MenuItem("vs");
+        vsItem.setOnAction(e -> setColorVs());
+        MenuItem vsDarkItem = new MenuItem("vs-dark");
+        vsDarkItem.setOnAction(e -> setColorVsDark());
+        MenuItem hcBlackItem = new MenuItem("hc-black");
+        hcBlackItem.setOnAction(e -> setColorHcBlack());
+        colorMenu.getItems().addAll(vsItem, vsDarkItem, hcBlackItem);
+        colorMenuButton.setOnMouseClicked(e -> colorMenu.show(colorMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // 课程菜单
+        ContextMenu courseMenu = new ContextMenu();
+        MenuItem createCourseItem = new MenuItem("Create Course");
+        createCourseItem.setOnAction(e -> createCourse());
+        MenuItem invitationListItem = new MenuItem("Course Invitation");
+        invitationListItem.setOnAction(e -> invitationList());
+        courseMenu.getItems().addAll(createCourseItem, invitationListItem);
+        courseMenuButton.setOnMouseClicked(e -> courseMenu.show(courseMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // 终端菜单
+        ContextMenu terminalMenu = new ContextMenu();
+        MenuItem openTerminalItem = new MenuItem("Open");
+        openTerminalItem.setOnAction(e -> openTerminal());
+        terminalMenu.getItems().addAll(openTerminalItem);
+        terminalMenuButton.setOnMouseClicked(e -> terminalMenu.show(terminalMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // 运行菜单
+        ContextMenu runMenu = new ContextMenu();
+        MenuItem runItem = new MenuItem("run");
+        runItem.setOnAction(e -> run());
+        runMenu.getItems().addAll(runItem);
+        runMenuButton.setOnMouseClicked(e -> runMenu.show(runMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
+
+        // 帮助菜单
+        ContextMenu helpMenu = new ContextMenu();
+        MenuItem aboutItem = new MenuItem("About");
+        helpMenu.getItems().addAll(aboutItem);
+        helpMenuButton.setOnMouseClicked(e -> helpMenu.show(helpMenuButton, javafx.geometry.Side.BOTTOM, 0, 0));
     }
 
     /**
@@ -88,7 +124,9 @@ public class MenuBarController {
      */
     @FXML
     private void setColorVs() {
-        changeTheme("vs");
+        ideController.getEditorController().setBackground("vs");
+        ideController.getEditorController().setTheme("vs");
+        ideController.changeImageColor("vs");
     }
 
     /**
@@ -96,7 +134,9 @@ public class MenuBarController {
      */
     @FXML
     private void setColorVsDark() {
-        changeTheme("vs-dark");
+        ideController.getEditorController().setBackground("vs-dark");
+        ideController.getEditorController().setTheme("vs-dark");
+        ideController.changeImageColor("vs-dark");
     }
 
     /**
@@ -104,7 +144,9 @@ public class MenuBarController {
      */
     @FXML
     private void setColorHcBlack() {
-        changeTheme("hc-black");
+        ideController.getEditorController().setBackground("hc-black");
+        ideController.getEditorController().setTheme("hc-black");
+        ideController.changeImageColor("hc-black");
     }
 
     /**
@@ -160,23 +202,6 @@ public class MenuBarController {
     }
 
     /**
-     * Changes the theme for the IDE and updates all relevant components.
-     * @param theme The theme name
-     */
-    private void changeTheme(String theme) {
-        ideController.getJeditermController().changeTheme(theme);
-        ideController.getEditorController().setBackground(theme);
-        ideController.getEditorController().setTheme(theme);
-        ideController.changeImageColor(theme);
-        Scene scene = menuBar.getScene();
-        if (scene != null) {
-            scene.getStylesheets().remove(this.css);
-            this.css = this.getClass().getResource("/css/style-" + theme + ".css").toExternalForm();
-            scene.getStylesheets().add(this.css);
-        }
-    }
-
-    /**
      * Sets the IDE controller reference.
      * @param ideController The IDE controller
      */
@@ -184,99 +209,8 @@ public class MenuBarController {
         this.ideController = ideController;
     }
 
-    /**
-     * Changes the visible menu group based on the current mode.
-     * @param mode The mode name (editor, class, userHome, etc.)
-     */
-    public void changeMode(String mode) {
-        Scene scene = menuBar.getScene();
-        if (scene != null) {
-            if (mode.equals("editor")) {
-                for (Menu menu : this.chatMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.userHomeMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.settingMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.IDEMenus) {
-                    menu.setVisible(true);
-                }
-            } else if (mode.equals("class")) {
-                for (Menu menu : this.IDEMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.chatMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.userHomeMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.settingMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(true);
-                }
-           } else if (mode.equals("userHome")) {
-                for (Menu menu : IDEMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.chatMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.settingMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.userHomeMenus) {
-                    menu.setVisible(true);
-                }
-            } else if (mode.equals("chat")) {
-                for (Menu menu : IDEMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.userHomeMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.settingMenus) {
-                    menu.setVisible(false);
-                }
-                 for (Menu menu : this.chatMenus) {
-                    menu.setVisible(true);
-                }
-            } else if (mode.equals("setting")) {
-                for (Menu menu : IDEMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.classMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.userHomeMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.chatMenus) {
-                    menu.setVisible(false);
-                }
-                for (Menu menu : this.settingMenus) {
-                    menu.setVisible(true);
-                }
-            }
-        }
-    }
-
     public void createCourse() {
-        Map<String, String> courseInfo = AlterUtils.courseInputForm((Stage) this.menuBar.getScene().getWindow());
+        Map<String, String> courseInfo = AlterUtils.courseInputForm((Stage) this.customMenuBar.getScene().getWindow());
         CourseApiImpl courseApi = new CourseApiImpl();
         if (courseInfo != null) {
             String courseName = courseInfo.get("courseName");
@@ -290,7 +224,7 @@ public class MenuBarController {
         CourseApiImpl courseApi = new CourseApiImpl();
         String userId = App.user.getUserId();
         List<Course> courseList = courseApi.getCourseInvitationByUserId(userId);
-        AlterUtils.showInvitationList((Stage) this.menuBar.getScene().getWindow(), courseList);
+        AlterUtils.showInvitationList((Stage) this.customMenuBar.getScene().getWindow(), courseList);
         ideController.getClassController().initializeClassChoiceScroll();
     }
 }
