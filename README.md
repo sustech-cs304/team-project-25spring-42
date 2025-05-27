@@ -94,7 +94,7 @@ Our team members:
 
 🤝We welcome community contributions! To get started:
 
-1. Read our [Build Tutorial](https://sustech-cs304.github.io/team-project-25spring-42/docs/intro)) for environment setup
+1. Read our [Build Tutorial](https://sustech-cs304.github.io/team-project-25spring-42/docs/intro) for environment setup
 2. Check the [API Documentation](https://sustech-cs304.github.io/team-project-25spring-42/javadoc/server/index.html)
 3. Submit a pull request following our [Contribution Guidelines](https://github.com/sustech-cs304/team-project-25spring-42/blob/main/docs/CONTRIBUTING.md)
 
