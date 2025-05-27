@@ -27,13 +27,13 @@ Count Tools and Commands:
 
     ```bash
   lizard src/
-    ```
+  ```
 
 * Number of dependencies
 
     ```bash
   mvn dependency:list | grep -c '^\[INFO\]    '
-    ```
+  ```
 
 ## Documentation
 
@@ -41,22 +41,30 @@ Our documentation is in [🔗](https://sustech-cs304.github.io/team-project-25sp
 
 ## Test
 
-* **Tools/Framework**: JUnit
-* **Source Code**: [🔗](https://github.com/sustech-cs304/team-project-25spring-42/tree/main/client/src/test/java/sustech/cs304) and [🔗](https://github.com/sustech-cs304/team-project-25spring-42/tree/main/server/src/test/java/sustech/cs304/AIDE)
+* **Tools/Framework**: JUnit and Jacoco
+
+* **Source Code**: [📁](https://github.com/sustech-cs304/team-project-25spring-42/tree/main/client/src/test/java/sustech/cs304) and [📁](https://github.com/sustech-cs304/team-project-25spring-42/tree/main/server/src/test/java/sustech/cs304/AIDE)
 
 * **Effectiveness**:
 
+  * Server:
 
+    ![jacoco-server](./picture/jacoco-server.png)
+  
+  * Client:
+  
+    ![jacoco-client](./picture/jacoco-client.png)
+  
 
 ## Build
 
-* **Tools**:
+* **Tools:**
   * Maven
   * Maven Shade Plugin
-* **Tasks executed in a build**: introduced in [document](https://sustech-cs304.github.io/team-project-25spring-42/docs/intro).
+* **Tasks executed in a build:** introduced in [document](https://sustech-cs304.github.io/team-project-25spring-42/docs/intro).
 
-* **The final artifacts**: 
-  * Client: `AIDE.app`
+* **The final artifacts:**
+  * Client: `AIDE.dmg` (macos) and `AIDE.zip` (windows) see [release](https://github.com/sustech-cs304/team-project-25spring-42/releases/tag/v1.0.0)
   * Server: `AIDE.jar`
 
 * **Buildfile**:
@@ -65,3 +73,17 @@ Our documentation is in [🔗](https://sustech-cs304.github.io/team-project-25sp
 
 ## Deployment
 
+* **Tools:**
+
+  * Docker
+
+  * Docker Compose
+
+* **Related Artifacts:**
+
+  * `Dockerfile`: [📁](https://github.com/sustech-cs304/team-project-25spring-42/blob/main/server/Dockerfile)
+  * `docker-compose.yml`: [📁](https://github.com/sustech-cs304/team-project-25spring-42/blob/main/server/docker-compose.yml)
+
+* **Snapshot:**
+
+  ![docker-compose](./picture/container.png)
