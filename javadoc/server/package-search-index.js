@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"sustech.cs304.AIDE"},{"l":"sustech.cs304.AIDE.config"},{"l":"sustech.cs304.AIDE.controller"},{"l":"sustech.cs304.AIDE.model"},{"l":"sustech.cs304.AIDE.repository"}];updateSearchResults();
