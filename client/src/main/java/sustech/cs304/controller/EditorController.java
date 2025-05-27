@@ -15,6 +15,9 @@ import sustech.cs304.utils.FileUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
+/**
+ * Editor controller, responsible for managing code/text editor tabs and file operations in the IDE.
+ */
 public class EditorController {
 
     private IDEController ideController;
@@ -27,26 +30,46 @@ public class EditorController {
 
     private String background;
 
+    /**
+     * Initializes the editor controller, sets up data structures.
+     */
     @FXML
     private void initialize() {
         monacoFXs = new HashSet<>();
         files = new HashSet<>();
     }
 
+    /**
+     * Sets the IDE controller reference.
+     * @param ideController The IDE controller
+     */
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
 
+    /**
+     * Sets the background theme for the editor.
+     * @param background The theme name
+     */
     public void setBackground(String background) {
         this.background = background;
     }
 
+    /**
+     * Sets the theme for all MonacoFX editors.
+     * @param theme The theme name
+     */
     public void setTheme(String theme) {
         for (MonacoFX monacoFX : monacoFXs) {
             monacoFX.getEditor().setCurrentTheme(theme);
         }
     }
 
+    /**
+     * Sets the text content for a MonacoFX editor.
+     * @param monacoFX The MonacoFX instance
+     * @param lines The text lines
+     */
     public void setText(MonacoFX monacoFX, List<String> lines) {
         StringBuilder sb = new StringBuilder();
         for (String line : lines) {
@@ -55,6 +78,11 @@ public class EditorController {
         monacoFX.getEditor().getDocument().setText(sb.toString());
     }
 
+    /**
+     * Sets the language for a MonacoFX editor based on file extension.
+     * @param monacoFX The MonacoFX instance
+     * @param file The file to determine language
+     */
     public void setLanguage(MonacoFX monacoFX, File file) {
         String extension = FileUtils.getExtension(file);
         if (extension.equals("java")) {
@@ -84,6 +112,11 @@ public class EditorController {
         }
     }
 
+    /**
+     * Adds a new code/text tab for the given file.
+     * @param lines The file content lines
+     * @param file The file to open
+     */
     public void addPage(List<String> lines, File file) {
         if (files.contains(file)) {
             Tab tab = findTabByFile(file);
@@ -118,6 +151,11 @@ public class EditorController {
         setTheme(background);
     }
 
+    /**
+     * Adds a new PDF tab for the given file.
+     * @param file The PDF file
+     * @throws IOException if loading fails
+     */
     public void addPDFPage(File file) throws IOException {
         if (files.contains(file)) {
             Tab tab = findTabByFile(file);
@@ -146,6 +184,11 @@ public class EditorController {
         files.add(file);
     }
 
+    /**
+     * Adds a new PPT tab for the given file.
+     * @param file The PPT file
+     * @throws IOException if loading fails
+     */
     public void addPPTPage(File file) throws IOException {
         if (files.contains(file)) {
             Tab tab = findTabByFile(file);
@@ -173,7 +216,11 @@ public class EditorController {
         files.add(file);
     }
 
-
+    /**
+     * Finds the tab corresponding to the given file.
+     * @param file The file
+     * @return The Tab instance, or null if not found
+     */
     private Tab findTabByFile(File file) {
         for (Tab tab : editorTabPane.getTabs()) {
             if (tab.getId().equals(file.getAbsolutePath())) {
@@ -183,6 +230,9 @@ public class EditorController {
         return null;
     }
 
+    /**
+     * Saves the content of the currently selected tab to file.
+     */
     public void savePage() {
         Tab tab = this.editorTabPane.getSelectionModel().getSelectedItem();
         if (tab == null) {
@@ -215,6 +265,10 @@ public class EditorController {
         }
     }
     
+    /**
+     * Gets the file currently being edited in the selected tab.
+     * @return The current file, or null if none
+     */
     public File getCurrentFile() {
         Tab tab = this.editorTabPane.getSelectionModel().getSelectedItem();
         if (tab == null) {

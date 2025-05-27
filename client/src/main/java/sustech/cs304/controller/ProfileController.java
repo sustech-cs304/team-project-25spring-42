@@ -14,6 +14,9 @@ import sustech.cs304.utils.UserUtils;
 
 import java.io.File;
 
+/**
+ * User profile controller, responsible for displaying and modifying user information.
+ */
 public class ProfileController {
 
 /**
@@ -43,11 +46,17 @@ public class ProfileController {
 
     private Parent IDEpane;
 
+    /**
+     * Initializes the user profile page and binds user data to the interface.
+     */
     @FXML
     public void initialize() {
         bindUserDataToUI();
     }
 
+    /**
+     * Updates the username.
+     */
     @FXML
     private void updateUsername() {
         String newUsername = usernameField.getText();
@@ -75,6 +84,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Updates the email.
+     */
     @FXML
     private void updateEmail() {
         String newEmail = mailField.getText();
@@ -102,6 +114,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Updates the phone number.
+     */
     @FXML
     private void updatePhone() {
         String newPhone = phoneField.getText();
@@ -129,6 +144,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Updates the user bio.
+     */
     @FXML
     private void updateBio() {
         String newBio = bioTextArea.getText();
@@ -156,6 +174,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Binds user data to UI controls.
+     */
     private void bindUserDataToUI() {
         userIdLabel.setText(App.user.getUserId());
         usernameField.setText(App.user.getUsername());
@@ -181,6 +202,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Handles avatar change.
+     */
     @FXML
     private void handleChangeAvatar() {
         FileChooser fileChooser = new FileChooser();
@@ -206,6 +230,9 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Handles user logout.
+     */
     @FXML
     private void handleLogout() {
     }

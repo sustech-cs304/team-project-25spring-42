@@ -47,7 +47,28 @@ import sustech.cs304.service.FriendApiImpl;
  * version: latest
  * usage: copilot is used to generate the AlterUtils class, which provides utility methods.
  */
+
+/**
+ * Utility class providing various dialog and form helpers for JavaFX applications,
+ * such as confirmation alerts, info alerts, input forms for announcements, assignments,
+ * resources, courses, invitations, member/friend management, and submission viewing.
+ *
+ * <p>
+ * Most dialogs are modal and styled to inherit the owner's stylesheets if present.
+ * The data models referenced (e.g., Announce, Assignment, Resource, User, Course, Submission)
+ * should be present in the application domain.
+ * </p>
+ */
 public class AlterUtils {
+    /**
+     * Shows a modal confirmation alert with Yes/No buttons.
+     *
+     * @param owner   The parent window for modality.
+     * @param title   The dialog title.
+     * @param header  The header message.
+     * @param content The content message.
+     * @return true if "Yes" was clicked, false otherwise.
+     */
     public static boolean showConfirmationAlert(Stage owner, String title, String header, String content) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -96,6 +117,14 @@ public class AlterUtils {
         return result[0];
     }
 
+    /**
+     * Shows a modal information alert with an OK button.
+     *
+     * @param owner   The parent window for modality.
+     * @param title   The dialog title.
+     * @param header  The header message.
+     * @param content The content message.
+     */
     public static void showInfoAlert(Stage owner, String title, String header, String content) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -132,6 +161,13 @@ public class AlterUtils {
         dialogStage.showAndWait();
     }
 
+    /**
+     * Displays a modal form to input a new announcement.
+     *
+     * @param owner    The parent window for modality.
+     * @param courseId The course ID to associate with the announcement.
+     * @return An Announce object if submitted, or null if cancelled.
+     */
     public static Announce showAnnounceInputForm(Stage owner, String courseId) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -180,6 +216,12 @@ public class AlterUtils {
         }
     }
 
+    /**
+     * Displays a modal form to input a new assignment.
+     *
+     * @param owner The parent window for modality.
+     * @return An Assignment object if submitted, or null if cancelled.
+     */
     public static Assignment showAssignmentInputForm(Stage owner) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -250,6 +292,12 @@ public class AlterUtils {
         }
     }
 
+    /**
+     * Displays a modal form to input a new resource (file upload).
+     *
+     * @param owner The parent window for modality.
+     * @return A Resource object if submitted, or null if cancelled.
+     */
     public static Resource showResourceInputForm(Stage owner) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -304,6 +352,14 @@ public class AlterUtils {
         }
     }
 
+    /**
+     * Displays a modal generic input form with dynamic fields.
+     *
+     * @param owner  The parent window for modality.
+     * @param title  The dialog title.
+     * @param fields A list of field names to display.
+     * @return A map of field names to user-input values if submitted, or null if cancelled.
+     */
     public static Map<String, String> showInputForm(Stage owner, String title, List<String> fields) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -356,6 +412,12 @@ public class AlterUtils {
         return submitted[0] ? result : null;
     }
 
+    /**
+     * Displays a modal form to input a new course, including name and description.
+     *
+     * @param owner The parent window for modality.
+     * @return A map with "courseName" and "courseDescription" if submitted, or null if cancelled.
+     */
     public static Map<String, String> courseInputForm(Stage owner) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -407,6 +469,12 @@ public class AlterUtils {
         return submitted[0] ? result : null;
     }
 
+    /**
+     * Shows a modal dialog containing a member/friend list, allowing friend requests.
+     *
+     * @param owner   The parent window for modality.
+     * @param members The list of users to display.
+     */
     public static void showMemberList(Stage owner, List<User> members) {
 
         FriendApi friendApi = new FriendApiImpl();
@@ -495,6 +563,12 @@ public class AlterUtils {
         dialogStage.showAndWait();
     }
 
+    /**
+     * Shows a modal dialog with new friend requests and Accept/Reject actions.
+     *
+     * @param owner    The parent window for modality.
+     * @param requests The list of requesting users.
+     */
     public static void showNewRequestList(Stage owner, List<User> requests) {
         FriendApi friendApi = new FriendApiImpl();
         Stage dialogStage = new Stage();
@@ -572,6 +646,12 @@ public class AlterUtils {
         dialogStage.showAndWait();
     }
 
+    /**
+     * Displays a modal input form for invitation user IDs.
+     *
+     * @param owner The parent window for modality.
+     * @return A list of user IDs if submitted, or null if cancelled.
+     */
     public static List<String> showInvitationInputForm(Stage owner) {
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -618,6 +698,12 @@ public class AlterUtils {
         }
     }
 
+    /**
+     * Shows a modal dialog listing course invitations with Accept/Reject actions.
+     *
+     * @param owner   The parent window for modality.
+     * @param courses The list of courses the user is invited to.
+     */
     public static void showInvitationList(Stage owner, List<Course> courses){
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -684,6 +770,12 @@ public class AlterUtils {
         dialogStage.showAndWait();
     }
 
+    /**
+     * Shows a modal dialog listing submissions for a given assignment, with download capability.
+     *
+     * @param owner        The parent window for modality.
+     * @param assignmentId The assignment ID whose submissions to display.
+     */
     public static void showSubmission(Stage owner, Long assignmentId) {
         CourseApi courseApi = new CourseApiImpl();
         List<Submission> submissions = courseApi.getSubmissionByAssignmentId(assignmentId);

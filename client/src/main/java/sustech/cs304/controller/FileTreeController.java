@@ -21,6 +21,9 @@ import sustech.cs304.utils.FileUtils;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * File tree controller, responsible for displaying and managing the file directory tree in the IDE.
+ */
 public class FileTreeController {
 
     @FXML
@@ -32,6 +35,9 @@ public class FileTreeController {
 
     private boolean showHiddenFiles = false;
 
+    /**
+     * Initializes the file tree view and root node.
+     */
     @FXML
     private void initialize() {
         FileTreeNode rootNode = new FileTreeNode("Folder", null);
@@ -41,6 +47,9 @@ public class FileTreeController {
         treeView.setRoot(rootItem);
     }
 
+    /**
+     * Refreshes the file tree based on the current root directory.
+     */
     public void refresh() {
         if (rootItem != null) {
             rootItem.getChildren().clear();
@@ -49,6 +58,9 @@ public class FileTreeController {
         }
     }
 
+    /**
+     * Handles folder selection and updates the file tree.
+     */
     public void handleSelectFolder() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a Folder");
@@ -86,6 +98,11 @@ public class FileTreeController {
         });
     }
 
+    /**
+     * Recursively builds the file tree structure.
+     * @param parentItem The parent tree item
+     * @param directory The directory file
+     */
     private void buildFileTree(TreeItem<FileTreeNode> parentItem, File directory) {
         File[] files = directory.listFiles();
         if (files != null) {
@@ -117,6 +134,11 @@ public class FileTreeController {
         }
     }
 
+    /**
+     * Opens a file in the editor or displays it in the appropriate viewer.
+     * @param file The file to open
+     * @throws IOException if file reading fails
+     */
     private void openFile(File file) throws IOException {
         if (file.isDirectory()) {
             return;
@@ -138,6 +160,10 @@ public class FileTreeController {
         }
     }
 
+    /**
+     * Sets the IDE controller reference.
+     * @param ideController The IDE controller
+     */
     public void setIdeController(IDEController ideController) {
         this.ideController = ideController;
     }
