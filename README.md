@@ -85,6 +85,20 @@ Our team members:
 - <img src="https://avatars.githubusercontent.com/u/170170207?s=64&v=4" alt="@XianzhiTang001" width="48" height="48" /> [**XianzhiTang001**](https://github.com/XianzhiTang001)
 - <img src="https://avatars.githubusercontent.com/u/144506378?s=64&v=4" alt="@ylers" width="48" height="48" /> [**ylers**](https://github.com/ylers)
 
+👥 current team members:
+
+- <img src="https://avatars.githubusercontent.com/u/96641098?s=64&v=4" alt="@RuizhePang" width="48" height="48" /> [**RuizhePang**](https://github.com/RuizhePang)
+- <img src="https://avatars.githubusercontent.com/u/142304970?s=64&v=4" alt="@JingqiSunn" width="48" height="48" /> [**JingqiSunn**](https://github.com/JingqiSunn)
+- <img src="https://avatars.githubusercontent.com/u/170170207?s=64&v=4" alt="@XianzhiTang001" width="48" height="48" /> [**XianzhiTang001**](https://github.com/XianzhiTang001)
+- <img src="https://avatars.githubusercontent.com/u/144506378?s=64&v=4" alt="@ylers" width="48" height="48" /> [**ylers**](https://github.com/ylers)
+
+🤝We welcome community contributions! To get started:
+
+1. Read our [Build Tutorial](https://sustech-cs304.github.io/team-project-25spring-42/docs/intro)) for environment setup
+2. Check the [API Documentation](https://sustech-cs304.github.io/team-project-25spring-42/javadoc/server/index.html)
+3. Submit a pull request following our [Contribution Guidelines](https://github.com/sustech-cs304/team-project-25spring-42/blob/main/docs/CONTRIBUTING.md)
+
+For major changes, please open an issue first to discuss your proposed changes.
 
 
 ## Support
