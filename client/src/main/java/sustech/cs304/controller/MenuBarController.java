@@ -91,13 +91,12 @@ public class MenuBarController {
 
             try{
                 if (extension.equals("java")) {
-                    String javaHome = Dotenv.load().get("JAVA_HOME");
+                    String javaHome = FileUtils.getEnvValue("JAVA_HOME");
                     if (javaHome == null) javaHome = System.getenv("java.home");
                     String command = javaHome + "/bin/java" + " " + filePath;
                     ideController.getJeditermController().executeCommand(command);
                 } else if (extension.equals("py")) {
-                    String pythonPath = Dotenv.load().get("PYTHONPATH");
-                    System.out.println(pythonPath);
+                    String pythonPath = FileUtils.getEnvValue("PYTHONPATH");
                     if (pythonPath == null) pythonPath = System.getenv("PYTHONPATH");
                     String command = "PYTHONPATH=" + pythonPath;
                     ideController.getJeditermController().executeCommand(command);

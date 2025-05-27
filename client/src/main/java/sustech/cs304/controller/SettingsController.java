@@ -2,7 +2,6 @@ package sustech.cs304.controller;
 
 import java.io.File;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -21,17 +20,17 @@ public class SettingsController {
 
     @FXML
     private void initialize() {
-        // Load existing settings if available
         javaHomeField.setText(System.getProperty("java.home"));
         pythonPathField.setText(System.getenv("PYTHONPATH"));
         FileUtils.modifyEnvFile("JAVA_HOME", javaHomeField.getText());
         FileUtils.modifyEnvFile("PYTHONPATH", pythonPathField.getText());
-        chatGptUrlField.setText(Dotenv.load().get("OPENAI_API_URL"));
-        chatGptKeyField.setText(Dotenv.load().get("OPENAI_API_KEY"));
-        deepSeekUrlField.setText(Dotenv.load().get("DEEPSEEK_API_URL"));
-        deepSeekKeyField.setText(Dotenv.load().get("DEEPSEEK_API_KEY"));
-        geminiUrlField.setText(Dotenv.load().get("GEMINI_API_URL"));
-        geminiKeyField.setText(Dotenv.load().get("GEMINI_API_KEY"));
+        
+        FileUtils.modifyEnvFile("OPENAI_API_URL", "");
+        FileUtils.modifyEnvFile("OPENAI_API_KEY", "");
+        FileUtils.modifyEnvFile("DEEPSEEK_API_URL", "");
+        FileUtils.modifyEnvFile("DEEPSEEK_API_KEY", "");
+        FileUtils.modifyEnvFile("GEMINI_API_URL", "");
+        FileUtils.modifyEnvFile("GEMINI_API_KEY", "");
     }
 
     @FXML

@@ -36,7 +36,10 @@ public class FileUtils {
 
     public static void modifyEnvFile(String key, String value) {
         try {
-            String filePath = "./" + File.separator + ".env";
+            String filePath = getAppDataPath().toString() + File.separator + ".env";
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
             List<String> lines = Files.readAllLines(Paths.get(filePath));
             boolean keyExists = false;
             for (int i = 0; i < lines.size(); i++) {
@@ -53,6 +56,24 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getEnvValue(String key) {
+        try {
+            String filePath = getAppDataPath().toString() + File.separator + ".env";
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            for (String line : lines) {
+                if (line.startsWith(key + "=")) {
+                    return line.substring((key + "=").length());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Path getAppDataPath() {
