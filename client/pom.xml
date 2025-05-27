@@ -243,6 +243,7 @@
                     <icon>src/main/resources/img/logo.icns</icon>
                     <javaOptions>
                         <javaOption>-Xmx512m</javaOption>
+                        <javaOption>-Dhttps.protocols=TLSv1.2</javaOption>
                     </javaOptions>
                     <modulePaths>
                         <modulePath>lib/javafx-sdk-${javafx.version}/lib</modulePath>
