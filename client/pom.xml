@@ -17,6 +17,35 @@
         <main.class>sustech.cs304.App</main.class>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <jpackage.icon>src/main/resources/img/logo.icns</jpackage.icon>
+                <jpackage.modulePath>lib/javafx-sdk-${javafx.version}/lib</jpackage.modulePath>
+                <jpackage.type>dmg</jpackage.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <jpackage.icon>src/main/resources/img/logo.ico</jpackage.icon>
+                <jpackage.modulePath>lib/javafx-sdk-${javafx.version}/lib</jpackage.modulePath>
+                <jpackage.type>exe</jpackage.type>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -240,12 +269,13 @@
                     <mainClass>${main.class}</mainClass>
                     <type>APP_IMAGE</type>
                     <destination>dist</destination>
-                    <icon>src/main/resources/img/logo.icns</icon>
+                    <icon>${jpackage.icon}</icon>
                     <javaOptions>
                         <javaOption>-Xmx512m</javaOption>
+                        <javaOption>-Dhttps.protocols=TLSv1.2</javaOption>
                     </javaOptions>
                     <modulePaths>
-                        <modulePath>lib/javafx-sdk-${javafx.version}/lib</modulePath>
+                        <modulePath>${jpackage.modulePath}</modulePath>
                     </modulePaths>
                     <addModules>
                         <addModule>javafx.controls</addModule>
@@ -268,6 +298,58 @@
                     </execution>
                 </executions>
             </plugin>
+                    <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>copy-dylibs</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <target>
+                            <copy todir="dist/${project.artifactId}.app/Contents/runtime/Contents/Home/lib">
+                                <fileset dir="lib/javafx-sdk-23.0.1/lib" includes="*.dylib"/>
+                            </copy>
+                        </target>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <!-- 3. 打包为 .dmg -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>create-dmg</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <target>
+                            <exec executable="hdiutil">
+                                <arg value="create"/>
+                                <arg value="-volname"/>
+                                <arg value="${project.artifactId}-${project.version}"/>
+                                <arg value="-srcfolder"/>
+                                <arg value="dist/${project.artifactId}.app"/>
+                                <arg value="-ov"/>
+                                <arg value="-format"/>
+                                <arg value="UDZO"/>
+                                <arg value="dist/${project.artifactId}-${project.version}.dmg"/>
+                            </exec>
+                        </target>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
         </plugins>
     </build>
 </project>

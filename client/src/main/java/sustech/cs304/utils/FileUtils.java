@@ -66,7 +66,10 @@ public class FileUtils {
      */
     public static void modifyEnvFile(String key, String value) {
         try {
-            String filePath = "./" + File.separator + ".env";
+            String filePath = getAppDataPath().toString() + File.separator + ".env";
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
             List<String> lines = Files.readAllLines(Paths.get(filePath));
             boolean keyExists = false;
             for (int i = 0; i < lines.size(); i++) {
@@ -83,6 +86,31 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Retrieves the value of a specified environment variable from the .env file.
+     * If the key does not exist, returns null.
+     *
+     * @param key the environment variable key to look for
+     * @return the value associated with the key, or null if not found
+     */
+    public static String getEnvValue(String key) {
+        try {
+            String filePath = getAppDataPath().toString() + File.separator + ".env";
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));
+            }
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            for (String line : lines) {
+                if (line.startsWith(key + "=")) {
+                    return line.substring((key + "=").length());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

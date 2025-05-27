@@ -31,7 +31,7 @@ public class AIChatController {
         } else if (deepseekModels.contains(model)) {
             return getDeepseekResponse(model, prompt);
         } else if (geminiModels.contains(model)) {
-            return getOpenaiResponse(model, prompt);
+            return getGeminiResponse(model, prompt);
         } else {
             return "Invalid model";
         }
