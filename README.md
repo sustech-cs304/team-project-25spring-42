@@ -79,10 +79,10 @@ Full documentation available at:
 ## Contributors
 Our team members:
 
-- [<img src="https://avatars.githubusercontent.com/u/96641098?s=64&v=4" alt="@RuizhePang" style="zoom: 10%;" />](https://github.com/RuizhePang)[**RuizhePang** ](https://github.com/RuizhePang)
-- [<img src="https://avatars.githubusercontent.com/u/142304970?s=64&v=4" alt="@JingqiSunn" style="zoom: 67%;" />](https://github.com/JingqiSunn)[**JingqiSunn**](https://github.com/JingqiSunn)
-- [<img src="https://avatars.githubusercontent.com/u/170170207?s=64&v=4" alt="@XianzhiTang001" style="zoom:10%;" />](https://github.com/XianzhiTang001)[**XianzhiTang001** ](https://github.com/XianzhiTang001)
-- [<img src="https://avatars.githubusercontent.com/u/144506378?s=64&v=4" alt="@ylers" style="zoom:10%;" />](https://github.com/ylers)[**ylers**](https://github.com/ylers)
+- <img src="https://avatars.githubusercontent.com/u/96641098?s=64&v=4" alt="@RuizhePang" width="48" height="48" /> [**RuizhePang**](https://github.com/RuizhePang)
+- <img src="https://avatars.githubusercontent.com/u/142304970?s=64&v=4" alt="@JingqiSunn" width="48" height="48" /> [**JingqiSunn**](https://github.com/JingqiSunn)
+- <img src="https://avatars.githubusercontent.com/u/170170207?s=64&v=4" alt="@XianzhiTang001" width="48" height="48" /> [**XianzhiTang001**](https://github.com/XianzhiTang001)
+- <img src="https://avatars.githubusercontent.com/u/144506378?s=64&v=4" alt="@ylers" width="48" height="48" /> [**ylers**](https://github.com/ylers)
 
 
 
