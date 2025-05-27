@@ -3,6 +3,7 @@
 <p align="center">
   <img src=".\docs\picture\aide_logo.png" alt="logo" width="260"/>
 </p>
+
 # AIDE - Intelligent Course-Aware IDE
 
 
